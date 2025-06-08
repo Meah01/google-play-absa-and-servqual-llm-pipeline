@@ -1313,3 +1313,21 @@ connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection re
 2025-06-09 00:12:50,953 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
 2025-06-09 00:12:52,001 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
 2025-06-09 00:12:52,065 - absa_pipeline.storage.redis - INFO - Redis connection initialized successfully
+2025-06-09 00:32:26,470 - absa_pipeline.storage.db - ERROR - Query execution failed: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-09 00:32:26,472 - absa_pipeline.storage.apps - ERROR - Failed to retrieve all apps: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-09 00:32:30,560 - absa_pipeline.storage.db - ERROR - Query execution failed: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
