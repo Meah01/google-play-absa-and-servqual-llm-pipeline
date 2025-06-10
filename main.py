@@ -117,9 +117,11 @@ class ABSAPipelineOrchestrator:
         from src.data.scraper import scrape_app_reviews
 
         sample_apps = [
-            "com.instagram.android",
-            "com.whatsapp",
-            "com.spotify.music"
+            "com.amazon.mShop.android.shopping",
+            "com.einnovation.temu",
+            "com.zzkko",
+            "com.ebay.mobile",
+            "com.etsy.android"
         ]
 
         try:

@@ -1,7 +1,7 @@
 """
-Basic Streamlit Dashboard for ABSA Sentiment Pipeline.
-Displays scraped reviews, app information, and basic analytics.
-Phase 1 implementation with core functionality.
+Enhanced Streamlit Dashboard for ABSA Sentiment Pipeline with SERVQUAL Integration.
+Displays scraped reviews, app information, basic analytics, and SERVQUAL service quality analysis.
+Phase 1.5 implementation with SERVQUAL business intelligence.
 """
 
 import streamlit as st
@@ -18,6 +18,7 @@ sys.path.insert(0, str(project_root))
 
 from src.data.storage import storage
 from src.data.scraper import scrape_app_reviews, scrape_multiple_apps
+from dashboard.servqual_components import servqual_dashboard
 
 # Page configuration
 st.set_page_config(
@@ -58,6 +59,14 @@ st.markdown("""
     border-radius: 0.5rem;
     margin: 1rem 0;
 }
+
+.servqual-section {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    border-left: 4px solid #007bff;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -92,6 +101,14 @@ def render_sidebar():
     """Render sidebar with controls and information."""
     st.sidebar.title("🎛️ Controls")
 
+    # Navigation
+    st.sidebar.markdown("### 📊 Navigation")
+    page = st.sidebar.selectbox(
+        "Select Page",
+        ["📊 Overview", "💬 Reviews Analysis", "🎯 SERVQUAL", "⚡ System Health"],
+        key="page_selection"
+    )
+
     # App selection
     apps_df, _, _ = load_dashboard_data()
 
@@ -116,13 +133,14 @@ def render_sidebar():
     else:
         selected_app = "All Apps"
         st.sidebar.warning("No apps found in database")
+        page = "📊 Overview"  # Default to overview if no apps
 
     # Data scraping controls
     st.sidebar.markdown("### 🔄 Data Collection")
 
-    if st.sidebar.button("🔍 Quick Scrape Instagram", type="primary"):
-        with st.spinner("Scraping Instagram reviews..."):
-            result = scrape_app_reviews("com.instagram.android", count=10)
+    if st.sidebar.button("🛒 Quick Scrape Amazon", type="primary"):
+        with st.spinner("Scraping Amazon Shopping reviews..."):
+            result = scrape_app_reviews("com.amazon.mShop.android.shopping", count=10)
             if result['success']:
                 st.sidebar.success(f"✅ Scraped {result['statistics']['stored']} reviews!")
                 st.experimental_rerun()
@@ -130,11 +148,13 @@ def render_sidebar():
                 st.sidebar.error("❌ Scraping failed")
 
     if st.sidebar.button("📊 Scrape All Apps"):
-        with st.spinner("Scraping multiple apps..."):
+        with st.spinner("Scraping multiple ecommerce apps..."):
             app_ids = [
-                "com.instagram.android",
-                "com.whatsapp",
-                "com.spotify.music"
+                "com.amazon.mShop.android.shopping",
+                "com.einnovation.temu",
+                "com.zzkko",
+                "com.ebay.mobile",
+                "com.etsy.android"
             ]
             results = scrape_multiple_apps(app_ids)
             total_reviews = sum(r['statistics']['stored'] for r in results)
@@ -171,7 +191,7 @@ def render_sidebar():
         time.sleep(30)
         st.experimental_rerun()
 
-    return selected_app
+    return page, selected_app
 
 
 def render_overview_metrics(apps_df, reviews_df):
@@ -380,51 +400,76 @@ def main():
     """Main dashboard function."""
     # Header
     st.title("📊 ABSA Sentiment Pipeline Dashboard")
-    st.markdown("**Phase 1**: Data Collection & Basic Analytics")
+    st.markdown("**Enhanced with SERVQUAL Service Quality Analysis**")
 
     # Sidebar
-    selected_app = render_sidebar()
+    page, selected_app = render_sidebar()
 
     # Load data
     apps_df, reviews_df, health = load_dashboard_data()
 
-    # Main content
-    if apps_df.empty and reviews_df.empty:
-        st.info("🚀 **Welcome to ABSA Pipeline!** Use the sidebar to scrape your first app reviews.")
-        st.markdown("""
-        ### 🎯 Getting Started:
-        1. Click **"Quick Scrape Instagram"** to get sample data
-        2. Or click **"Scrape All Apps"** for multiple apps
-        3. Explore the dashboard as data loads
-
-        ### 📋 Current Capabilities:
-        - ✅ Google Play Store review scraping
-        - ✅ App metadata collection
-        - ✅ Basic review analytics
-        - ✅ System health monitoring
-        - ⏳ ABSA sentiment analysis (Phase 2)
-        """)
-    else:
+    # Main content based on page selection
+    if page == "📊 Overview":
         # Overview metrics
         render_overview_metrics(apps_df, reviews_df)
 
         # Apps overview
         render_app_overview(apps_df)
 
+        if apps_df.empty and reviews_df.empty:
+            st.info("🚀 **Welcome to ABSA Pipeline!** Use the sidebar to scrape your first app reviews.")
+            st.markdown("""
+            ### 🎯 Getting Started:
+            1. Click **"Quick Scrape Amazon"** to get sample data
+            2. Or click **"Scrape All Apps"** for multiple apps
+            3. Explore the dashboard as data loads
+            4. Use **SERVQUAL section** for business intelligence
+
+            ### 📋 Current Capabilities:
+            - ✅ Google Play Store review scraping
+            - ✅ App metadata collection
+            - ✅ Basic review analytics
+            - ✅ SERVQUAL service quality analysis
+            - ✅ System health monitoring
+            - ⏳ ABSA sentiment analysis (Phase 2)
+            """)
+
+    elif page == "💬 Reviews Analysis":
         # Reviews analysis
         render_reviews_analysis(reviews_df, selected_app)
 
         # Recent reviews
         render_recent_reviews(reviews_df, selected_app)
 
-    # Health status (always show)
-    render_health_status()
+    elif page == "🎯 SERVQUAL":
+        # SERVQUAL Section
+        if apps_df.empty:
+            st.warning("📊 No apps available. Please scrape some app data first!")
+            st.info("Use the sidebar controls to scrape Amazon or all apps.")
+        else:
+            # Render SERVQUAL dashboard
+            servqual_dashboard.render_servqual_section()
+
+    elif page == "⚡ System Health":
+        # Health status
+        render_health_status()
+
+        # Additional system info
+        st.markdown("### 📊 System Information")
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.info("**Phase 1 Features:**\n- Data collection\n- Basic analytics\n- SERVQUAL analysis\n- Health monitoring")
+
+        with col2:
+            st.warning("**Phase 2 Coming:**\n- Real-time ABSA\n- Advanced ML models\n- Predictive analytics\n- API endpoints")
 
     # Footer
     st.markdown("---")
     st.markdown("""
     <div style='text-align: center; color: #666;'>
-    🔧 ABSA Pipeline v1.0 | Phase 1: Data Collection Complete
+    🔧 ABSA Pipeline v1.5 | Phase 1: Data Collection + SERVQUAL Analysis Complete
     </div>
     """, unsafe_allow_html=True)
 

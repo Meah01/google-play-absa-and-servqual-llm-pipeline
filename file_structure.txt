@@ -1,0 +1,85 @@
+Folder PATH listing
+Volume serial number is 64DF-44A7
+C:.
+³   .env
+³   .gitattributes
+³   check_docker.py
+³   dashboard_app.py
+³   debug_dashboard.py
+³   docker-compose.yml
+³   file_structure.txt
+³   main.py
+³   requirements.txt
+³   scraper_usage_examples.py
+³   shutdown.bat
+³   simple_dashboard_launcher.py
+³   startup.bat
+³   test_dashboard.py
+³   test_health_fix.py
+³   test_scraper.py
+³   test_storage.py
+³   test_unicode_fix.py
+³   
+ÃÄÄÄ.idea
+³   ³   .gitignore
+³   ³   ABSA project.iml
+³   ³   misc.xml
+³   ³   modules.xml
+³   ³   vcs.xml
+³   ³   workspace.xml
+³   ³   
+³   ÀÄÄÄinspectionProfiles
+³           profiles_settings.xml
+³           
+ÃÄÄÄconfig
+ÃÄÄÄdags
+ÃÄÄÄdashboard
+³       __init__.py
+³       
+ÃÄÄÄdata
+³   ÀÄÄÄexports
+ÃÄÄÄdocs
+ÃÄÄÄlogs
+³       absa_pipeline.log
+³       
+ÃÄÄÄscripts
+ÃÄÄÄsql
+³       schema.sql
+³       
+ÃÄÄÄsrc
+³   ³   __init__.py
+³   ³   
+³   ÃÄÄÄabsa
+³   ³       __init__.py
+³   ³       
+³   ÃÄÄÄdata
+³   ³   ³   scraper.py
+³   ³   ³   storage.py
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           scraper.cpython-312.pyc
+³   ³           storage.cpython-312.pyc
+³   ³           __init__.cpython-312.pyc
+³   ³           
+³   ÃÄÄÄpipeline
+³   ³       __init__.py
+³   ³       
+³   ÃÄÄÄutils
+³   ³   ³   config.py
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           config.cpython-311.pyc
+³   ³           config.cpython-312.pyc
+³   ³           __init__.cpython-311.pyc
+³   ³           __init__.cpython-312.pyc
+³   ³           
+³   ÀÄÄÄ__pycache__
+³           __init__.cpython-311.pyc
+³           __init__.cpython-312.pyc
+³           
+ÃÄÄÄtests
+ÀÄÄÄ__pycache__
+        dashboard_app.cpython-312.pyc
+        

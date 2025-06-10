@@ -165,13 +165,23 @@ INSERT INTO aspects (aspect_name, category, keywords, weight, description) VALUE
 ('ads', 'monetization', ARRAY['ads', 'advertisement', 'popup', 'banner', 'commercial', 'marketing'], 0.8, 'Advertising and monetization')
 ON CONFLICT (aspect_name) DO NOTHING;
 
--- Insert sample apps for testing
+-- Clear existing app data and insert new ecommerce apps
+DELETE FROM reviews WHERE app_id IN (
+    'com.instagram.android', 'com.whatsapp', 'com.spotify.music',
+    'com.netflix.mediaclient', 'com.google.android.youtube'
+);
+DELETE FROM apps WHERE app_id IN (
+    'com.instagram.android', 'com.whatsapp', 'com.spotify.music',
+    'com.netflix.mediaclient', 'com.google.android.youtube'
+);
+
+-- Insert new ecommerce apps
 INSERT INTO apps (app_id, app_name, category, developer, rating) VALUES
-('com.instagram.android', 'Instagram', 'Social', 'Meta Platforms, Inc.', 4.2),
-('com.whatsapp', 'WhatsApp', 'Communication', 'WhatsApp LLC', 4.3),
-('com.spotify.music', 'Spotify', 'Music & Audio', 'Spotify AB', 4.4),
-('com.netflix.mediaclient', 'Netflix', 'Entertainment', 'Netflix, Inc.', 4.1),
-('com.google.android.youtube', 'YouTube', 'Video Players & Editors', 'Google LLC', 4.0)
+('com.amazon.mShop.android.shopping', 'Amazon Shopping', 'Shopping', 'Amazon Mobile LLC', 4.3),
+('com.einnovation.temu', 'Temu: Shop Like a Billionaire', 'Shopping', 'PDD Holdings Inc.', 4.6),
+('com.zzkko', 'SHEIN-Shopping Online', 'Shopping', 'Roadget Business PTE. LTD.', 4.5),
+('com.ebay.mobile', 'eBay online shopping & selling', 'Shopping', 'eBay Mobile', 4.3),
+('com.etsy.android', 'Etsy: A Special Marketplace', 'Shopping', 'Etsy, Inc.', 4.7)
 ON CONFLICT (app_id) DO NOTHING;
 
 -- Functions for automatic timestamp updates
@@ -223,5 +233,97 @@ SELECT
     COUNT(DISTINCT aspect) as aspects_analyzed,
     SUM(sentiment_count) as total_reviews_analyzed
 FROM daily_aspect_sentiment
+GROUP BY app_id, date
+ORDER BY app_id, date DESC;
+
+-- Add SERVQUAL dimension column to aspects table
+ALTER TABLE aspects ADD COLUMN IF NOT EXISTS servqual_dimension VARCHAR(50);
+
+-- SERVQUAL scores table for dimension-level aggregation
+CREATE TABLE IF NOT EXISTS servqual_scores (
+    score_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    app_id VARCHAR(255) NOT NULL REFERENCES apps(app_id) ON DELETE CASCADE,
+    dimension VARCHAR(50) NOT NULL,
+    sentiment_score DECIMAL(4,3),
+    quality_score INTEGER CHECK (quality_score >= 1 AND quality_score <= 5),
+    review_count INTEGER DEFAULT 0,
+    date DATE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(app_id, dimension, date)
+);
+
+-- Clear existing aspects and insert ecommerce aspects with SERVQUAL mappings
+DELETE FROM aspects;
+
+-- Insert ecommerce-focused aspects with SERVQUAL dimension mappings
+INSERT INTO aspects (aspect_name, category, keywords, weight, description, servqual_dimension) VALUES
+
+-- RELIABILITY dimension (Platform consistency, order processing accuracy)
+('product_quality', 'product', ARRAY['quality', 'cheap', 'flimsy', 'durable', 'material', 'defective', 'broken', 'fake', 'authentic', 'counterfeit', 'well made', 'poor quality'], 1.3, 'Product quality, materials, and authenticity', 'reliability'),
+
+('product_description', 'product', ARRAY['description', 'accurate', 'misleading', 'photos', 'images', 'size', 'color', 'different', 'expected', 'as described', 'not as shown'], 1.2, 'Accuracy of product descriptions and images', 'reliability'),
+
+('app_performance', 'technical', ARRAY['slow', 'fast', 'lag', 'crash', 'freeze', 'loading', 'responsive', 'performance', 'smooth', 'glitchy'], 1.1, 'App speed and technical performance', 'reliability'),
+
+-- ASSURANCE dimension (Security, trust, professional competence)
+('customer_service', 'service', ARRAY['customer service', 'support', 'help', 'response', 'staff', 'representative', 'chat', 'email', 'helpful', 'rude'], 1.2, 'Customer service quality and responsiveness', 'assurance'),
+
+('payment_security', 'security', ARRAY['payment', 'secure', 'safe', 'fraud', 'scam', 'credit card', 'paypal', 'security', 'secure payment'], 1.2, 'Payment security and fraud protection', 'assurance'),
+
+('seller_trust', 'trust', ARRAY['seller', 'vendor', 'trustworthy', 'reliable', 'scammer', 'legitimate', 'verified', 'trusted seller'], 1.1, 'Seller reliability and trustworthiness', 'assurance'),
+
+-- TANGIBLES dimension (Physical appearance and interface design)
+('search_navigation', 'experience', ARRAY['search', 'find', 'browse', 'navigation', 'filter', 'category', 'menu', 'interface', 'ui', 'easy to find', 'hard to navigate'], 1.1, 'Search functionality and app navigation', 'tangibles'),
+
+('app_usability', 'technical', ARRAY['easy', 'user friendly', 'intuitive', 'confusing', 'complicated', 'design', 'layout', 'simple', 'hard to use'], 1.0, 'App usability and design', 'tangibles'),
+
+('product_variety', 'product', ARRAY['selection', 'variety', 'options', 'catalog', 'inventory', 'stock', 'availability', 'out of stock', 'limited options'], 1.0, 'Product selection and inventory availability', 'tangibles'),
+
+-- EMPATHY dimension (Personal attention and customer understanding)
+('return_refund', 'service', ARRAY['return', 'refund', 'exchange', 'money back', 'policy', 'hassle', 'easy return', 'return process', 'refund policy'], 1.3, 'Return and refund process', 'empathy'),
+
+-- RESPONSIVENESS dimension (Speed of service and communication)
+('shipping_delivery', 'logistics', ARRAY['shipping', 'delivery', 'fast', 'slow', 'delayed', 'arrived', 'package', 'tracking', 'logistics', 'quick delivery', 'late delivery'], 1.3, 'Shipping speed and delivery experience', 'responsiveness'),
+
+('shipping_cost', 'logistics', ARRAY['shipping cost', 'free shipping', 'expensive shipping', 'delivery fee', 'shipping price', 'shipping charges'], 1.1, 'Shipping costs and fees', 'responsiveness'),
+
+('order_tracking', 'communication', ARRAY['track', 'tracking', 'status', 'update', 'progress', 'whereabouts', 'location', 'track order'], 1.1, 'Order tracking and status updates', 'responsiveness'),
+
+-- ADDITIONAL ecommerce aspects
+('pricing_value', 'financial', ARRAY['price', 'expensive', 'cheap', 'affordable', 'value', 'money', 'cost', 'worth', 'overpriced', 'good deal', 'value for money'], 1.2, 'Product pricing and value for money', 'assurance'),
+
+('checkout_process', 'experience', ARRAY['checkout', 'payment', 'cart', 'order', 'purchase', 'buy', 'easy', 'difficult', 'smooth', 'complicated', 'simple checkout'], 1.2, 'Checkout and payment process', 'tangibles')
+
+ON CONFLICT (aspect_name) DO NOTHING;
+
+-- SERVQUAL performance indexes
+CREATE INDEX IF NOT EXISTS idx_servqual_scores_app_date ON servqual_scores(app_id, date);
+CREATE INDEX IF NOT EXISTS idx_servqual_scores_dimension ON servqual_scores(dimension);
+CREATE INDEX IF NOT EXISTS idx_aspects_servqual_dimension ON aspects(servqual_dimension);
+
+-- SERVQUAL analysis views
+CREATE OR REPLACE VIEW servqual_dimension_summary AS
+SELECT
+    app_id,
+    dimension,
+    DATE_TRUNC('week', date) as week,
+    AVG(quality_score) as avg_quality_score,
+    AVG(sentiment_score) as avg_sentiment_score,
+    SUM(review_count) as total_reviews,
+    MAX(date) as latest_date
+FROM servqual_scores
+GROUP BY app_id, dimension, DATE_TRUNC('week', date)
+ORDER BY app_id, dimension, week DESC;
+
+CREATE OR REPLACE VIEW app_servqual_profile AS
+SELECT
+    app_id,
+    MAX(CASE WHEN dimension = 'reliability' THEN quality_score END) as reliability_score,
+    MAX(CASE WHEN dimension = 'assurance' THEN quality_score END) as assurance_score,
+    MAX(CASE WHEN dimension = 'tangibles' THEN quality_score END) as tangibles_score,
+    MAX(CASE WHEN dimension = 'empathy' THEN quality_score END) as empathy_score,
+    MAX(CASE WHEN dimension = 'responsiveness' THEN quality_score END) as responsiveness_score,
+    date
+FROM servqual_scores
 GROUP BY app_id, date
 ORDER BY app_id, date DESC;

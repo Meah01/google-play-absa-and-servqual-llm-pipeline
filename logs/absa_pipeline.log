@@ -1331,3 +1331,343 @@ connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection re
 	Is the server running on that host and accepting TCP/IP connections?
 
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-09 21:25:37,445 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-09 21:25:37,447 - absa_pipeline.main - INFO - [START] Starting ABSA Pipeline - Phase 1
+2025-06-09 21:25:37,590 - absa_pipeline.main - INFO - [OK] Docker infrastructure is running
+2025-06-09 21:25:38,519 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-09 21:25:39,475 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-09 21:25:39,613 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-09 21:25:39,626 - absa_pipeline.storage.redis - INFO - Redis connection initialized successfully
+2025-06-09 21:25:39,627 - absa_pipeline.main - INFO - [OK] Storage connectivity verified
+2025-06-09 21:25:39,627 - absa_pipeline.main - INFO - [DATA] Running sample data collection...
+2025-06-09 21:25:40,086 - absa_pipeline.main - INFO - [SCRAPE] Scraping com.instagram.android...
+2025-06-09 21:25:40,087 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.instagram.android
+2025-06-09 21:25:40,087 - absa_pipeline.scraper - INFO - Scraping app info for: com.instagram.android
+2025-06-09 21:25:40,893 - absa_pipeline.scraper - INFO - Successfully scraped app info: Instagram
+2025-06-09 21:25:40,912 - absa_pipeline.storage.apps - INFO - Stored app: com.instagram.android
+2025-06-09 21:25:40,912 - absa_pipeline.scraper - INFO - Stored app info for Instagram
+2025-06-09 21:25:40,913 - absa_pipeline.scraper - INFO - Starting review scraping for com.instagram.android, target: 1000 reviews
+2025-06-09 21:25:40,934 - absa_pipeline.scraper.deduplicator - INFO - Loaded 238 existing review IDs for com.instagram.android
+2025-06-09 21:25:40,935 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-09 21:25:41,447 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-09 21:25:41,447 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-09 21:25:41,459 - absa_pipeline.scraper - INFO - Batch processing complete: 168 valid out of 200 raw reviews
+2025-06-09 21:25:41,459 - absa_pipeline.scraper - INFO - Batch 1: 168 valid reviews added. Total valid: 168
+2025-06-09 21:25:41,460 - absa_pipeline.scraper - INFO - Breaking early - found 168 valid reviews
+2025-06-09 21:25:41,460 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 168
+2025-06-09 21:25:42,002 - absa_pipeline.storage.reviews - INFO - Stored 168 reviews, 0 errors
+2025-06-09 21:25:42,003 - absa_pipeline.scraper - INFO - Scraping completed for com.instagram.android: {'app_id': 'com.instagram.android', 'execution_time': 1.92, 'statistics': {'scraped': 200, 'valid': 168, 'invalid': 32, 'duplicates': 0, 'stored': 168, 'errors': 0}, 'success': True}
+2025-06-09 21:25:42,004 - absa_pipeline.main - INFO - [OK] com.instagram.android: 168 reviews stored
+2025-06-09 21:25:44,006 - absa_pipeline.main - INFO - [SCRAPE] Scraping com.whatsapp...
+2025-06-09 21:25:44,007 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.whatsapp
+2025-06-09 21:25:44,008 - absa_pipeline.scraper - INFO - Scraping app info for: com.whatsapp
+2025-06-09 21:25:44,737 - absa_pipeline.scraper - INFO - Successfully scraped app info: WhatsApp Messenger
+2025-06-09 21:25:44,744 - absa_pipeline.storage.apps - INFO - Stored app: com.whatsapp
+2025-06-09 21:25:44,745 - absa_pipeline.scraper - INFO - Stored app info for WhatsApp Messenger
+2025-06-09 21:25:44,746 - absa_pipeline.scraper - INFO - Starting review scraping for com.whatsapp, target: 1000 reviews
+2025-06-09 21:25:44,751 - absa_pipeline.scraper.deduplicator - INFO - Loaded 261 existing review IDs for com.whatsapp
+2025-06-09 21:25:44,751 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-09 21:25:45,323 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-09 21:25:45,324 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-09 21:25:45,332 - absa_pipeline.scraper - INFO - Batch processing complete: 163 valid out of 200 raw reviews
+2025-06-09 21:25:45,333 - absa_pipeline.scraper - INFO - Batch 1: 163 valid reviews added. Total valid: 163
+2025-06-09 21:25:45,333 - absa_pipeline.scraper - INFO - Breaking early - found 163 valid reviews
+2025-06-09 21:25:45,334 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 163
+2025-06-09 21:25:45,832 - absa_pipeline.storage.reviews - INFO - Stored 163 reviews, 0 errors
+2025-06-09 21:25:45,832 - absa_pipeline.scraper - INFO - Scraping completed for com.whatsapp: {'app_id': 'com.whatsapp', 'execution_time': 1.83, 'statistics': {'scraped': 200, 'valid': 163, 'invalid': 37, 'duplicates': 0, 'stored': 163, 'errors': 0}, 'success': True}
+2025-06-09 21:25:45,833 - absa_pipeline.main - INFO - [OK] com.whatsapp: 163 reviews stored
+2025-06-09 21:25:47,834 - absa_pipeline.main - INFO - [SCRAPE] Scraping com.spotify.music...
+2025-06-09 21:25:47,835 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.spotify.music
+2025-06-09 21:25:47,835 - absa_pipeline.scraper - INFO - Scraping app info for: com.spotify.music
+2025-06-09 21:25:48,694 - absa_pipeline.scraper - INFO - Successfully scraped app info: Spotify: Music and Podcasts
+2025-06-09 21:25:48,703 - absa_pipeline.storage.apps - INFO - Stored app: com.spotify.music
+2025-06-09 21:25:48,703 - absa_pipeline.scraper - INFO - Stored app info for Spotify: Music and Podcasts
+2025-06-09 21:25:48,704 - absa_pipeline.scraper - INFO - Starting review scraping for com.spotify.music, target: 1000 reviews
+2025-06-09 21:25:48,709 - absa_pipeline.scraper.deduplicator - INFO - Loaded 219 existing review IDs for com.spotify.music
+2025-06-09 21:25:48,710 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-09 21:25:49,190 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-09 21:25:49,191 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-09 21:25:49,213 - absa_pipeline.scraper - INFO - Batch processing complete: 179 valid out of 200 raw reviews
+2025-06-09 21:25:49,214 - absa_pipeline.scraper - INFO - Batch 1: 179 valid reviews added. Total valid: 179
+2025-06-09 21:25:49,214 - absa_pipeline.scraper - INFO - Breaking early - found 179 valid reviews
+2025-06-09 21:25:49,215 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 179
+2025-06-09 21:25:49,723 - absa_pipeline.storage.reviews - INFO - Stored 179 reviews, 0 errors
+2025-06-09 21:25:49,724 - absa_pipeline.scraper - INFO - Scraping completed for com.spotify.music: {'app_id': 'com.spotify.music', 'execution_time': 1.89, 'statistics': {'scraped': 200, 'valid': 179, 'invalid': 21, 'duplicates': 0, 'stored': 179, 'errors': 0}, 'success': True}
+2025-06-09 21:25:49,724 - absa_pipeline.main - INFO - [OK] com.spotify.music: 179 reviews stored
+2025-06-09 21:25:51,726 - absa_pipeline.main - INFO - [SUMMARY] Sample collection complete: 510 reviews from 3 apps
+2025-06-09 21:25:51,726 - absa_pipeline.main - INFO - [DASH] Launching dashboard...
+2025-06-09 21:25:51,727 - absa_pipeline.main - INFO - [START] Starting dashboard on http://0.0.0.0:8502
+2025-06-09 21:25:54,810 - absa_pipeline.main - INFO - [OK] Dashboard launched successfully
+2025-06-09 21:25:54,811 - absa_pipeline.main - INFO - [URL] Access dashboard at: http://localhost:8502
+2025-06-09 21:25:54,815 - absa_pipeline.main - INFO - [SUCCESS] ABSA Pipeline Phase 1 launched successfully!
+2025-06-09 21:25:54,818 - absa_pipeline.main - INFO - [INFO] What's running:
+2025-06-09 21:25:54,821 - absa_pipeline.main - INFO -    - PostgreSQL database
+2025-06-09 21:25:54,822 - absa_pipeline.main - INFO -    - Redis cache
+2025-06-09 21:25:54,823 - absa_pipeline.main - INFO -    - Kafka streaming (ready for Phase 2)
+2025-06-09 21:25:54,824 - absa_pipeline.main - INFO -    - Streamlit dashboard
+2025-06-09 21:25:54,827 - absa_pipeline.main - INFO -    - Review scraping capability
+2025-06-09 21:25:54,828 - absa_pipeline.main - INFO - [DASHBOARD] Dashboard: http://localhost:8502
+2025-06-09 21:25:54,830 - absa_pipeline.main - INFO - [INFO] Press Ctrl+C to stop the pipeline
+2025-06-09 21:26:07,630 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-09 21:26:07,631 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-09 21:26:08,597 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-09 21:26:08,668 - absa_pipeline.storage.redis - INFO - Redis connection initialized successfully
+2025-06-10 12:47:01,797 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 12:47:01,799 - absa_pipeline.main - INFO - [DASH] Launching dashboard...
+2025-06-10 12:47:01,800 - absa_pipeline.main - INFO - [START] Starting dashboard on http://0.0.0.0:8502
+2025-06-10 12:47:04,804 - absa_pipeline.main - INFO - [OK] Dashboard launched successfully
+2025-06-10 12:47:04,805 - absa_pipeline.main - INFO - [URL] Access dashboard at: http://localhost:8502
+2025-06-10 12:47:26,967 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 12:47:26,967 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 12:47:28,339 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 12:47:28,458 - absa_pipeline.storage.redis - INFO - Redis connection initialized successfully
+2025-06-10 13:15:05,823 - absa_pipeline - INFO - 
+[STOP] Stopping dashboard...
+2025-06-10 13:22:03,661 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 13:22:03,662 - absa_pipeline.main - INFO - [START] Starting ABSA Pipeline - Phase 1
+2025-06-10 13:22:03,815 - absa_pipeline.main - INFO - [OK] Docker infrastructure is running
+2025-06-10 13:22:04,374 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 13:22:05,246 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 13:22:05,364 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 13:22:05,378 - absa_pipeline.storage.redis - INFO - Redis connection initialized successfully
+2025-06-10 13:22:05,380 - absa_pipeline.main - INFO - [OK] Storage connectivity verified
+2025-06-10 13:22:05,380 - absa_pipeline.main - INFO - [DATA] Running sample data collection...
+2025-06-10 13:22:05,856 - absa_pipeline.main - INFO - [SCRAPE] Scraping com.instagram.android...
+2025-06-10 13:22:05,857 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.instagram.android
+2025-06-10 13:22:05,857 - absa_pipeline.scraper - INFO - Scraping app info for: com.instagram.android
+2025-06-10 13:22:06,563 - absa_pipeline.scraper - INFO - Successfully scraped app info: Instagram
+2025-06-10 13:22:06,639 - absa_pipeline.storage.apps - INFO - Stored app: com.instagram.android
+2025-06-10 13:22:06,640 - absa_pipeline.scraper - INFO - Stored app info for Instagram
+2025-06-10 13:22:06,641 - absa_pipeline.scraper - INFO - Starting review scraping for com.instagram.android, target: 1000 reviews
+2025-06-10 13:22:06,659 - absa_pipeline.scraper.deduplicator - INFO - Loaded 406 existing review IDs for com.instagram.android
+2025-06-10 13:22:06,660 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 13:22:07,237 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 13:22:07,237 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 13:22:07,250 - absa_pipeline.scraper - INFO - Batch processing complete: 157 valid out of 200 raw reviews
+2025-06-10 13:22:07,251 - absa_pipeline.scraper - INFO - Batch 1: 157 valid reviews added. Total valid: 157
+2025-06-10 13:22:07,251 - absa_pipeline.scraper - INFO - Breaking early - found 157 valid reviews
+2025-06-10 13:22:07,252 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 157
+2025-06-10 13:22:07,808 - absa_pipeline.storage.reviews - INFO - Stored 157 reviews, 0 errors
+2025-06-10 13:22:07,809 - absa_pipeline.scraper - INFO - Scraping completed for com.instagram.android: {'app_id': 'com.instagram.android', 'execution_time': 1.95, 'statistics': {'scraped': 200, 'valid': 157, 'invalid': 43, 'duplicates': 0, 'stored': 157, 'errors': 0}, 'success': True}
+2025-06-10 13:22:07,809 - absa_pipeline.main - INFO - [OK] com.instagram.android: 157 reviews stored
+2025-06-10 13:22:09,811 - absa_pipeline.main - INFO - [SCRAPE] Scraping com.whatsapp...
+2025-06-10 13:22:09,812 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.whatsapp
+2025-06-10 13:22:09,812 - absa_pipeline.scraper - INFO - Scraping app info for: com.whatsapp
+2025-06-10 13:22:10,507 - absa_pipeline.scraper - INFO - Successfully scraped app info: WhatsApp Messenger
+2025-06-10 13:22:10,513 - absa_pipeline.storage.apps - INFO - Stored app: com.whatsapp
+2025-06-10 13:22:10,514 - absa_pipeline.scraper - INFO - Stored app info for WhatsApp Messenger
+2025-06-10 13:22:10,514 - absa_pipeline.scraper - INFO - Starting review scraping for com.whatsapp, target: 1000 reviews
+2025-06-10 13:22:10,521 - absa_pipeline.scraper.deduplicator - INFO - Loaded 424 existing review IDs for com.whatsapp
+2025-06-10 13:22:10,522 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 13:22:11,056 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 13:22:11,057 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 13:22:11,069 - absa_pipeline.scraper - INFO - Batch processing complete: 160 valid out of 200 raw reviews
+2025-06-10 13:22:11,069 - absa_pipeline.scraper - INFO - Batch 1: 160 valid reviews added. Total valid: 160
+2025-06-10 13:22:11,070 - absa_pipeline.scraper - INFO - Breaking early - found 160 valid reviews
+2025-06-10 13:22:11,070 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 160
+2025-06-10 13:22:11,608 - absa_pipeline.storage.reviews - INFO - Stored 160 reviews, 0 errors
+2025-06-10 13:22:11,608 - absa_pipeline.scraper - INFO - Scraping completed for com.whatsapp: {'app_id': 'com.whatsapp', 'execution_time': 1.8, 'statistics': {'scraped': 200, 'valid': 160, 'invalid': 40, 'duplicates': 0, 'stored': 160, 'errors': 0}, 'success': True}
+2025-06-10 13:22:11,609 - absa_pipeline.main - INFO - [OK] com.whatsapp: 160 reviews stored
+2025-06-10 13:22:13,610 - absa_pipeline.main - INFO - [SCRAPE] Scraping com.spotify.music...
+2025-06-10 13:22:13,611 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.spotify.music
+2025-06-10 13:22:13,611 - absa_pipeline.scraper - INFO - Scraping app info for: com.spotify.music
+2025-06-10 13:22:14,255 - absa_pipeline.scraper - INFO - Successfully scraped app info: Spotify: Music and Podcasts
+2025-06-10 13:22:14,262 - absa_pipeline.storage.apps - INFO - Stored app: com.spotify.music
+2025-06-10 13:22:14,263 - absa_pipeline.scraper - INFO - Stored app info for Spotify: Music and Podcasts
+2025-06-10 13:22:14,264 - absa_pipeline.scraper - INFO - Starting review scraping for com.spotify.music, target: 1000 reviews
+2025-06-10 13:22:14,271 - absa_pipeline.scraper.deduplicator - INFO - Loaded 398 existing review IDs for com.spotify.music
+2025-06-10 13:22:14,271 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 13:22:14,816 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 13:22:14,816 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 13:22:14,832 - absa_pipeline.scraper - INFO - Batch processing complete: 178 valid out of 200 raw reviews
+2025-06-10 13:22:14,833 - absa_pipeline.scraper - INFO - Batch 1: 178 valid reviews added. Total valid: 178
+2025-06-10 13:22:14,833 - absa_pipeline.scraper - INFO - Breaking early - found 178 valid reviews
+2025-06-10 13:22:14,834 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 178
+2025-06-10 13:22:15,391 - absa_pipeline.storage.reviews - INFO - Stored 178 reviews, 0 errors
+2025-06-10 13:22:15,391 - absa_pipeline.scraper - INFO - Scraping completed for com.spotify.music: {'app_id': 'com.spotify.music', 'execution_time': 1.78, 'statistics': {'scraped': 200, 'valid': 178, 'invalid': 22, 'duplicates': 0, 'stored': 178, 'errors': 0}, 'success': True}
+2025-06-10 13:22:15,392 - absa_pipeline.main - INFO - [OK] com.spotify.music: 178 reviews stored
+2025-06-10 13:22:17,393 - absa_pipeline.main - INFO - [SUMMARY] Sample collection complete: 495 reviews from 3 apps
+2025-06-10 13:22:17,393 - absa_pipeline.main - INFO - [DASH] Launching dashboard...
+2025-06-10 13:22:17,394 - absa_pipeline.main - INFO - [START] Starting dashboard on http://0.0.0.0:8502
+2025-06-10 13:22:20,399 - absa_pipeline.main - INFO - [OK] Dashboard launched successfully
+2025-06-10 13:22:20,399 - absa_pipeline.main - INFO - [URL] Access dashboard at: http://localhost:8502
+2025-06-10 13:22:20,399 - absa_pipeline.main - INFO - [SUCCESS] ABSA Pipeline Phase 1 launched successfully!
+2025-06-10 13:22:20,400 - absa_pipeline.main - INFO - [INFO] What's running:
+2025-06-10 13:22:20,400 - absa_pipeline.main - INFO -    - PostgreSQL database
+2025-06-10 13:22:20,401 - absa_pipeline.main - INFO -    - Redis cache
+2025-06-10 13:22:20,401 - absa_pipeline.main - INFO -    - Kafka streaming (ready for Phase 2)
+2025-06-10 13:22:20,402 - absa_pipeline.main - INFO -    - Streamlit dashboard
+2025-06-10 13:22:20,402 - absa_pipeline.main - INFO -    - Review scraping capability
+2025-06-10 13:22:20,403 - absa_pipeline.main - INFO - [DASHBOARD] Dashboard: http://localhost:8502
+2025-06-10 13:22:20,403 - absa_pipeline.main - INFO - [INFO] Press Ctrl+C to stop the pipeline
+2025-06-10 13:22:26,278 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 13:22:26,279 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 13:22:27,411 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 13:22:27,482 - absa_pipeline.storage.redis - INFO - Redis connection initialized successfully
+2025-06-10 13:26:07,620 - absa_pipeline - INFO - 
+[STOP] Shutting down pipeline...
+2025-06-10 13:26:07,620 - absa_pipeline.main - INFO - [STOP] Stopping infrastructure...
+2025-06-10 13:26:10,140 - absa_pipeline.main - INFO - [OK] Infrastructure stopped successfully
+2025-06-10 13:29:21,412 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 13:29:21,414 - absa_pipeline.main - INFO - [START] Starting ABSA Pipeline - Phase 1
+2025-06-10 13:29:21,571 - absa_pipeline.main - INFO - [OK] Docker infrastructure is running
+2025-06-10 13:29:21,919 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 13:29:22,513 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 13:29:22,589 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 13:29:22,600 - absa_pipeline.storage.redis - INFO - Redis connection initialized successfully
+2025-06-10 13:29:22,601 - absa_pipeline.main - INFO - [OK] Storage connectivity verified
+2025-06-10 13:29:22,601 - absa_pipeline.main - INFO - [DATA] Running sample data collection...
+2025-06-10 13:29:23,061 - absa_pipeline.main - INFO - [SCRAPE] Scraping com.amazon.mShop.android.shopping...
+2025-06-10 13:29:23,061 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.amazon.mShop.android.shopping
+2025-06-10 13:29:23,062 - absa_pipeline.scraper - INFO - Scraping app info for: com.amazon.mShop.android.shopping
+2025-06-10 13:29:25,009 - absa_pipeline.scraper - INFO - Successfully scraped app info: Amazon Shopping
+2025-06-10 13:29:25,030 - absa_pipeline.storage.apps - INFO - Stored app: com.amazon.mShop.android.shopping
+2025-06-10 13:29:25,030 - absa_pipeline.scraper - INFO - Stored app info for Amazon Shopping
+2025-06-10 13:29:25,031 - absa_pipeline.scraper - INFO - Starting review scraping for com.amazon.mShop.android.shopping, target: 1000 reviews
+2025-06-10 13:29:25,041 - absa_pipeline.scraper.deduplicator - INFO - Loaded 0 existing review IDs for com.amazon.mShop.android.shopping
+2025-06-10 13:29:25,041 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 13:29:25,456 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 13:29:25,457 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 13:29:25,474 - absa_pipeline.scraper - INFO - Batch processing complete: 190 valid out of 200 raw reviews
+2025-06-10 13:29:25,475 - absa_pipeline.scraper - INFO - Batch 1: 190 valid reviews added. Total valid: 190
+2025-06-10 13:29:25,475 - absa_pipeline.scraper - INFO - Breaking early - found 190 valid reviews
+2025-06-10 13:29:25,476 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 190
+2025-06-10 13:29:26,245 - absa_pipeline.storage.reviews - INFO - Stored 190 reviews, 0 errors
+2025-06-10 13:29:26,246 - absa_pipeline.scraper - INFO - Scraping completed for com.amazon.mShop.android.shopping: {'app_id': 'com.amazon.mShop.android.shopping', 'execution_time': 3.18, 'statistics': {'scraped': 200, 'valid': 190, 'invalid': 10, 'duplicates': 0, 'stored': 190, 'errors': 0}, 'success': True}
+2025-06-10 13:29:26,246 - absa_pipeline.main - INFO - [OK] com.amazon.mShop.android.shopping: 190 reviews stored
+2025-06-10 13:29:28,248 - absa_pipeline.main - INFO - [SCRAPE] Scraping com.einnovation.temu...
+2025-06-10 13:29:28,248 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.einnovation.temu
+2025-06-10 13:29:28,249 - absa_pipeline.scraper - INFO - Scraping app info for: com.einnovation.temu
+2025-06-10 13:29:29,115 - absa_pipeline.scraper - INFO - Successfully scraped app info: Temu: Shop Like a Billionaire
+2025-06-10 13:29:29,120 - absa_pipeline.storage.apps - INFO - Stored app: com.einnovation.temu
+2025-06-10 13:29:29,121 - absa_pipeline.scraper - INFO - Stored app info for Temu: Shop Like a Billionaire
+2025-06-10 13:29:29,121 - absa_pipeline.scraper - INFO - Starting review scraping for com.einnovation.temu, target: 1000 reviews
+2025-06-10 13:29:29,126 - absa_pipeline.scraper.deduplicator - INFO - Loaded 0 existing review IDs for com.einnovation.temu
+2025-06-10 13:29:29,127 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 13:29:29,527 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 13:29:29,527 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 13:29:29,541 - absa_pipeline.scraper - INFO - Batch processing complete: 180 valid out of 200 raw reviews
+2025-06-10 13:29:29,541 - absa_pipeline.scraper - INFO - Batch 1: 180 valid reviews added. Total valid: 180
+2025-06-10 13:29:29,541 - absa_pipeline.scraper - INFO - Breaking early - found 180 valid reviews
+2025-06-10 13:29:29,542 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 180
+2025-06-10 13:29:30,142 - absa_pipeline.storage.reviews - INFO - Stored 180 reviews, 0 errors
+2025-06-10 13:29:30,142 - absa_pipeline.scraper - INFO - Scraping completed for com.einnovation.temu: {'app_id': 'com.einnovation.temu', 'execution_time': 1.89, 'statistics': {'scraped': 200, 'valid': 180, 'invalid': 20, 'duplicates': 0, 'stored': 180, 'errors': 0}, 'success': True}
+2025-06-10 13:29:30,143 - absa_pipeline.main - INFO - [OK] com.einnovation.temu: 180 reviews stored
+2025-06-10 13:29:32,144 - absa_pipeline.main - INFO - [SCRAPE] Scraping com.zzkko...
+2025-06-10 13:29:32,144 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.zzkko
+2025-06-10 13:29:32,145 - absa_pipeline.scraper - INFO - Scraping app info for: com.zzkko
+2025-06-10 13:29:32,911 - absa_pipeline.scraper - INFO - Successfully scraped app info: SHEIN-Shopping Online
+2025-06-10 13:29:32,917 - absa_pipeline.storage.apps - INFO - Stored app: com.zzkko
+2025-06-10 13:29:32,917 - absa_pipeline.scraper - INFO - Stored app info for SHEIN-Shopping Online
+2025-06-10 13:29:32,918 - absa_pipeline.scraper - INFO - Starting review scraping for com.zzkko, target: 1000 reviews
+2025-06-10 13:29:32,922 - absa_pipeline.scraper.deduplicator - INFO - Loaded 0 existing review IDs for com.zzkko
+2025-06-10 13:29:32,923 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 13:29:33,700 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 13:29:33,701 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 13:29:33,716 - absa_pipeline.scraper - INFO - Batch processing complete: 181 valid out of 200 raw reviews
+2025-06-10 13:29:33,716 - absa_pipeline.scraper - INFO - Batch 1: 181 valid reviews added. Total valid: 181
+2025-06-10 13:29:33,717 - absa_pipeline.scraper - INFO - Breaking early - found 181 valid reviews
+2025-06-10 13:29:33,717 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 181
+2025-06-10 13:29:34,329 - absa_pipeline.storage.reviews - INFO - Stored 181 reviews, 0 errors
+2025-06-10 13:29:34,329 - absa_pipeline.scraper - INFO - Scraping completed for com.zzkko: {'app_id': 'com.zzkko', 'execution_time': 2.19, 'statistics': {'scraped': 200, 'valid': 181, 'invalid': 19, 'duplicates': 0, 'stored': 181, 'errors': 0}, 'success': True}
+2025-06-10 13:29:34,330 - absa_pipeline.main - INFO - [OK] com.zzkko: 181 reviews stored
+2025-06-10 13:29:36,331 - absa_pipeline.main - INFO - [SCRAPE] Scraping com.ebay.mobile...
+2025-06-10 13:29:36,331 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.ebay.mobile
+2025-06-10 13:29:36,332 - absa_pipeline.scraper - INFO - Scraping app info for: com.ebay.mobile
+2025-06-10 13:29:37,604 - absa_pipeline.scraper - INFO - Successfully scraped app info: eBay online shopping & selling
+2025-06-10 13:29:37,609 - absa_pipeline.storage.apps - INFO - Stored app: com.ebay.mobile
+2025-06-10 13:29:37,609 - absa_pipeline.scraper - INFO - Stored app info for eBay online shopping & selling
+2025-06-10 13:29:37,609 - absa_pipeline.scraper - INFO - Starting review scraping for com.ebay.mobile, target: 1000 reviews
+2025-06-10 13:29:37,614 - absa_pipeline.scraper.deduplicator - INFO - Loaded 0 existing review IDs for com.ebay.mobile
+2025-06-10 13:29:37,615 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 13:29:38,098 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 13:29:38,099 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 13:29:38,117 - absa_pipeline.scraper - INFO - Batch processing complete: 190 valid out of 200 raw reviews
+2025-06-10 13:29:38,117 - absa_pipeline.scraper - INFO - Batch 1: 190 valid reviews added. Total valid: 190
+2025-06-10 13:29:38,117 - absa_pipeline.scraper - INFO - Breaking early - found 190 valid reviews
+2025-06-10 13:29:38,117 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 190
+2025-06-10 13:29:38,740 - absa_pipeline.storage.reviews - INFO - Stored 190 reviews, 0 errors
+2025-06-10 13:29:38,741 - absa_pipeline.scraper - INFO - Scraping completed for com.ebay.mobile: {'app_id': 'com.ebay.mobile', 'execution_time': 2.41, 'statistics': {'scraped': 200, 'valid': 190, 'invalid': 10, 'duplicates': 0, 'stored': 190, 'errors': 0}, 'success': True}
+2025-06-10 13:29:38,741 - absa_pipeline.main - INFO - [OK] com.ebay.mobile: 190 reviews stored
+2025-06-10 13:29:40,743 - absa_pipeline.main - INFO - [SCRAPE] Scraping com.etsy.android...
+2025-06-10 13:29:40,743 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.etsy.android
+2025-06-10 13:29:40,744 - absa_pipeline.scraper - INFO - Scraping app info for: com.etsy.android
+2025-06-10 13:29:41,473 - absa_pipeline.scraper - INFO - Successfully scraped app info: Etsy: A Special Marketplace
+2025-06-10 13:29:41,478 - absa_pipeline.storage.apps - INFO - Stored app: com.etsy.android
+2025-06-10 13:29:41,479 - absa_pipeline.scraper - INFO - Stored app info for Etsy: A Special Marketplace
+2025-06-10 13:29:41,479 - absa_pipeline.scraper - INFO - Starting review scraping for com.etsy.android, target: 1000 reviews
+2025-06-10 13:29:41,484 - absa_pipeline.scraper.deduplicator - INFO - Loaded 0 existing review IDs for com.etsy.android
+2025-06-10 13:29:41,484 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 13:29:41,854 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 13:29:41,854 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 13:29:41,867 - absa_pipeline.scraper - INFO - Batch processing complete: 197 valid out of 200 raw reviews
+2025-06-10 13:29:41,869 - absa_pipeline.scraper - INFO - Batch 1: 197 valid reviews added. Total valid: 197
+2025-06-10 13:29:41,869 - absa_pipeline.scraper - INFO - Breaking early - found 197 valid reviews
+2025-06-10 13:29:41,870 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 197
+2025-06-10 13:29:42,545 - absa_pipeline.storage.reviews - INFO - Stored 197 reviews, 0 errors
+2025-06-10 13:29:42,545 - absa_pipeline.scraper - INFO - Scraping completed for com.etsy.android: {'app_id': 'com.etsy.android', 'execution_time': 1.8, 'statistics': {'scraped': 200, 'valid': 197, 'invalid': 3, 'duplicates': 0, 'stored': 197, 'errors': 0}, 'success': True}
+2025-06-10 13:29:42,546 - absa_pipeline.main - INFO - [OK] com.etsy.android: 197 reviews stored
+2025-06-10 13:29:44,547 - absa_pipeline.main - INFO - [SUMMARY] Sample collection complete: 938 reviews from 5 apps
+2025-06-10 13:29:44,547 - absa_pipeline.main - INFO - [DASH] Launching dashboard...
+2025-06-10 13:29:44,548 - absa_pipeline.main - INFO - [START] Starting dashboard on http://0.0.0.0:8502
+2025-06-10 13:29:47,553 - absa_pipeline.main - INFO - [OK] Dashboard launched successfully
+2025-06-10 13:29:47,553 - absa_pipeline.main - INFO - [URL] Access dashboard at: http://localhost:8502
+2025-06-10 13:29:47,554 - absa_pipeline.main - INFO - [SUCCESS] ABSA Pipeline Phase 1 launched successfully!
+2025-06-10 13:29:47,554 - absa_pipeline.main - INFO - [INFO] What's running:
+2025-06-10 13:29:47,554 - absa_pipeline.main - INFO -    - PostgreSQL database
+2025-06-10 13:29:47,555 - absa_pipeline.main - INFO -    - Redis cache
+2025-06-10 13:29:47,555 - absa_pipeline.main - INFO -    - Kafka streaming (ready for Phase 2)
+2025-06-10 13:29:47,555 - absa_pipeline.main - INFO -    - Streamlit dashboard
+2025-06-10 13:29:47,556 - absa_pipeline.main - INFO -    - Review scraping capability
+2025-06-10 13:29:47,556 - absa_pipeline.main - INFO - [DASHBOARD] Dashboard: http://localhost:8502
+2025-06-10 13:29:47,557 - absa_pipeline.main - INFO - [INFO] Press Ctrl+C to stop the pipeline
+2025-06-10 13:29:56,980 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 13:29:56,980 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 13:29:58,140 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 13:29:58,227 - absa_pipeline.storage.redis - INFO - Redis connection initialized successfully
+2025-06-10 16:48:04,741 - absa_pipeline - INFO - 
+[STOP] Shutting down pipeline...
+2025-06-10 16:48:04,757 - absa_pipeline.main - INFO - [STOP] Stopping infrastructure...
+2025-06-10 16:48:07,832 - absa_pipeline.main - INFO - [OK] Infrastructure stopped successfully
+2025-06-10 16:48:35,971 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 16:48:35,972 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 16:48:48,680 - absa_pipeline.storage.db - ERROR - Failed to initialize database connection: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-10 16:51:16,635 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 16:51:16,636 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 16:51:19,354 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 16:51:19,433 - absa_pipeline.servqual.implementation - INFO - Updated 0 aspects
+2025-06-10 16:51:19,437 - absa_pipeline.servqual.implementation - INFO - Updated 0 aspects
+2025-06-10 16:51:19,441 - absa_pipeline.servqual.implementation - INFO - Updated 0 aspects
+2025-06-10 16:51:19,444 - absa_pipeline.servqual.implementation - INFO - Updated 0 aspects
+2025-06-10 16:51:19,447 - absa_pipeline.servqual.implementation - INFO - Updated 0 aspects
+2025-06-10 16:53:04,253 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 16:53:04,254 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 16:53:06,684 - absa_pipeline.servqual.implementation - INFO - Starting SERVQUAL implementation...
+2025-06-10 16:53:06,684 - absa_pipeline.servqual.implementation - INFO - Adding SERVQUAL dimension column to aspects table...
+2025-06-10 16:53:06,762 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 16:53:06,768 - absa_pipeline.servqual.implementation - INFO - SERVQUAL column added to aspects table
+2025-06-10 16:53:06,769 - absa_pipeline.servqual.implementation - INFO - Creating SERVQUAL scores table...
+2025-06-10 16:53:06,772 - absa_pipeline.servqual.implementation - INFO - SERVQUAL scores table created
+2025-06-10 16:53:06,773 - absa_pipeline.servqual.implementation - INFO - Mapping aspects to SERVQUAL dimensions...
+2025-06-10 16:53:06,779 - absa_pipeline.servqual.implementation - INFO - Updated 0 aspects
+2025-06-10 16:53:06,783 - absa_pipeline.servqual.implementation - INFO - Updated 0 aspects
+2025-06-10 16:53:06,786 - absa_pipeline.servqual.implementation - INFO - Updated 0 aspects
+2025-06-10 16:53:06,788 - absa_pipeline.servqual.implementation - INFO - Updated 0 aspects
+2025-06-10 16:53:06,790 - absa_pipeline.servqual.implementation - INFO - Updated 0 aspects
+2025-06-10 16:53:06,791 - absa_pipeline.servqual.implementation - INFO - Aspect-to-SERVQUAL mapping completed
+2025-06-10 16:53:06,791 - absa_pipeline.servqual.implementation - INFO - Creating performance indexes...
+2025-06-10 16:53:06,799 - absa_pipeline.servqual.implementation - INFO - Performance indexes created
+2025-06-10 16:53:06,799 - absa_pipeline.servqual.implementation - INFO - Creating SERVQUAL analysis views...
+2025-06-10 16:53:06,812 - absa_pipeline.servqual.implementation - INFO - SERVQUAL analysis views created
+2025-06-10 16:53:06,813 - absa_pipeline.servqual.implementation - INFO - Verifying SERVQUAL implementation...
+2025-06-10 16:53:06,837 - absa_pipeline.servqual.implementation - ERROR - Verification failed: No aspect-to-SERVQUAL mappings found
+2025-06-10 16:53:06,838 - absa_pipeline.servqual.implementation - ERROR - SERVQUAL implementation failed: No aspect-to-SERVQUAL mappings found
+2025-06-10 17:06:30,857 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 17:06:30,858 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 17:06:31,955 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 17:06:32,004 - absa_pipeline.storage.redis - INFO - Redis connection initialized successfully
