@@ -1671,3 +1671,1385 @@ connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection re
 2025-06-10 17:06:30,858 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
 2025-06-10 17:06:31,955 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
 2025-06-10 17:06:32,004 - absa_pipeline.storage.redis - INFO - Redis connection initialized successfully
+2025-06-10 18:58:58,374 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 18:58:58,376 - absa_pipeline.main - INFO - [START] Starting Docker infrastructure...
+2025-06-10 18:58:59,171 - absa_pipeline.main - INFO - [OK] Docker infrastructure started successfully
+2025-06-10 18:58:59,171 - absa_pipeline.main - INFO - [WAIT] Waiting for services to be ready...
+2025-06-10 18:59:09,175 - absa_pipeline.main - INFO - [CHECK] Checking service health...
+2025-06-10 18:59:10,365 - absa_pipeline.health - ERROR - System resource check failed: argument 1 (impossible<bad format char>)
+2025-06-10 18:59:10,365 - absa_pipeline.main - INFO - [OK] All services are healthy
+2025-06-10 18:59:34,920 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 18:59:35,460 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 18:59:36,927 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 18:59:36,929 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.amazon.mShop.android.shopping
+2025-06-10 18:59:36,930 - absa_pipeline.scraper - INFO - Scraping app info for: com.amazon.mShop.android.shopping
+2025-06-10 18:59:37,580 - absa_pipeline.scraper - INFO - Successfully scraped app info: Amazon Shopping
+2025-06-10 18:59:37,698 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 18:59:37,764 - absa_pipeline.storage.apps - INFO - Stored app: com.amazon.mShop.android.shopping
+2025-06-10 18:59:37,765 - absa_pipeline.scraper - INFO - Stored app info for Amazon Shopping
+2025-06-10 18:59:37,765 - absa_pipeline.scraper - INFO - Starting review scraping for com.amazon.mShop.android.shopping, target: 1000 reviews
+2025-06-10 18:59:37,776 - absa_pipeline.scraper.deduplicator - INFO - Loaded 0 existing review IDs for com.amazon.mShop.android.shopping
+2025-06-10 18:59:37,777 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 18:59:38,249 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 18:59:38,250 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 18:59:38,270 - absa_pipeline.scraper - INFO - Batch processing complete: 191 valid out of 200 raw reviews
+2025-06-10 18:59:38,270 - absa_pipeline.scraper - INFO - Batch 1: 191 valid reviews added. Total valid: 191
+2025-06-10 18:59:38,270 - absa_pipeline.scraper - INFO - Breaking early - found 191 valid reviews
+2025-06-10 18:59:38,271 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 191
+2025-06-10 18:59:38,897 - absa_pipeline.storage.reviews - INFO - Stored 191 reviews, 0 errors
+2025-06-10 18:59:38,897 - absa_pipeline.scraper - INFO - Scraping completed for com.amazon.mShop.android.shopping: {'app_id': 'com.amazon.mShop.android.shopping', 'execution_time': 1.97, 'statistics': {'scraped': 200, 'valid': 191, 'invalid': 9, 'duplicates': 0, 'stored': 191, 'errors': 0}, 'success': True}
+2025-06-10 18:59:51,006 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 18:59:51,008 - absa_pipeline.main - INFO - [ABSA] Starting ABSA batch processing...
+2025-06-10 18:59:51,338 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 18:59:51,938 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 19:00:16,493 - absa_pipeline.main - ERROR - [ERROR] ABSA processing error: ForwardRef._evaluate() missing 1 required keyword-only argument: 'recursive_guard'
+2025-06-10 19:06:50,520 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 19:06:50,522 - absa_pipeline.main - INFO - [ABSA] Starting ABSA batch processing...
+2025-06-10 19:06:50,832 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 19:06:51,373 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 19:07:05,275 - absa_pipeline.main - ERROR - [ERROR] ABSA processing error: ForwardRef._evaluate() missing 1 required keyword-only argument: 'recursive_guard'
+2025-06-10 19:07:40,866 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 19:07:40,867 - absa_pipeline.main - INFO - [ABSA] Starting ABSA batch processing...
+2025-06-10 19:07:41,174 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 19:07:41,697 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 19:07:55,525 - absa_pipeline.main - ERROR - [ERROR] ABSA processing error: ForwardRef._evaluate() missing 1 required keyword-only argument: 'recursive_guard'
+2025-06-10 19:10:53,544 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 19:10:53,853 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 19:21:41,293 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 19:21:41,772 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 19:22:03,121 - absa_pipeline.models.manager - INFO - ModelManager initialized
+2025-06-10 19:22:03,462 - absa_pipeline.preprocessing.aspects - WARNING - Using basic English model - aspect extraction will be limited
+2025-06-10 19:22:03,894 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 19:22:04,021 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 19:22:04,041 - absa_pipeline.preprocessing.aspects - INFO - Loaded 15 aspect keyword sets
+2025-06-10 19:22:04,042 - absa_pipeline.preprocessing - INFO - ABSA Preprocessor initialized
+2025-06-10 19:22:04,042 - absa_pipeline.deep_engine - INFO - Deep ABSA Engine initialized
+2025-06-10 19:22:04,043 - absa_pipeline.engine - INFO - Deep ABSA engine initialized
+2025-06-10 19:22:04,043 - absa_pipeline.engine - INFO - Unified ABSA Engine initialized with mode: deep
+2025-06-10 19:22:21,493 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 19:22:21,495 - absa_pipeline.main - INFO - [ABSA] Starting ABSA batch processing...
+2025-06-10 19:22:21,967 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 19:22:22,768 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 19:22:38,150 - absa_pipeline.models.manager - INFO - ModelManager initialized
+2025-06-10 19:22:38,363 - absa_pipeline.preprocessing.aspects - WARNING - Using basic English model - aspect extraction will be limited
+2025-06-10 19:22:38,438 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 19:22:38,445 - absa_pipeline.preprocessing.aspects - INFO - Loaded 15 aspect keyword sets
+2025-06-10 19:22:38,446 - absa_pipeline.preprocessing - INFO - ABSA Preprocessor initialized
+2025-06-10 19:22:38,446 - absa_pipeline.deep_engine - INFO - Deep ABSA Engine initialized
+2025-06-10 19:22:38,447 - absa_pipeline.engine - INFO - Deep ABSA engine initialized
+2025-06-10 19:22:38,447 - absa_pipeline.engine - INFO - Unified ABSA Engine initialized with mode: deep
+2025-06-10 19:22:38,469 - absa_pipeline.servqual.mapper - INFO - Loaded 15 aspect-to-SERVQUAL mappings
+2025-06-10 19:22:38,469 - absa_pipeline.batch.processor - INFO - Batch processor initialized with batch size: 32
+2025-06-10 19:22:38,470 - absa_pipeline.main - INFO - [ABSA] Processing reviews for all apps
+2025-06-10 19:22:38,472 - absa_pipeline.storage.db - ERROR - Non-query execution failed: (psycopg2.ProgrammingError) can't adapt type 'dict'
+[SQL: 
+            INSERT INTO processing_jobs (job_id, job_type, app_id, status, start_time, metadata)
+            VALUES (%(job_id)s, %(job_type)s, %(app_id)s, 'running', %(start_time)s, %(metadata)s)
+            ]
+[parameters: {'job_id': 'fb742332-5405-4c90-9b5b-90d73ec7c382', 'job_type': 'daily_absa_processing', 'app_id': None, 'start_time': datetime.datetime(2025, 6, 10, 19, 22, 38, 470413), 'metadata': {'batch_size': 32}}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:22:38,472 - absa_pipeline.batch.tracker - ERROR - Error creating processing job: (psycopg2.ProgrammingError) can't adapt type 'dict'
+[SQL: 
+            INSERT INTO processing_jobs (job_id, job_type, app_id, status, start_time, metadata)
+            VALUES (%(job_id)s, %(job_type)s, %(app_id)s, 'running', %(start_time)s, %(metadata)s)
+            ]
+[parameters: {'job_id': 'fb742332-5405-4c90-9b5b-90d73ec7c382', 'job_type': 'daily_absa_processing', 'app_id': None, 'start_time': datetime.datetime(2025, 6, 10, 19, 22, 38, 470413), 'metadata': {'batch_size': 32}}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:22:38,473 - absa_pipeline.main - ERROR - [ERROR] ABSA processing error: (psycopg2.ProgrammingError) can't adapt type 'dict'
+[SQL: 
+            INSERT INTO processing_jobs (job_id, job_type, app_id, status, start_time, metadata)
+            VALUES (%(job_id)s, %(job_type)s, %(app_id)s, 'running', %(start_time)s, %(metadata)s)
+            ]
+[parameters: {'job_id': 'fb742332-5405-4c90-9b5b-90d73ec7c382', 'job_type': 'daily_absa_processing', 'app_id': None, 'start_time': datetime.datetime(2025, 6, 10, 19, 22, 38, 470413), 'metadata': {'batch_size': 32}}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:39:01,573 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 19:39:01,574 - absa_pipeline.main - INFO - [ABSA] Starting ABSA batch processing...
+2025-06-10 19:39:01,909 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 19:39:02,523 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 19:39:17,374 - absa_pipeline.models.manager - INFO - ModelManager initialized
+2025-06-10 19:39:17,580 - absa_pipeline.preprocessing.aspects - WARNING - Using basic English model - aspect extraction will be limited
+2025-06-10 19:39:17,656 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 19:39:17,662 - absa_pipeline.preprocessing.aspects - INFO - Loaded 15 aspect keyword sets
+2025-06-10 19:39:17,663 - absa_pipeline.preprocessing - INFO - ABSA Preprocessor initialized
+2025-06-10 19:39:17,663 - absa_pipeline.deep_engine - INFO - Deep ABSA Engine initialized
+2025-06-10 19:39:17,663 - absa_pipeline.engine - INFO - Deep ABSA engine initialized
+2025-06-10 19:39:17,663 - absa_pipeline.engine - INFO - Unified ABSA Engine initialized with mode: deep
+2025-06-10 19:39:17,672 - absa_pipeline.servqual.mapper - INFO - Loaded 15 aspect-to-SERVQUAL mappings
+2025-06-10 19:39:17,672 - absa_pipeline.batch.processor - INFO - Batch processor initialized with batch size: 32
+2025-06-10 19:39:17,673 - absa_pipeline.main - INFO - [ABSA] Processing reviews for all apps
+2025-06-10 19:39:17,688 - absa_pipeline.batch.tracker - INFO - Created processing job: 95c1f1cf-4045-4ec6-8ea7-9963e5974ce6
+2025-06-10 19:39:17,689 - absa_pipeline.batch.processor - INFO - Starting daily processing job 95c1f1cf-4045-4ec6-8ea7-9963e5974ce6 for all apps
+2025-06-10 19:39:17,708 - absa_pipeline.batch.processor - INFO - Found 191 unprocessed reviews
+2025-06-10 19:39:17,709 - absa_pipeline.batch.processor - INFO - Processing batch 1/6 (32 reviews)
+2025-06-10 19:39:17,710 - absa_pipeline.batch.processor - INFO - Processing batch of 32 reviews for job 95c1f1cf-4045-4ec6-8ea7-9963e5974ce6
+2025-06-10 19:39:17,710 - absa_pipeline.engine - INFO - Starting batch analysis of 32 reviews in deep mode
+2025-06-10 19:39:17,710 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 32 reviews
+2025-06-10 19:39:17,711 - absa_pipeline.deep_engine - INFO - Loading deep ABSA models
+2025-06-10 19:39:17,712 - absa_pipeline.models.manager - INFO - Loading deep ABSA models
+2025-06-10 19:39:17,712 - absa_pipeline.models.loader - INFO - Loading sentiment model: cardiffnlp/twitter-roberta-base-sentiment
+2025-06-10 19:39:21,754 - huggingface_hub.file_download - WARNING - Xet Storage is enabled for this repo, but the 'hf_xet' package is not installed. Falling back to regular HTTP download. For better performance, install the package with: `pip install huggingface_hub[hf_xet]` or `pip install hf_xet`
+2025-06-10 19:42:58,302 - absa_pipeline.models.loader - INFO - Successfully loaded sentiment model: cardiffnlp/twitter-roberta-base-sentiment
+2025-06-10 19:42:58,302 - absa_pipeline.models.cache - INFO - Added sentiment:cardiffnlp/twitter-roberta-base-sentiment to cache
+2025-06-10 19:42:58,303 - absa_pipeline.models.loader - INFO - Loading spaCy model: en_core_web_sm
+2025-06-10 19:42:58,304 - absa_pipeline.models.loader - ERROR - Error loading spaCy model: [E050] Can't find model 'en_core_web_sm'. It doesn't seem to be a Python package or a valid path to a data directory.
+2025-06-10 19:42:58,304 - absa_pipeline.models.loader - WARNING - Creating basic English model without pre-trained vectors
+2025-06-10 19:42:58,419 - absa_pipeline.models.cache - INFO - Added spacy:en_core_web_sm to cache
+2025-06-10 19:42:58,428 - absa_pipeline.deep_engine.aspects - INFO - Loaded 15 aspect definitions
+2025-06-10 19:42:58,431 - absa_pipeline.deep_engine - INFO - Deep ABSA models loaded successfully
+2025-06-10 19:42:58,432 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,433 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,434 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,434 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,435 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,435 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,436 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,436 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,437 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,437 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,438 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,438 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,439 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,439 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,439 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,440 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,440 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,441 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,441 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,442 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,442 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,442 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,443 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,443 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,444 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,444 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,445 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,445 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,445 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,446 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,446 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,447 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,447 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 32 processed, 0 errors, 220.74s total
+2025-06-10 19:42:58,448 - absa_pipeline.engine - INFO - Batch analysis complete: 0/32 successful, 0 aspects extracted, 220.74s
+2025-06-10 19:42:58,456 - absa_pipeline.storage.db - ERROR - Non-query execution failed: (psycopg2.errors.UndefinedColumn) column "updated_at" of relation "reviews" does not exist
+LINE 3:         SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+                                      ^
+
+[SQL: 
+        UPDATE reviews 
+        SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+        WHERE review_id IN ('7029bf3b-c6f3-5038-8a36-3a070e0802ac','71d0a085-dc02-5c23-add9-11fe68487c9f','b196f471-172b-542d-bce1-45ddb28154c5','bf8456a7-39be-5fce-aafd-8bc1d5e674ea','248b862c-8292-553c-95ae-490b05bb8609','6dddc274-0801-5513-ba42-fccfade7c443','5daab05b-3a35-54b9-9c08-0866afa49672','0d5907ea-9d19-5e21-a529-92f7a0b7b1fb','99804a4d-f9fa-5b9f-bbc4-17f9cb67d8a0','5e17df35-28e9-5bea-8c3c-42a8761d1306','77b85d33-65e9-5265-bef5-d16b4e9240e9','43a048e9-fb98-5567-9d9b-8f99a1b4289c','82c9ab43-e654-51ac-80ef-20bda77bfb5c','aa171054-3d9e-562b-b7d0-d62e5f17f378','9ccb7ba7-52be-51ff-8aad-5e22866d919c','2d33e649-96c4-5a09-b2d6-34d528783af4','4ff40c92-4501-5d91-8bb9-d4828608d129','92aeca88-e323-5517-890f-645dc524b540','d8ed95eb-8c11-51c6-b70c-0772f3c87f2f','e9fa293b-7ebe-5687-b3aa-6a27e72291f5','81c48953-d5fe-56e9-9808-95cc1d79ed66','3df1a93e-47f3-5ac7-9e75-6f9e72cc914b','f21bbffd-fe41-594f-802c-4cc8be9fc69e','0d9af252-e8f2-579d-a2e9-48f3095c9cb5','f2370a4b-97fa-5102-84f9-16dd4eb723e2','2b0f72f3-a293-5f32-a633-1bdbf425d40f','1966fa99-5916-56bf-98a6-743485db5eee','895737d4-8ca2-541f-8163-7e0d73cd6644','ee7f602f-9c91-5fc5-97a1-52a3e4b7dbc7','f83178eb-9bc9-5215-abdc-40e36a1e3604','19e25397-6b1d-5623-b6ac-4c011361b7d0','004770f1-6650-5fc0-b5b4-b15f7d5fb792')
+        ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,456 - absa_pipeline.storage.reviews - ERROR - Failed to mark reviews as processed: (psycopg2.errors.UndefinedColumn) column "updated_at" of relation "reviews" does not exist
+LINE 3:         SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+                                      ^
+
+[SQL: 
+        UPDATE reviews 
+        SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+        WHERE review_id IN ('7029bf3b-c6f3-5038-8a36-3a070e0802ac','71d0a085-dc02-5c23-add9-11fe68487c9f','b196f471-172b-542d-bce1-45ddb28154c5','bf8456a7-39be-5fce-aafd-8bc1d5e674ea','248b862c-8292-553c-95ae-490b05bb8609','6dddc274-0801-5513-ba42-fccfade7c443','5daab05b-3a35-54b9-9c08-0866afa49672','0d5907ea-9d19-5e21-a529-92f7a0b7b1fb','99804a4d-f9fa-5b9f-bbc4-17f9cb67d8a0','5e17df35-28e9-5bea-8c3c-42a8761d1306','77b85d33-65e9-5265-bef5-d16b4e9240e9','43a048e9-fb98-5567-9d9b-8f99a1b4289c','82c9ab43-e654-51ac-80ef-20bda77bfb5c','aa171054-3d9e-562b-b7d0-d62e5f17f378','9ccb7ba7-52be-51ff-8aad-5e22866d919c','2d33e649-96c4-5a09-b2d6-34d528783af4','4ff40c92-4501-5d91-8bb9-d4828608d129','92aeca88-e323-5517-890f-645dc524b540','d8ed95eb-8c11-51c6-b70c-0772f3c87f2f','e9fa293b-7ebe-5687-b3aa-6a27e72291f5','81c48953-d5fe-56e9-9808-95cc1d79ed66','3df1a93e-47f3-5ac7-9e75-6f9e72cc914b','f21bbffd-fe41-594f-802c-4cc8be9fc69e','0d9af252-e8f2-579d-a2e9-48f3095c9cb5','f2370a4b-97fa-5102-84f9-16dd4eb723e2','2b0f72f3-a293-5f32-a633-1bdbf425d40f','1966fa99-5916-56bf-98a6-743485db5eee','895737d4-8ca2-541f-8163-7e0d73cd6644','ee7f602f-9c91-5fc5-97a1-52a3e4b7dbc7','f83178eb-9bc9-5215-abdc-40e36a1e3604','19e25397-6b1d-5623-b6ac-4c011361b7d0','004770f1-6650-5fc0-b5b4-b15f7d5fb792')
+        ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,457 - absa_pipeline.batch.processor - INFO - Marked 0 reviews as processed
+2025-06-10 19:42:58,462 - absa_pipeline.storage.db - ERROR - Non-query execution failed: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 4: ...    metadata = COALESCE(metadata, '{}'::jsonb) || :update_me...
+                                                             ^
+
+[SQL: 
+            UPDATE processing_jobs 
+            SET records_processed = %(records_processed)s, 
+                metadata = COALESCE(metadata, '{}'::jsonb) || :update_metadata::jsonb
+            WHERE job_id = %(job_id)s
+            ]
+[parameters: {'records_processed': 32, 'job_id': '95c1f1cf-4045-4ec6-8ea7-9963e5974ce6'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,463 - absa_pipeline.batch.tracker - ERROR - Error updating job progress: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 4: ...    metadata = COALESCE(metadata, '{}'::jsonb) || :update_me...
+                                                             ^
+
+[SQL: 
+            UPDATE processing_jobs 
+            SET records_processed = %(records_processed)s, 
+                metadata = COALESCE(metadata, '{}'::jsonb) || :update_metadata::jsonb
+            WHERE job_id = %(job_id)s
+            ]
+[parameters: {'records_processed': 32, 'job_id': '95c1f1cf-4045-4ec6-8ea7-9963e5974ce6'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,463 - absa_pipeline.batch.processor - INFO - Processing batch 2/6 (32 reviews)
+2025-06-10 19:42:58,464 - absa_pipeline.batch.processor - INFO - Processing batch of 32 reviews for job 95c1f1cf-4045-4ec6-8ea7-9963e5974ce6
+2025-06-10 19:42:58,464 - absa_pipeline.engine - INFO - Starting batch analysis of 32 reviews in deep mode
+2025-06-10 19:42:58,465 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 32 reviews
+2025-06-10 19:42:58,465 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,466 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,466 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,467 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,468 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,468 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,468 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,469 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,469 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,469 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,470 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,470 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,471 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,471 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,471 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,472 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,472 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,472 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,473 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,473 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,474 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,474 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,474 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,475 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,475 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,476 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,476 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,476 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,477 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,477 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,478 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,478 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,478 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 32 processed, 0 errors, 0.01s total
+2025-06-10 19:42:58,479 - absa_pipeline.engine - INFO - Batch analysis complete: 0/32 successful, 0 aspects extracted, 0.01s
+2025-06-10 19:42:58,481 - absa_pipeline.storage.db - ERROR - Non-query execution failed: (psycopg2.errors.UndefinedColumn) column "updated_at" of relation "reviews" does not exist
+LINE 3:         SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+                                      ^
+
+[SQL: 
+        UPDATE reviews 
+        SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+        WHERE review_id IN ('6a08d41f-0c79-5fb2-8d73-eea6d3ceb701','05c8e2a2-5b50-57a9-a55a-7e98495cb7a1','6072b264-bf8b-516e-a553-3c6572c61d04','b54c0caf-b6fc-51f6-929e-4fadb15d1ff1','bef987f9-bfce-5955-94ff-c7097d2dc545','8fb17c58-72c0-54d0-bcb9-fdc5b82bafab','eaff97f2-fc3d-554d-9902-bfac03d4a1fe','f44e00fd-e86e-55d0-b61f-77b0656fdebd','ac4a3a03-4061-5091-a4da-3d5bbb4d1c85','bfaee58b-5097-584a-acea-86b2dc80329b','3278961c-caf9-5d6a-a61d-f7d53057b293','cf862ab7-1b33-5f2f-abc3-0d54cd15830f','abed3e88-5904-57ab-8316-bf768c27d1cf','ed89576e-0419-58fe-b137-e27689e2f6d5','4159cc71-26ee-56be-b66b-03fcaf3669dc','b005c718-e041-58a2-be88-c3fe3b8a3544','bc886a12-7d37-5012-af99-3205c27a6e2b','0414a546-e16f-5350-adf0-13de7381b3ca','9ca3c626-f4d0-5330-9ac4-6867dd2ab146','16ba8299-5f34-568b-aa71-e68209ee629b','92db2282-0647-5d17-bb29-0e70b2de63df','19c47873-8e4b-54d5-a606-a20bf291029c','29421b88-0aa0-5a14-8ec7-d910c0d774cb','2f0b4708-5e9c-5b42-b256-0b51ca74bd8b','fd7874af-8fa2-5582-bd9d-19442ca876b4','a8865fab-3067-5c6d-93d4-267c0e03ae62','d5159d65-4d11-501c-ba84-da11cf1fa1d0','b006a5d0-5fd5-50b0-a380-b3cca607cd7c','c597407f-c53b-5671-847a-e9c22e72afda','670efd4e-d3d8-5405-8ab1-bfc60958dadd','4ef8c30f-e3f0-54b1-8fb1-d553177cd375','82c83d18-911d-50ed-b8cc-3e68e8e0ef23')
+        ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,482 - absa_pipeline.storage.reviews - ERROR - Failed to mark reviews as processed: (psycopg2.errors.UndefinedColumn) column "updated_at" of relation "reviews" does not exist
+LINE 3:         SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+                                      ^
+
+[SQL: 
+        UPDATE reviews 
+        SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+        WHERE review_id IN ('6a08d41f-0c79-5fb2-8d73-eea6d3ceb701','05c8e2a2-5b50-57a9-a55a-7e98495cb7a1','6072b264-bf8b-516e-a553-3c6572c61d04','b54c0caf-b6fc-51f6-929e-4fadb15d1ff1','bef987f9-bfce-5955-94ff-c7097d2dc545','8fb17c58-72c0-54d0-bcb9-fdc5b82bafab','eaff97f2-fc3d-554d-9902-bfac03d4a1fe','f44e00fd-e86e-55d0-b61f-77b0656fdebd','ac4a3a03-4061-5091-a4da-3d5bbb4d1c85','bfaee58b-5097-584a-acea-86b2dc80329b','3278961c-caf9-5d6a-a61d-f7d53057b293','cf862ab7-1b33-5f2f-abc3-0d54cd15830f','abed3e88-5904-57ab-8316-bf768c27d1cf','ed89576e-0419-58fe-b137-e27689e2f6d5','4159cc71-26ee-56be-b66b-03fcaf3669dc','b005c718-e041-58a2-be88-c3fe3b8a3544','bc886a12-7d37-5012-af99-3205c27a6e2b','0414a546-e16f-5350-adf0-13de7381b3ca','9ca3c626-f4d0-5330-9ac4-6867dd2ab146','16ba8299-5f34-568b-aa71-e68209ee629b','92db2282-0647-5d17-bb29-0e70b2de63df','19c47873-8e4b-54d5-a606-a20bf291029c','29421b88-0aa0-5a14-8ec7-d910c0d774cb','2f0b4708-5e9c-5b42-b256-0b51ca74bd8b','fd7874af-8fa2-5582-bd9d-19442ca876b4','a8865fab-3067-5c6d-93d4-267c0e03ae62','d5159d65-4d11-501c-ba84-da11cf1fa1d0','b006a5d0-5fd5-50b0-a380-b3cca607cd7c','c597407f-c53b-5671-847a-e9c22e72afda','670efd4e-d3d8-5405-8ab1-bfc60958dadd','4ef8c30f-e3f0-54b1-8fb1-d553177cd375','82c83d18-911d-50ed-b8cc-3e68e8e0ef23')
+        ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,483 - absa_pipeline.batch.processor - INFO - Marked 0 reviews as processed
+2025-06-10 19:42:58,486 - absa_pipeline.storage.db - ERROR - Non-query execution failed: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 4: ...    metadata = COALESCE(metadata, '{}'::jsonb) || :update_me...
+                                                             ^
+
+[SQL: 
+            UPDATE processing_jobs 
+            SET records_processed = %(records_processed)s, 
+                metadata = COALESCE(metadata, '{}'::jsonb) || :update_metadata::jsonb
+            WHERE job_id = %(job_id)s
+            ]
+[parameters: {'records_processed': 32, 'job_id': '95c1f1cf-4045-4ec6-8ea7-9963e5974ce6'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,487 - absa_pipeline.batch.tracker - ERROR - Error updating job progress: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 4: ...    metadata = COALESCE(metadata, '{}'::jsonb) || :update_me...
+                                                             ^
+
+[SQL: 
+            UPDATE processing_jobs 
+            SET records_processed = %(records_processed)s, 
+                metadata = COALESCE(metadata, '{}'::jsonb) || :update_metadata::jsonb
+            WHERE job_id = %(job_id)s
+            ]
+[parameters: {'records_processed': 32, 'job_id': '95c1f1cf-4045-4ec6-8ea7-9963e5974ce6'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,487 - absa_pipeline.batch.processor - INFO - Processing batch 3/6 (32 reviews)
+2025-06-10 19:42:58,487 - absa_pipeline.batch.processor - INFO - Processing batch of 32 reviews for job 95c1f1cf-4045-4ec6-8ea7-9963e5974ce6
+2025-06-10 19:42:58,493 - absa_pipeline.engine - INFO - Starting batch analysis of 32 reviews in deep mode
+2025-06-10 19:42:58,493 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 32 reviews
+2025-06-10 19:42:58,494 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,494 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,495 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,495 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,496 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,496 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,496 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,497 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,497 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,498 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,498 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,499 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,499 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,500 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,500 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,501 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,501 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,502 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,502 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,503 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,503 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,504 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,504 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,505 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,505 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,506 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,506 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,506 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,506 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,507 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,507 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,507 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,508 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 32 processed, 0 errors, 0.01s total
+2025-06-10 19:42:58,508 - absa_pipeline.engine - INFO - Batch analysis complete: 0/32 successful, 0 aspects extracted, 0.02s
+2025-06-10 19:42:58,511 - absa_pipeline.storage.db - ERROR - Non-query execution failed: (psycopg2.errors.UndefinedColumn) column "updated_at" of relation "reviews" does not exist
+LINE 3:         SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+                                      ^
+
+[SQL: 
+        UPDATE reviews 
+        SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+        WHERE review_id IN ('8e4505d1-6226-557d-aba7-b7c966af9e9b','0f35d790-464e-5b9a-9c9a-e436ee131476','fbc18f70-0def-573c-affb-fdfa8b3c7f3b','75904f64-94a6-5b89-ac2e-fd87e1158eb2','89357431-3b6b-56d4-ab5c-5eacc75392e9','999c396a-10b3-589f-a906-25c552bcb8f6','80724307-154f-5fff-a3b6-840c139e607d','3d035ff9-7418-5073-aeef-cade3d8fa307','e0b1fcb0-238d-51dc-b4fb-b6b0721ab91f','b4fbbe86-1580-5ba0-ad32-937165d66368','f9c6b271-c212-54c7-b7ea-981b3bff409e','0535be1a-a851-524d-b89d-0b91655db9e3','3074a9a3-0d2e-515a-a565-5cc4a4f43d33','487be44c-39a0-5b71-9c17-05f04ed85b26','0f6995ea-e63f-58da-b5e3-4d0d3d382e21','20a40507-14cc-572c-94a7-42557fde8d32','ee0157a2-5e3e-5a7e-858a-f74e25f30b80','48de5bd1-3882-5470-9feb-5a6da14c9906','7d886f57-0a0f-5e9e-9e98-50a6c0809afd','e1910cc2-b67b-5d65-842e-41417060d5dd','f6d77ec2-c4da-59da-8a43-45527c23f70d','2fd7d0d2-4874-5b2c-95c2-ac6497d72435','2814a8d0-2eb1-5618-88c0-ce865ccb4739','d0c238c6-c1d7-5917-ba75-35052ec418b5','b599e852-abd2-50ea-a25b-7d7625b40812','d55aad03-951f-5c66-8674-207656a0eb31','4205c1b9-74da-5bfd-9791-e3de05b7fdfc','fc09e903-bdbd-57e3-b325-f97343e45f0e','0b1d6f62-ee10-505e-954a-e7f75b35d402','a4caa7a7-f6a6-5a33-9a7e-34d53d349f6e','35938036-f819-52f4-859e-473b73464b82','5d060320-03d1-50d2-a08d-aade1c83ba4e')
+        ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,512 - absa_pipeline.storage.reviews - ERROR - Failed to mark reviews as processed: (psycopg2.errors.UndefinedColumn) column "updated_at" of relation "reviews" does not exist
+LINE 3:         SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+                                      ^
+
+[SQL: 
+        UPDATE reviews 
+        SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+        WHERE review_id IN ('8e4505d1-6226-557d-aba7-b7c966af9e9b','0f35d790-464e-5b9a-9c9a-e436ee131476','fbc18f70-0def-573c-affb-fdfa8b3c7f3b','75904f64-94a6-5b89-ac2e-fd87e1158eb2','89357431-3b6b-56d4-ab5c-5eacc75392e9','999c396a-10b3-589f-a906-25c552bcb8f6','80724307-154f-5fff-a3b6-840c139e607d','3d035ff9-7418-5073-aeef-cade3d8fa307','e0b1fcb0-238d-51dc-b4fb-b6b0721ab91f','b4fbbe86-1580-5ba0-ad32-937165d66368','f9c6b271-c212-54c7-b7ea-981b3bff409e','0535be1a-a851-524d-b89d-0b91655db9e3','3074a9a3-0d2e-515a-a565-5cc4a4f43d33','487be44c-39a0-5b71-9c17-05f04ed85b26','0f6995ea-e63f-58da-b5e3-4d0d3d382e21','20a40507-14cc-572c-94a7-42557fde8d32','ee0157a2-5e3e-5a7e-858a-f74e25f30b80','48de5bd1-3882-5470-9feb-5a6da14c9906','7d886f57-0a0f-5e9e-9e98-50a6c0809afd','e1910cc2-b67b-5d65-842e-41417060d5dd','f6d77ec2-c4da-59da-8a43-45527c23f70d','2fd7d0d2-4874-5b2c-95c2-ac6497d72435','2814a8d0-2eb1-5618-88c0-ce865ccb4739','d0c238c6-c1d7-5917-ba75-35052ec418b5','b599e852-abd2-50ea-a25b-7d7625b40812','d55aad03-951f-5c66-8674-207656a0eb31','4205c1b9-74da-5bfd-9791-e3de05b7fdfc','fc09e903-bdbd-57e3-b325-f97343e45f0e','0b1d6f62-ee10-505e-954a-e7f75b35d402','a4caa7a7-f6a6-5a33-9a7e-34d53d349f6e','35938036-f819-52f4-859e-473b73464b82','5d060320-03d1-50d2-a08d-aade1c83ba4e')
+        ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,513 - absa_pipeline.batch.processor - INFO - Marked 0 reviews as processed
+2025-06-10 19:42:58,517 - absa_pipeline.storage.db - ERROR - Non-query execution failed: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 4: ...    metadata = COALESCE(metadata, '{}'::jsonb) || :update_me...
+                                                             ^
+
+[SQL: 
+            UPDATE processing_jobs 
+            SET records_processed = %(records_processed)s, 
+                metadata = COALESCE(metadata, '{}'::jsonb) || :update_metadata::jsonb
+            WHERE job_id = %(job_id)s
+            ]
+[parameters: {'records_processed': 32, 'job_id': '95c1f1cf-4045-4ec6-8ea7-9963e5974ce6'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,518 - absa_pipeline.batch.tracker - ERROR - Error updating job progress: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 4: ...    metadata = COALESCE(metadata, '{}'::jsonb) || :update_me...
+                                                             ^
+
+[SQL: 
+            UPDATE processing_jobs 
+            SET records_processed = %(records_processed)s, 
+                metadata = COALESCE(metadata, '{}'::jsonb) || :update_metadata::jsonb
+            WHERE job_id = %(job_id)s
+            ]
+[parameters: {'records_processed': 32, 'job_id': '95c1f1cf-4045-4ec6-8ea7-9963e5974ce6'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,518 - absa_pipeline.batch.processor - INFO - Processing batch 4/6 (32 reviews)
+2025-06-10 19:42:58,519 - absa_pipeline.batch.processor - INFO - Processing batch of 32 reviews for job 95c1f1cf-4045-4ec6-8ea7-9963e5974ce6
+2025-06-10 19:42:58,519 - absa_pipeline.engine - INFO - Starting batch analysis of 32 reviews in deep mode
+2025-06-10 19:42:58,519 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 32 reviews
+2025-06-10 19:42:58,520 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,520 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,521 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,521 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,521 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,522 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,522 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,523 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,523 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,523 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,524 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,524 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,525 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,525 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,526 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,526 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,527 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,527 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,527 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,528 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,528 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,529 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,529 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,530 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,530 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,530 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,531 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,531 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,532 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,532 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,533 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,533 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,534 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 32 processed, 0 errors, 0.01s total
+2025-06-10 19:42:58,534 - absa_pipeline.engine - INFO - Batch analysis complete: 0/32 successful, 0 aspects extracted, 0.02s
+2025-06-10 19:42:58,538 - absa_pipeline.storage.db - ERROR - Non-query execution failed: (psycopg2.errors.UndefinedColumn) column "updated_at" of relation "reviews" does not exist
+LINE 3:         SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+                                      ^
+
+[SQL: 
+        UPDATE reviews 
+        SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+        WHERE review_id IN ('536305fc-c091-5b4d-b1b7-c52d0458d7af','2c2f77ae-6954-540e-91c1-301d6a6f2cb0','1b430843-a6b1-5e44-b805-4cffdf1e7912','c7e2e4e4-6b93-5ad4-b356-8425ee5b6f34','0044539c-607e-5608-88b1-47c52dd3e7ae','ceb59373-bb7c-5c62-bb6b-1a391f42573f','198e568b-6ece-59fc-adde-83c351f9d218','10cfd94c-384d-5ad2-bb8b-384734716fd1','cc9d7991-a16c-5723-ba3c-fd71ff362c40','0b393ee0-18e3-5bdd-bfc1-c411613abcdb','580dc8ee-9ca8-5890-946f-e80cd1aa17e2','08f4b141-75fe-5b22-865e-8322c0f2b2bf','3582b015-3c6b-5c67-bed1-b545f7455e3c','1e58230c-ce27-5cfa-8a9c-2518235dab6c','5393d35d-ff9a-5d24-9ad3-a38805b53b3f','0df43374-aa76-52e8-b10a-3f105357aac0','358be779-530a-5c5d-a16e-8d119b222a8e','c597df27-de75-52d7-a88c-d0bc31e4dcab','5d374027-8153-5b4e-bd36-4affd070d524','5f92712e-6053-55e8-948a-f24e85777ec0','90ada6a5-1b82-5b5f-98c2-6fa1f81a99f7','dd6f02f0-cfdf-5818-9eab-d17ecba680c1','812d3385-f6c4-5f38-8c0b-69425539582b','57c63f96-4ec7-5d2e-87dc-96f9cfc456c5','0a5ab7f3-934e-528f-a19f-2de6736c7694','3e2cbd3c-bc4a-5885-b205-c22b409d5d48','a3abb9e8-9f45-5864-afce-5655fa9ff028','809faeb2-58dc-5092-84e4-f5709367c5ff','dcba6b8c-0ac2-5f23-a6de-f3886a7a0cfb','a8af0e1c-d8a6-5d43-a244-6bec16d28992','ec338647-4209-52a0-9e73-b965717253a7','5f81040b-833f-59a0-90a9-55da50503997')
+        ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,538 - absa_pipeline.storage.reviews - ERROR - Failed to mark reviews as processed: (psycopg2.errors.UndefinedColumn) column "updated_at" of relation "reviews" does not exist
+LINE 3:         SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+                                      ^
+
+[SQL: 
+        UPDATE reviews 
+        SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+        WHERE review_id IN ('536305fc-c091-5b4d-b1b7-c52d0458d7af','2c2f77ae-6954-540e-91c1-301d6a6f2cb0','1b430843-a6b1-5e44-b805-4cffdf1e7912','c7e2e4e4-6b93-5ad4-b356-8425ee5b6f34','0044539c-607e-5608-88b1-47c52dd3e7ae','ceb59373-bb7c-5c62-bb6b-1a391f42573f','198e568b-6ece-59fc-adde-83c351f9d218','10cfd94c-384d-5ad2-bb8b-384734716fd1','cc9d7991-a16c-5723-ba3c-fd71ff362c40','0b393ee0-18e3-5bdd-bfc1-c411613abcdb','580dc8ee-9ca8-5890-946f-e80cd1aa17e2','08f4b141-75fe-5b22-865e-8322c0f2b2bf','3582b015-3c6b-5c67-bed1-b545f7455e3c','1e58230c-ce27-5cfa-8a9c-2518235dab6c','5393d35d-ff9a-5d24-9ad3-a38805b53b3f','0df43374-aa76-52e8-b10a-3f105357aac0','358be779-530a-5c5d-a16e-8d119b222a8e','c597df27-de75-52d7-a88c-d0bc31e4dcab','5d374027-8153-5b4e-bd36-4affd070d524','5f92712e-6053-55e8-948a-f24e85777ec0','90ada6a5-1b82-5b5f-98c2-6fa1f81a99f7','dd6f02f0-cfdf-5818-9eab-d17ecba680c1','812d3385-f6c4-5f38-8c0b-69425539582b','57c63f96-4ec7-5d2e-87dc-96f9cfc456c5','0a5ab7f3-934e-528f-a19f-2de6736c7694','3e2cbd3c-bc4a-5885-b205-c22b409d5d48','a3abb9e8-9f45-5864-afce-5655fa9ff028','809faeb2-58dc-5092-84e4-f5709367c5ff','dcba6b8c-0ac2-5f23-a6de-f3886a7a0cfb','a8af0e1c-d8a6-5d43-a244-6bec16d28992','ec338647-4209-52a0-9e73-b965717253a7','5f81040b-833f-59a0-90a9-55da50503997')
+        ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,539 - absa_pipeline.batch.processor - INFO - Marked 0 reviews as processed
+2025-06-10 19:42:58,542 - absa_pipeline.storage.db - ERROR - Non-query execution failed: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 4: ...    metadata = COALESCE(metadata, '{}'::jsonb) || :update_me...
+                                                             ^
+
+[SQL: 
+            UPDATE processing_jobs 
+            SET records_processed = %(records_processed)s, 
+                metadata = COALESCE(metadata, '{}'::jsonb) || :update_metadata::jsonb
+            WHERE job_id = %(job_id)s
+            ]
+[parameters: {'records_processed': 32, 'job_id': '95c1f1cf-4045-4ec6-8ea7-9963e5974ce6'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,543 - absa_pipeline.batch.tracker - ERROR - Error updating job progress: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 4: ...    metadata = COALESCE(metadata, '{}'::jsonb) || :update_me...
+                                                             ^
+
+[SQL: 
+            UPDATE processing_jobs 
+            SET records_processed = %(records_processed)s, 
+                metadata = COALESCE(metadata, '{}'::jsonb) || :update_metadata::jsonb
+            WHERE job_id = %(job_id)s
+            ]
+[parameters: {'records_processed': 32, 'job_id': '95c1f1cf-4045-4ec6-8ea7-9963e5974ce6'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,543 - absa_pipeline.batch.processor - INFO - Processing batch 5/6 (32 reviews)
+2025-06-10 19:42:58,544 - absa_pipeline.batch.processor - INFO - Processing batch of 32 reviews for job 95c1f1cf-4045-4ec6-8ea7-9963e5974ce6
+2025-06-10 19:42:58,544 - absa_pipeline.engine - INFO - Starting batch analysis of 32 reviews in deep mode
+2025-06-10 19:42:58,544 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 32 reviews
+2025-06-10 19:42:58,545 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,545 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,546 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,546 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,546 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,547 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,547 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,548 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,548 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,549 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,549 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,550 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,551 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,552 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,553 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,553 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,553 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,554 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,554 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,555 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,555 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,555 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,556 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,557 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,557 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,557 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,558 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,558 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,559 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,559 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,560 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,560 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,560 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 32 processed, 0 errors, 0.02s total
+2025-06-10 19:42:58,561 - absa_pipeline.engine - INFO - Batch analysis complete: 0/32 successful, 0 aspects extracted, 0.02s
+2025-06-10 19:42:58,564 - absa_pipeline.storage.db - ERROR - Non-query execution failed: (psycopg2.errors.UndefinedColumn) column "updated_at" of relation "reviews" does not exist
+LINE 3:         SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+                                      ^
+
+[SQL: 
+        UPDATE reviews 
+        SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+        WHERE review_id IN ('8382ab5c-0963-55a4-9887-ef09579c583e','c6704d20-b229-55ec-9288-5a8e9a1dbc93','a14005cc-a208-5a0c-b1ce-f80c083e3266','36decc49-1a98-5005-8976-4e4101d24702','41fc8083-fdc8-5f41-80f4-c00f81c11bd8','e86a570b-81b8-549a-9f83-af6ebecc03ed','b656db21-9a2a-5d2d-a548-0d5ea16a8f55','9511bc39-bde1-5173-ae47-13a740e0b454','f5fa3978-bc42-550e-a1dc-a9ede4358dfa','05d821ee-2c82-5073-8939-e4001d51e11e','e9051408-e7ea-5e23-b3d4-06507f91318d','b059c403-f9d6-54bf-ac1c-cdda11de6674','f6e70588-a868-5f39-ae56-c497da7d69b7','ec10dd44-a2e6-5a4f-9e4e-fa953b65a73f','f17d9aaa-b737-5653-b9dc-fa30344507fd','cc24fe0e-4273-51dd-be89-9d8783665faa','50002169-444c-5caa-aae2-f2d892a5aae7','7f308d1a-71c6-5734-b296-00ed5424abb3','5fe93930-308a-5bea-bce5-fdf9d16349eb','e6adf47c-f47b-5e84-81ab-b800376152a6','77e6cc41-b834-589e-b0f0-485665b38d75','33260459-3efd-5550-8a53-1f6d96b06202','7fe4c9e1-b9ad-5be4-8463-fbcad70ebed5','c44621ac-db23-5baf-96aa-9be3741f1de9','62b538e4-100b-5a09-8004-8ca3f045cee3','53c59779-3c2e-52c4-af77-18b0e49f81d7','0da45210-041a-5ba3-bbc7-e46841ec9c8b','88cab65b-5499-5768-a613-ee6591671f28','5426e3f7-6e65-5b87-af7d-f6f9c33c587a','ee93e23f-b5ab-5193-8899-7afc2355098e','36063804-1c6b-598d-ad90-cd508c978df0','69cddfbf-a492-5e0f-9baf-81f3401a6433')
+        ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,564 - absa_pipeline.storage.reviews - ERROR - Failed to mark reviews as processed: (psycopg2.errors.UndefinedColumn) column "updated_at" of relation "reviews" does not exist
+LINE 3:         SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+                                      ^
+
+[SQL: 
+        UPDATE reviews 
+        SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+        WHERE review_id IN ('8382ab5c-0963-55a4-9887-ef09579c583e','c6704d20-b229-55ec-9288-5a8e9a1dbc93','a14005cc-a208-5a0c-b1ce-f80c083e3266','36decc49-1a98-5005-8976-4e4101d24702','41fc8083-fdc8-5f41-80f4-c00f81c11bd8','e86a570b-81b8-549a-9f83-af6ebecc03ed','b656db21-9a2a-5d2d-a548-0d5ea16a8f55','9511bc39-bde1-5173-ae47-13a740e0b454','f5fa3978-bc42-550e-a1dc-a9ede4358dfa','05d821ee-2c82-5073-8939-e4001d51e11e','e9051408-e7ea-5e23-b3d4-06507f91318d','b059c403-f9d6-54bf-ac1c-cdda11de6674','f6e70588-a868-5f39-ae56-c497da7d69b7','ec10dd44-a2e6-5a4f-9e4e-fa953b65a73f','f17d9aaa-b737-5653-b9dc-fa30344507fd','cc24fe0e-4273-51dd-be89-9d8783665faa','50002169-444c-5caa-aae2-f2d892a5aae7','7f308d1a-71c6-5734-b296-00ed5424abb3','5fe93930-308a-5bea-bce5-fdf9d16349eb','e6adf47c-f47b-5e84-81ab-b800376152a6','77e6cc41-b834-589e-b0f0-485665b38d75','33260459-3efd-5550-8a53-1f6d96b06202','7fe4c9e1-b9ad-5be4-8463-fbcad70ebed5','c44621ac-db23-5baf-96aa-9be3741f1de9','62b538e4-100b-5a09-8004-8ca3f045cee3','53c59779-3c2e-52c4-af77-18b0e49f81d7','0da45210-041a-5ba3-bbc7-e46841ec9c8b','88cab65b-5499-5768-a613-ee6591671f28','5426e3f7-6e65-5b87-af7d-f6f9c33c587a','ee93e23f-b5ab-5193-8899-7afc2355098e','36063804-1c6b-598d-ad90-cd508c978df0','69cddfbf-a492-5e0f-9baf-81f3401a6433')
+        ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,565 - absa_pipeline.batch.processor - INFO - Marked 0 reviews as processed
+2025-06-10 19:42:58,569 - absa_pipeline.storage.db - ERROR - Non-query execution failed: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 4: ...    metadata = COALESCE(metadata, '{}'::jsonb) || :update_me...
+                                                             ^
+
+[SQL: 
+            UPDATE processing_jobs 
+            SET records_processed = %(records_processed)s, 
+                metadata = COALESCE(metadata, '{}'::jsonb) || :update_metadata::jsonb
+            WHERE job_id = %(job_id)s
+            ]
+[parameters: {'records_processed': 32, 'job_id': '95c1f1cf-4045-4ec6-8ea7-9963e5974ce6'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,570 - absa_pipeline.batch.tracker - ERROR - Error updating job progress: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 4: ...    metadata = COALESCE(metadata, '{}'::jsonb) || :update_me...
+                                                             ^
+
+[SQL: 
+            UPDATE processing_jobs 
+            SET records_processed = %(records_processed)s, 
+                metadata = COALESCE(metadata, '{}'::jsonb) || :update_metadata::jsonb
+            WHERE job_id = %(job_id)s
+            ]
+[parameters: {'records_processed': 32, 'job_id': '95c1f1cf-4045-4ec6-8ea7-9963e5974ce6'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,571 - absa_pipeline.batch.processor - INFO - Processing batch 6/6 (31 reviews)
+2025-06-10 19:42:58,571 - absa_pipeline.batch.processor - INFO - Processing batch of 31 reviews for job 95c1f1cf-4045-4ec6-8ea7-9963e5974ce6
+2025-06-10 19:42:58,571 - absa_pipeline.engine - INFO - Starting batch analysis of 31 reviews in deep mode
+2025-06-10 19:42:58,572 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 31 reviews
+2025-06-10 19:42:58,572 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,572 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,573 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,573 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,574 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,574 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,574 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,575 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,575 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,575 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,576 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,576 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,577 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,577 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,577 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,578 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,578 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,578 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,579 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,579 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,580 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,580 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,580 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,581 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,581 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,581 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,582 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,582 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,583 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,583 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,584 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:42:58,584 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 31 processed, 0 errors, 0.01s total
+2025-06-10 19:42:58,585 - absa_pipeline.engine - INFO - Batch analysis complete: 0/31 successful, 0 aspects extracted, 0.01s
+2025-06-10 19:42:58,588 - absa_pipeline.storage.db - ERROR - Non-query execution failed: (psycopg2.errors.UndefinedColumn) column "updated_at" of relation "reviews" does not exist
+LINE 3:         SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+                                      ^
+
+[SQL: 
+        UPDATE reviews 
+        SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+        WHERE review_id IN ('7a19d51c-c5c9-5bd0-97c4-4a63bd64725c','307907de-ff17-5728-b681-856a37d66cab','6a9a5946-b8c8-52c6-a5d6-dadbe5e4c0d4','060cf1b9-99c7-59c1-860b-2d85ea07866d','7bf9e415-c960-519a-84bf-1235ab5d91dd','ba67ad01-9e69-5397-abd7-3a50008ca538','b2f38487-f110-5fa5-993b-d6dbef92d7a4','951d6937-bee9-52a0-968a-de3a4e0d6526','d6acb52c-e88e-5540-bd06-ed33955d7cbd','1ece639b-0714-5a07-8fd0-a717a19d7092','acc63763-999f-5319-82de-3787d9735560','3bef7d29-c94d-5a13-8263-62f112d2d96c','13841256-b08d-5778-9841-ba6a365c4e78','8aee1880-3501-5548-a971-d9ae466a48f8','c30e5e7e-8e11-50c0-b263-39dfbfa8880a','533e1819-aa77-5c2c-94ff-31ac82542b9f','26df9d58-0d4e-5cac-b79b-cf0d7a99be3e','e7e22dee-82f3-569c-a86c-f8b2f7d0b5fe','5fc431aa-c9c8-5402-8694-73589e9d373e','1341043d-1250-52e9-a216-8d02674d0e15','1e5930bc-23d9-51e9-b14a-48b1dba13b6e','ce2bc1be-7662-5e80-88ad-883db4e1cb33','162812f2-c949-5c9b-ad7f-50dfdb9bbf92','e2fabc55-6430-55ad-866f-0fb5a1fa49db','0147bde7-7c50-5f10-9d05-8e1b8a709093','dc225b05-269f-50ed-b888-e7ecb81eaba5','317faf1e-d3cd-57a8-882b-a9a6930840ac','ba9cdd08-7da1-566d-8e19-7d1995889817','082c9b4c-8a35-5ff3-958e-c2f20474c09a','92a807c6-fa2e-50ed-a151-e78a9ec10c55','950e9003-0219-5cc6-a4b9-97d38cbeee34')
+        ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,588 - absa_pipeline.storage.reviews - ERROR - Failed to mark reviews as processed: (psycopg2.errors.UndefinedColumn) column "updated_at" of relation "reviews" does not exist
+LINE 3:         SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+                                      ^
+
+[SQL: 
+        UPDATE reviews 
+        SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+        WHERE review_id IN ('7a19d51c-c5c9-5bd0-97c4-4a63bd64725c','307907de-ff17-5728-b681-856a37d66cab','6a9a5946-b8c8-52c6-a5d6-dadbe5e4c0d4','060cf1b9-99c7-59c1-860b-2d85ea07866d','7bf9e415-c960-519a-84bf-1235ab5d91dd','ba67ad01-9e69-5397-abd7-3a50008ca538','b2f38487-f110-5fa5-993b-d6dbef92d7a4','951d6937-bee9-52a0-968a-de3a4e0d6526','d6acb52c-e88e-5540-bd06-ed33955d7cbd','1ece639b-0714-5a07-8fd0-a717a19d7092','acc63763-999f-5319-82de-3787d9735560','3bef7d29-c94d-5a13-8263-62f112d2d96c','13841256-b08d-5778-9841-ba6a365c4e78','8aee1880-3501-5548-a971-d9ae466a48f8','c30e5e7e-8e11-50c0-b263-39dfbfa8880a','533e1819-aa77-5c2c-94ff-31ac82542b9f','26df9d58-0d4e-5cac-b79b-cf0d7a99be3e','e7e22dee-82f3-569c-a86c-f8b2f7d0b5fe','5fc431aa-c9c8-5402-8694-73589e9d373e','1341043d-1250-52e9-a216-8d02674d0e15','1e5930bc-23d9-51e9-b14a-48b1dba13b6e','ce2bc1be-7662-5e80-88ad-883db4e1cb33','162812f2-c949-5c9b-ad7f-50dfdb9bbf92','e2fabc55-6430-55ad-866f-0fb5a1fa49db','0147bde7-7c50-5f10-9d05-8e1b8a709093','dc225b05-269f-50ed-b888-e7ecb81eaba5','317faf1e-d3cd-57a8-882b-a9a6930840ac','ba9cdd08-7da1-566d-8e19-7d1995889817','082c9b4c-8a35-5ff3-958e-c2f20474c09a','92a807c6-fa2e-50ed-a151-e78a9ec10c55','950e9003-0219-5cc6-a4b9-97d38cbeee34')
+        ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,589 - absa_pipeline.batch.processor - INFO - Marked 0 reviews as processed
+2025-06-10 19:42:58,591 - absa_pipeline.storage.db - ERROR - Non-query execution failed: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 4: ...    metadata = COALESCE(metadata, '{}'::jsonb) || :update_me...
+                                                             ^
+
+[SQL: 
+            UPDATE processing_jobs 
+            SET records_processed = %(records_processed)s, 
+                metadata = COALESCE(metadata, '{}'::jsonb) || :update_metadata::jsonb
+            WHERE job_id = %(job_id)s
+            ]
+[parameters: {'records_processed': 31, 'job_id': '95c1f1cf-4045-4ec6-8ea7-9963e5974ce6'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,591 - absa_pipeline.batch.tracker - ERROR - Error updating job progress: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 4: ...    metadata = COALESCE(metadata, '{}'::jsonb) || :update_me...
+                                                             ^
+
+[SQL: 
+            UPDATE processing_jobs 
+            SET records_processed = %(records_processed)s, 
+                metadata = COALESCE(metadata, '{}'::jsonb) || :update_metadata::jsonb
+            WHERE job_id = %(job_id)s
+            ]
+[parameters: {'records_processed': 31, 'job_id': '95c1f1cf-4045-4ec6-8ea7-9963e5974ce6'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-06-10 19:42:58,592 - absa_pipeline.batch.processor - INFO - Processing SERVQUAL analysis for com.amazon.mShop.android.shopping on 2025-06-10
+2025-06-10 19:42:58,616 - absa_pipeline.servqual.mapper - INFO - No aspect data found for com.amazon.mShop.android.shopping on 2025-06-10
+2025-06-10 19:42:58,617 - absa_pipeline.batch.processor - INFO - No SERVQUAL data generated for com.amazon.mShop.android.shopping on 2025-06-10
+2025-06-10 19:42:58,647 - absa_pipeline.batch.tracker - INFO - Job 95c1f1cf-4045-4ec6-8ea7-9963e5974ce6 completed with status: completed
+2025-06-10 19:42:58,647 - absa_pipeline.batch.processor - INFO - Daily processing completed successfully: 191 reviews, 0 aspects, 0 SERVQUAL dimensions
+2025-06-10 19:42:58,647 - absa_pipeline.main - INFO - [OK] ABSA processing completed successfully
+2025-06-10 19:42:58,648 - absa_pipeline.main - INFO -    - Reviews processed: 191
+2025-06-10 19:42:58,648 - absa_pipeline.main - INFO -    - Aspects extracted: 0
+2025-06-10 19:42:58,648 - absa_pipeline.main - INFO -    - SERVQUAL dimensions updated: 0
+2025-06-10 19:42:58,649 - absa_pipeline.main - INFO -    - Processing time: 221.0s
+2025-06-10 19:42:59,025 - huggingface_hub.file_download - WARNING - Xet Storage is enabled for this repo, but the 'hf_xet' package is not installed. Falling back to regular HTTP download. For better performance, install the package with: `pip install huggingface_hub[hf_xet]` or `pip install hf_xet`
+2025-06-10 19:54:50,106 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 19:54:50,108 - absa_pipeline.main - INFO - [ABSA] Starting ABSA batch processing...
+2025-06-10 19:54:50,531 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 19:54:51,271 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 19:55:10,742 - absa_pipeline.models.manager - INFO - ModelManager initialized
+2025-06-10 19:55:10,957 - absa_pipeline.preprocessing.aspects - WARNING - Using basic English model - aspect extraction will be limited
+2025-06-10 19:55:11,051 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 19:55:11,057 - absa_pipeline.preprocessing.aspects - INFO - Loaded 15 aspect keyword sets
+2025-06-10 19:55:11,058 - absa_pipeline.preprocessing - INFO - ABSA Preprocessor initialized
+2025-06-10 19:55:11,058 - absa_pipeline.deep_engine - INFO - Deep ABSA Engine initialized
+2025-06-10 19:55:11,059 - absa_pipeline.engine - INFO - Deep ABSA engine initialized
+2025-06-10 19:55:11,059 - absa_pipeline.engine - INFO - Unified ABSA Engine initialized with mode: deep
+2025-06-10 19:55:11,068 - absa_pipeline.servqual.mapper - INFO - Loaded 15 aspect-to-SERVQUAL mappings
+2025-06-10 19:55:11,069 - absa_pipeline.batch.processor - INFO - Batch processor initialized with batch size: 32
+2025-06-10 19:55:11,069 - absa_pipeline.main - INFO - [ABSA] Processing reviews for all apps
+2025-06-10 19:55:11,076 - absa_pipeline.batch.tracker - INFO - Created processing job: 149d1632-3d11-47bc-9dc2-3ac6d35151dc
+2025-06-10 19:55:11,076 - absa_pipeline.batch.processor - INFO - Starting daily processing job 149d1632-3d11-47bc-9dc2-3ac6d35151dc for all apps
+2025-06-10 19:55:11,086 - absa_pipeline.batch.processor - INFO - Found 191 unprocessed reviews
+2025-06-10 19:55:11,087 - absa_pipeline.batch.processor - INFO - Processing batch 1/6 (32 reviews)
+2025-06-10 19:55:11,087 - absa_pipeline.batch.processor - INFO - Processing batch of 32 reviews for job 149d1632-3d11-47bc-9dc2-3ac6d35151dc
+2025-06-10 19:55:11,088 - absa_pipeline.engine - INFO - Starting batch analysis of 32 reviews in deep mode
+2025-06-10 19:55:11,088 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 32 reviews
+2025-06-10 19:55:11,088 - absa_pipeline.deep_engine - INFO - Loading deep ABSA models
+2025-06-10 19:55:11,089 - absa_pipeline.models.manager - INFO - Loading deep ABSA models
+2025-06-10 19:55:11,089 - absa_pipeline.models.loader - INFO - Loading sentiment model: cardiffnlp/twitter-roberta-base-sentiment
+2025-06-10 19:55:12,791 - absa_pipeline.models.loader - INFO - Successfully loaded sentiment model: cardiffnlp/twitter-roberta-base-sentiment
+2025-06-10 19:55:12,792 - absa_pipeline.models.cache - INFO - Added sentiment:cardiffnlp/twitter-roberta-base-sentiment to cache
+2025-06-10 19:55:12,792 - absa_pipeline.models.loader - INFO - Loading spaCy model: en_core_web_sm
+2025-06-10 19:55:12,793 - absa_pipeline.models.loader - ERROR - Error loading spaCy model: [E050] Can't find model 'en_core_web_sm'. It doesn't seem to be a Python package or a valid path to a data directory.
+2025-06-10 19:55:12,793 - absa_pipeline.models.loader - WARNING - Creating basic English model without pre-trained vectors
+2025-06-10 19:55:12,907 - absa_pipeline.models.cache - INFO - Added spacy:en_core_web_sm to cache
+2025-06-10 19:55:12,915 - absa_pipeline.deep_engine.aspects - INFO - Loaded 15 aspect definitions
+2025-06-10 19:55:12,918 - absa_pipeline.deep_engine - INFO - Deep ABSA models loaded successfully
+2025-06-10 19:55:12,919 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,920 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,920 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,921 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,921 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,922 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,922 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,923 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,923 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,924 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,924 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,925 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,926 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,927 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,927 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,928 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,928 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,928 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,929 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,929 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,930 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,930 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,931 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,931 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,931 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,932 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,932 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,933 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,933 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,933 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,934 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,934 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,934 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 32 processed, 0 errors, 1.85s total
+2025-06-10 19:55:12,935 - absa_pipeline.engine - INFO - Batch analysis complete: 0/32 successful, 0 aspects extracted, 1.85s
+2025-06-10 19:55:12,978 - absa_pipeline.batch.processor - INFO - Marked 32 reviews as processed
+2025-06-10 19:55:12,984 - absa_pipeline.batch.processor - INFO - Processing batch 2/6 (32 reviews)
+2025-06-10 19:55:12,984 - absa_pipeline.batch.processor - INFO - Processing batch of 32 reviews for job 149d1632-3d11-47bc-9dc2-3ac6d35151dc
+2025-06-10 19:55:12,985 - absa_pipeline.engine - INFO - Starting batch analysis of 32 reviews in deep mode
+2025-06-10 19:55:12,985 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 32 reviews
+2025-06-10 19:55:12,986 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,986 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,987 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,987 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,987 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,988 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,988 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,989 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,989 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,990 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,991 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,991 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,992 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,992 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,993 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,993 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,994 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,994 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,995 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,995 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,996 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,996 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,997 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,997 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,998 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,998 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,999 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:12,999 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,000 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,000 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,000 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,001 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,001 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 32 processed, 0 errors, 0.02s total
+2025-06-10 19:55:13,001 - absa_pipeline.engine - INFO - Batch analysis complete: 0/32 successful, 0 aspects extracted, 0.02s
+2025-06-10 19:55:13,011 - absa_pipeline.batch.processor - INFO - Marked 32 reviews as processed
+2025-06-10 19:55:13,016 - absa_pipeline.batch.processor - INFO - Processing batch 3/6 (32 reviews)
+2025-06-10 19:55:13,017 - absa_pipeline.batch.processor - INFO - Processing batch of 32 reviews for job 149d1632-3d11-47bc-9dc2-3ac6d35151dc
+2025-06-10 19:55:13,017 - absa_pipeline.engine - INFO - Starting batch analysis of 32 reviews in deep mode
+2025-06-10 19:55:13,017 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 32 reviews
+2025-06-10 19:55:13,018 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,018 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,019 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,019 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,019 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,020 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,021 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,021 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,022 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,022 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,023 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,023 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,023 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,024 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,024 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,025 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,025 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,026 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,026 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,027 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,027 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,027 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,028 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,028 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,029 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,029 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,029 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,030 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,030 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,030 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,031 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,031 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,031 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 32 processed, 0 errors, 0.01s total
+2025-06-10 19:55:13,031 - absa_pipeline.engine - INFO - Batch analysis complete: 0/32 successful, 0 aspects extracted, 0.01s
+2025-06-10 19:55:13,039 - absa_pipeline.batch.processor - INFO - Marked 32 reviews as processed
+2025-06-10 19:55:13,045 - absa_pipeline.batch.processor - INFO - Processing batch 4/6 (32 reviews)
+2025-06-10 19:55:13,045 - absa_pipeline.batch.processor - INFO - Processing batch of 32 reviews for job 149d1632-3d11-47bc-9dc2-3ac6d35151dc
+2025-06-10 19:55:13,046 - absa_pipeline.engine - INFO - Starting batch analysis of 32 reviews in deep mode
+2025-06-10 19:55:13,046 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 32 reviews
+2025-06-10 19:55:13,047 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,047 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,048 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,048 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,048 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,049 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,049 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,050 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,050 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,051 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,051 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,052 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,052 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,052 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,053 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,053 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,053 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,054 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,054 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,055 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,055 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,055 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,056 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,056 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,057 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,057 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,058 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,058 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,059 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,059 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,060 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,060 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,060 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 32 processed, 0 errors, 0.01s total
+2025-06-10 19:55:13,061 - absa_pipeline.engine - INFO - Batch analysis complete: 0/32 successful, 0 aspects extracted, 0.01s
+2025-06-10 19:55:13,069 - absa_pipeline.batch.processor - INFO - Marked 32 reviews as processed
+2025-06-10 19:55:13,072 - absa_pipeline.batch.processor - INFO - Processing batch 5/6 (32 reviews)
+2025-06-10 19:55:13,073 - absa_pipeline.batch.processor - INFO - Processing batch of 32 reviews for job 149d1632-3d11-47bc-9dc2-3ac6d35151dc
+2025-06-10 19:55:13,073 - absa_pipeline.engine - INFO - Starting batch analysis of 32 reviews in deep mode
+2025-06-10 19:55:13,074 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 32 reviews
+2025-06-10 19:55:13,074 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,075 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,075 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,076 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,076 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,076 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,077 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,077 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,078 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,079 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,079 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,079 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,080 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,080 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,081 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,081 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,081 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,082 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,082 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,082 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,083 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,083 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,084 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,084 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,084 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,085 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,085 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,085 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,086 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,086 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,087 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,087 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,087 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 32 processed, 0 errors, 0.01s total
+2025-06-10 19:55:13,088 - absa_pipeline.engine - INFO - Batch analysis complete: 0/32 successful, 0 aspects extracted, 0.01s
+2025-06-10 19:55:13,095 - absa_pipeline.batch.processor - INFO - Marked 32 reviews as processed
+2025-06-10 19:55:13,099 - absa_pipeline.batch.processor - INFO - Processing batch 6/6 (31 reviews)
+2025-06-10 19:55:13,099 - absa_pipeline.batch.processor - INFO - Processing batch of 31 reviews for job 149d1632-3d11-47bc-9dc2-3ac6d35151dc
+2025-06-10 19:55:13,099 - absa_pipeline.engine - INFO - Starting batch analysis of 31 reviews in deep mode
+2025-06-10 19:55:13,100 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 31 reviews
+2025-06-10 19:55:13,100 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,100 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,101 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,101 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,101 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,102 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,102 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,103 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,103 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,103 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,104 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,104 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,104 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,105 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,105 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,105 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,106 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,106 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,107 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,108 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,108 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,109 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,109 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,109 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,110 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,110 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,111 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,111 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,111 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,112 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,112 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:55:13,113 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 31 processed, 0 errors, 0.01s total
+2025-06-10 19:55:13,113 - absa_pipeline.engine - INFO - Batch analysis complete: 0/31 successful, 0 aspects extracted, 0.01s
+2025-06-10 19:55:13,120 - absa_pipeline.batch.processor - INFO - Marked 31 reviews as processed
+2025-06-10 19:55:13,124 - absa_pipeline.batch.processor - INFO - Processing SERVQUAL analysis for com.amazon.mShop.android.shopping on 2025-06-10
+2025-06-10 19:55:13,133 - absa_pipeline.servqual.mapper - INFO - No aspect data found for com.amazon.mShop.android.shopping on 2025-06-10
+2025-06-10 19:55:13,133 - absa_pipeline.batch.processor - INFO - No SERVQUAL data generated for com.amazon.mShop.android.shopping on 2025-06-10
+2025-06-10 19:55:13,149 - absa_pipeline.batch.tracker - INFO - Job 149d1632-3d11-47bc-9dc2-3ac6d35151dc completed with status: completed
+2025-06-10 19:55:13,149 - absa_pipeline.batch.processor - INFO - Daily processing completed successfully: 191 reviews, 0 aspects, 0 SERVQUAL dimensions
+2025-06-10 19:55:13,150 - absa_pipeline.main - INFO - [OK] ABSA processing completed successfully
+2025-06-10 19:55:13,150 - absa_pipeline.main - INFO -    - Reviews processed: 191
+2025-06-10 19:55:13,150 - absa_pipeline.main - INFO -    - Aspects extracted: 0
+2025-06-10 19:55:13,151 - absa_pipeline.main - INFO -    - SERVQUAL dimensions updated: 0
+2025-06-10 19:55:13,151 - absa_pipeline.main - INFO -    - Processing time: 2.1s
+2025-06-10 19:58:21,347 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 19:58:21,563 - absa_pipeline.preprocessing.aspects - WARNING - Using basic English model - aspect extraction will be limited
+2025-06-10 19:58:21,971 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 19:58:22,052 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 19:58:22,058 - absa_pipeline.preprocessing.aspects - INFO - Loaded 15 aspect keyword sets
+2025-06-10 19:58:22,059 - absa_pipeline.preprocessing - INFO - ABSA Preprocessor initialized
+2025-06-10 19:58:22,060 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:59:05,327 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 19:59:05,532 - absa_pipeline.preprocessing.aspects - WARNING - Using basic English model - aspect extraction will be limited
+2025-06-10 19:59:05,880 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 19:59:05,954 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 19:59:05,961 - absa_pipeline.preprocessing.aspects - INFO - Loaded 15 aspect keyword sets
+2025-06-10 19:59:05,961 - absa_pipeline.preprocessing - INFO - ABSA Preprocessor initialized
+2025-06-10 19:59:05,962 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 19:59:21,541 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 19:59:21,726 - absa_pipeline.preprocessing.aspects - WARNING - Using basic English model - aspect extraction will be limited
+2025-06-10 19:59:22,059 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 19:59:22,133 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 19:59:22,138 - absa_pipeline.preprocessing.aspects - INFO - Loaded 15 aspect keyword sets
+2025-06-10 19:59:22,138 - absa_pipeline.preprocessing - INFO - ABSA Preprocessor initialized
+2025-06-10 19:59:22,139 - absa_pipeline.preprocessing - ERROR - Error preprocessing text: unterminated character set at position 0
+2025-06-10 20:01:04,007 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:01:04,192 - absa_pipeline.preprocessing.aspects - WARNING - Using basic English model - aspect extraction will be limited
+2025-06-10 20:01:04,563 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:01:04,647 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:01:04,655 - absa_pipeline.preprocessing.aspects - INFO - Loaded 15 aspect keyword sets
+2025-06-10 20:01:04,656 - absa_pipeline.preprocessing - INFO - ABSA Preprocessor initialized
+2025-06-10 20:02:24,605 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:02:24,810 - absa_pipeline.preprocessing.aspects - WARNING - Using basic English model - aspect extraction will be limited
+2025-06-10 20:02:25,144 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:02:25,217 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:02:25,223 - absa_pipeline.preprocessing.aspects - INFO - Loaded 15 aspect keyword sets
+2025-06-10 20:02:25,224 - absa_pipeline.preprocessing - INFO - ABSA Preprocessor initialized
+2025-06-10 20:02:39,898 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:02:39,899 - absa_pipeline.main - INFO - [ABSA] Starting ABSA batch processing...
+2025-06-10 20:02:40,210 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 20:02:40,775 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:02:55,421 - absa_pipeline.models.manager - INFO - ModelManager initialized
+2025-06-10 20:02:55,619 - absa_pipeline.preprocessing.aspects - WARNING - Using basic English model - aspect extraction will be limited
+2025-06-10 20:02:55,694 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:02:55,701 - absa_pipeline.preprocessing.aspects - INFO - Loaded 15 aspect keyword sets
+2025-06-10 20:02:55,702 - absa_pipeline.preprocessing - INFO - ABSA Preprocessor initialized
+2025-06-10 20:02:55,702 - absa_pipeline.deep_engine - INFO - Deep ABSA Engine initialized
+2025-06-10 20:02:55,703 - absa_pipeline.engine - INFO - Deep ABSA engine initialized
+2025-06-10 20:02:55,703 - absa_pipeline.engine - INFO - Unified ABSA Engine initialized with mode: deep
+2025-06-10 20:02:55,711 - absa_pipeline.servqual.mapper - INFO - Loaded 15 aspect-to-SERVQUAL mappings
+2025-06-10 20:02:55,712 - absa_pipeline.batch.processor - INFO - Batch processor initialized with batch size: 32
+2025-06-10 20:02:55,712 - absa_pipeline.main - INFO - [ABSA] Processing reviews for all apps
+2025-06-10 20:02:55,721 - absa_pipeline.batch.tracker - INFO - Created processing job: fadd36e5-887a-473c-95ef-fb62083c4a6b
+2025-06-10 20:02:55,721 - absa_pipeline.batch.processor - INFO - Starting daily processing job fadd36e5-887a-473c-95ef-fb62083c4a6b for all apps
+2025-06-10 20:02:55,731 - absa_pipeline.batch.processor - INFO - Found 0 unprocessed reviews
+2025-06-10 20:02:55,732 - absa_pipeline.batch.processor - INFO - No unprocessed reviews found
+2025-06-10 20:02:55,737 - absa_pipeline.batch.tracker - INFO - Job fadd36e5-887a-473c-95ef-fb62083c4a6b completed with status: completed
+2025-06-10 20:02:55,737 - absa_pipeline.main - INFO - [OK] ABSA processing completed successfully
+2025-06-10 20:02:55,738 - absa_pipeline.main - INFO -    - Reviews processed: 0
+2025-06-10 20:02:55,738 - absa_pipeline.main - INFO -    - Aspects extracted: 0
+2025-06-10 20:02:55,739 - absa_pipeline.main - INFO -    - SERVQUAL dimensions updated: 0
+2025-06-10 20:02:55,740 - absa_pipeline.main - INFO -    - Processing time: 0.0s
+2025-06-10 20:04:05,232 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:04:48,279 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:04:48,598 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 20:04:49,560 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:04:49,562 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.amazon.mShop.android.shopping
+2025-06-10 20:04:49,563 - absa_pipeline.scraper - INFO - Scraping app info for: com.amazon.mShop.android.shopping
+2025-06-10 20:04:50,272 - absa_pipeline.scraper - INFO - Successfully scraped app info: Amazon Shopping
+2025-06-10 20:04:50,343 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:04:50,353 - absa_pipeline.storage.apps - INFO - Stored app: com.amazon.mShop.android.shopping
+2025-06-10 20:04:50,354 - absa_pipeline.scraper - INFO - Stored app info for Amazon Shopping
+2025-06-10 20:04:50,354 - absa_pipeline.scraper - INFO - Starting review scraping for com.amazon.mShop.android.shopping, target: 1000 reviews
+2025-06-10 20:04:50,363 - absa_pipeline.scraper.deduplicator - INFO - Loaded 191 existing review IDs for com.amazon.mShop.android.shopping
+2025-06-10 20:04:50,364 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 20:04:50,778 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 20:04:50,779 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 20:04:50,794 - absa_pipeline.scraper - INFO - Batch processing complete: 190 valid out of 200 raw reviews
+2025-06-10 20:04:50,796 - absa_pipeline.scraper - INFO - Batch 1: 190 valid reviews added. Total valid: 190
+2025-06-10 20:04:50,796 - absa_pipeline.scraper - INFO - Breaking early - found 190 valid reviews
+2025-06-10 20:04:50,796 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 190
+2025-06-10 20:04:51,161 - absa_pipeline.storage.reviews - INFO - Stored 6 reviews, 184 errors
+2025-06-10 20:04:51,162 - absa_pipeline.scraper - INFO - Scraping completed for com.amazon.mShop.android.shopping: {'app_id': 'com.amazon.mShop.android.shopping', 'execution_time': 1.6, 'statistics': {'scraped': 200, 'valid': 190, 'invalid': 10, 'duplicates': 0, 'stored': 6, 'errors': 184}, 'success': True}
+2025-06-10 20:05:00,360 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:05:00,361 - absa_pipeline.main - INFO - [ABSA] Starting ABSA batch processing...
+2025-06-10 20:05:00,709 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 20:05:01,275 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:05:16,158 - absa_pipeline.models.manager - INFO - ModelManager initialized
+2025-06-10 20:05:16,378 - absa_pipeline.preprocessing.aspects - WARNING - Using basic English model - aspect extraction will be limited
+2025-06-10 20:05:16,455 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:05:16,462 - absa_pipeline.preprocessing.aspects - INFO - Loaded 15 aspect keyword sets
+2025-06-10 20:05:16,462 - absa_pipeline.preprocessing - INFO - ABSA Preprocessor initialized
+2025-06-10 20:05:16,463 - absa_pipeline.deep_engine - INFO - Deep ABSA Engine initialized
+2025-06-10 20:05:16,463 - absa_pipeline.engine - INFO - Deep ABSA engine initialized
+2025-06-10 20:05:16,463 - absa_pipeline.engine - INFO - Unified ABSA Engine initialized with mode: deep
+2025-06-10 20:05:16,471 - absa_pipeline.servqual.mapper - INFO - Loaded 15 aspect-to-SERVQUAL mappings
+2025-06-10 20:05:16,471 - absa_pipeline.batch.processor - INFO - Batch processor initialized with batch size: 32
+2025-06-10 20:05:16,471 - absa_pipeline.main - INFO - [ABSA] Processing reviews for all apps
+2025-06-10 20:05:16,478 - absa_pipeline.batch.tracker - INFO - Created processing job: 65895e86-3c1e-4017-965c-066677dad45b
+2025-06-10 20:05:16,479 - absa_pipeline.batch.processor - INFO - Starting daily processing job 65895e86-3c1e-4017-965c-066677dad45b for all apps
+2025-06-10 20:05:16,487 - absa_pipeline.batch.processor - INFO - Found 6 unprocessed reviews
+2025-06-10 20:05:16,487 - absa_pipeline.batch.processor - INFO - Processing batch 1/1 (6 reviews)
+2025-06-10 20:05:16,488 - absa_pipeline.batch.processor - INFO - Processing batch of 6 reviews for job 65895e86-3c1e-4017-965c-066677dad45b
+2025-06-10 20:05:16,488 - absa_pipeline.engine - INFO - Starting batch analysis of 6 reviews in deep mode
+2025-06-10 20:05:16,489 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 6 reviews
+2025-06-10 20:05:16,489 - absa_pipeline.deep_engine - INFO - Loading deep ABSA models
+2025-06-10 20:05:16,489 - absa_pipeline.models.manager - INFO - Loading deep ABSA models
+2025-06-10 20:05:16,490 - absa_pipeline.models.loader - INFO - Loading sentiment model: cardiffnlp/twitter-roberta-base-sentiment
+2025-06-10 20:05:18,584 - absa_pipeline.models.loader - INFO - Successfully loaded sentiment model: cardiffnlp/twitter-roberta-base-sentiment
+2025-06-10 20:05:18,584 - absa_pipeline.models.cache - INFO - Added sentiment:cardiffnlp/twitter-roberta-base-sentiment to cache
+2025-06-10 20:05:18,584 - absa_pipeline.models.loader - INFO - Loading spaCy model: en_core_web_sm
+2025-06-10 20:05:18,585 - absa_pipeline.models.loader - ERROR - Error loading spaCy model: [E050] Can't find model 'en_core_web_sm'. It doesn't seem to be a Python package or a valid path to a data directory.
+2025-06-10 20:05:18,586 - absa_pipeline.models.loader - WARNING - Creating basic English model without pre-trained vectors
+2025-06-10 20:05:18,700 - absa_pipeline.models.cache - INFO - Added spacy:en_core_web_sm to cache
+2025-06-10 20:05:18,707 - absa_pipeline.deep_engine.aspects - INFO - Loaded 15 aspect definitions
+2025-06-10 20:05:18,710 - absa_pipeline.deep_engine - INFO - Deep ABSA models loaded successfully
+2025-06-10 20:05:19,155 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 6 processed, 0 errors, 2.67s total
+2025-06-10 20:05:19,155 - absa_pipeline.engine - INFO - Batch analysis complete: 2/6 successful, 4 aspects extracted, 2.67s
+2025-06-10 20:05:19,173 - absa_pipeline.storage.absa - INFO - Stored 4 deep ABSA results
+2025-06-10 20:05:19,174 - absa_pipeline.batch.processor - INFO - Stored 4 ABSA results in database
+2025-06-10 20:05:19,180 - absa_pipeline.batch.processor - INFO - Marked 6 reviews as processed
+2025-06-10 20:05:19,184 - absa_pipeline.batch.processor - INFO - Processing SERVQUAL analysis for com.amazon.mShop.android.shopping on 2025-06-10
+2025-06-10 20:05:19,190 - absa_pipeline.servqual.mapper - INFO - No aspect data found for com.amazon.mShop.android.shopping on 2025-06-10
+2025-06-10 20:05:19,191 - absa_pipeline.batch.processor - INFO - No SERVQUAL data generated for com.amazon.mShop.android.shopping on 2025-06-10
+2025-06-10 20:05:19,203 - absa_pipeline.batch.tracker - INFO - Job 65895e86-3c1e-4017-965c-066677dad45b completed with status: completed
+2025-06-10 20:05:19,203 - absa_pipeline.batch.processor - INFO - Daily processing completed successfully: 6 reviews, 4 aspects, 0 SERVQUAL dimensions
+2025-06-10 20:05:19,204 - absa_pipeline.main - INFO - [OK] ABSA processing completed successfully
+2025-06-10 20:05:19,204 - absa_pipeline.main - INFO -    - Reviews processed: 6
+2025-06-10 20:05:19,205 - absa_pipeline.main - INFO -    - Aspects extracted: 4
+2025-06-10 20:05:19,205 - absa_pipeline.main - INFO -    - SERVQUAL dimensions updated: 0
+2025-06-10 20:05:19,205 - absa_pipeline.main - INFO -    - Processing time: 2.7s
+2025-06-10 20:32:24,144 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:32:24,509 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 20:32:25,465 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:32:25,467 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.amazon.mShop.android.shopping
+2025-06-10 20:32:25,467 - absa_pipeline.scraper - INFO - Scraping app info for: com.amazon.mShop.android.shopping
+2025-06-10 20:32:26,106 - absa_pipeline.scraper - INFO - Successfully scraped app info: Amazon Shopping
+2025-06-10 20:32:26,190 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:32:26,197 - absa_pipeline.storage.apps - INFO - Stored app: com.amazon.mShop.android.shopping
+2025-06-10 20:32:26,197 - absa_pipeline.scraper - INFO - Stored app info for Amazon Shopping
+2025-06-10 20:32:26,198 - absa_pipeline.scraper - INFO - Starting review scraping for com.amazon.mShop.android.shopping, target: 1000 reviews
+2025-06-10 20:32:26,206 - absa_pipeline.scraper.deduplicator - INFO - Loaded 197 existing review IDs for com.amazon.mShop.android.shopping
+2025-06-10 20:32:26,206 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 20:32:26,621 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 20:32:26,622 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 20:32:26,636 - absa_pipeline.scraper - INFO - Batch processing complete: 191 valid out of 200 raw reviews
+2025-06-10 20:32:26,636 - absa_pipeline.scraper - INFO - Batch 1: 191 valid reviews added. Total valid: 191
+2025-06-10 20:32:26,637 - absa_pipeline.scraper - INFO - Breaking early - found 191 valid reviews
+2025-06-10 20:32:26,637 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 191
+2025-06-10 20:32:27,010 - absa_pipeline.storage.reviews - INFO - Stored 2 reviews, 189 errors
+2025-06-10 20:32:27,010 - absa_pipeline.scraper - INFO - Scraping completed for com.amazon.mShop.android.shopping: {'app_id': 'com.amazon.mShop.android.shopping', 'execution_time': 1.54, 'statistics': {'scraped': 200, 'valid': 191, 'invalid': 9, 'duplicates': 0, 'stored': 2, 'errors': 189}, 'success': True}
+2025-06-10 20:33:00,091 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:33:00,093 - absa_pipeline.main - INFO - [ABSA] Starting ABSA batch processing...
+2025-06-10 20:33:00,528 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 20:33:01,227 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:33:15,505 - absa_pipeline.models.manager - INFO - ModelManager initialized
+2025-06-10 20:33:15,702 - absa_pipeline.preprocessing.aspects - WARNING - Using basic English model - aspect extraction will be limited
+2025-06-10 20:33:15,779 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:33:15,786 - absa_pipeline.preprocessing.aspects - INFO - Loaded 15 aspect keyword sets
+2025-06-10 20:33:15,787 - absa_pipeline.preprocessing - INFO - ABSA Preprocessor initialized
+2025-06-10 20:33:15,787 - absa_pipeline.deep_engine - INFO - Deep ABSA Engine initialized
+2025-06-10 20:33:15,787 - absa_pipeline.engine - INFO - Deep ABSA engine initialized
+2025-06-10 20:33:15,788 - absa_pipeline.engine - INFO - Unified ABSA Engine initialized with mode: deep
+2025-06-10 20:33:15,796 - absa_pipeline.servqual.mapper - INFO - Loaded 15 aspect-to-SERVQUAL mappings
+2025-06-10 20:33:15,797 - absa_pipeline.batch.processor - INFO - Batch processor initialized with batch size: 32
+2025-06-10 20:33:15,797 - absa_pipeline.main - INFO - [ABSA] Processing reviews for all apps
+2025-06-10 20:33:15,804 - absa_pipeline.batch.tracker - INFO - Created processing job: 473d8562-ce9c-4a07-b053-8b4c3047ef30
+2025-06-10 20:33:15,804 - absa_pipeline.batch.processor - INFO - Starting daily processing job 473d8562-ce9c-4a07-b053-8b4c3047ef30 for all apps
+2025-06-10 20:33:15,812 - absa_pipeline.batch.processor - INFO - Found 2 unprocessed reviews
+2025-06-10 20:33:15,812 - absa_pipeline.batch.processor - INFO - Processing batch 1/1 (2 reviews)
+2025-06-10 20:33:15,813 - absa_pipeline.batch.processor - INFO - Processing batch of 2 reviews for job 473d8562-ce9c-4a07-b053-8b4c3047ef30
+2025-06-10 20:33:15,813 - absa_pipeline.engine - INFO - Starting batch analysis of 2 reviews in deep mode
+2025-06-10 20:33:15,813 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 2 reviews
+2025-06-10 20:33:15,814 - absa_pipeline.deep_engine - INFO - Loading deep ABSA models
+2025-06-10 20:33:15,814 - absa_pipeline.models.manager - INFO - Loading deep ABSA models
+2025-06-10 20:33:15,814 - absa_pipeline.models.loader - INFO - Loading sentiment model: cardiffnlp/twitter-roberta-base-sentiment
+2025-06-10 20:33:17,589 - absa_pipeline.models.loader - INFO - Successfully loaded sentiment model: cardiffnlp/twitter-roberta-base-sentiment
+2025-06-10 20:33:17,589 - absa_pipeline.models.cache - INFO - Added sentiment:cardiffnlp/twitter-roberta-base-sentiment to cache
+2025-06-10 20:33:17,590 - absa_pipeline.models.loader - INFO - Loading spaCy model: en_core_web_sm
+2025-06-10 20:33:17,591 - absa_pipeline.models.loader - ERROR - Error loading spaCy model: [E050] Can't find model 'en_core_web_sm'. It doesn't seem to be a Python package or a valid path to a data directory.
+2025-06-10 20:33:17,591 - absa_pipeline.models.loader - WARNING - Creating basic English model without pre-trained vectors
+2025-06-10 20:33:17,704 - absa_pipeline.models.cache - INFO - Added spacy:en_core_web_sm to cache
+2025-06-10 20:33:17,709 - absa_pipeline.deep_engine.aspects - INFO - Loaded 15 aspect definitions
+2025-06-10 20:33:17,712 - absa_pipeline.deep_engine - INFO - Deep ABSA models loaded successfully
+2025-06-10 20:33:17,843 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 2 processed, 0 errors, 2.03s total
+2025-06-10 20:33:17,844 - absa_pipeline.engine - INFO - Batch analysis complete: 1/2 successful, 2 aspects extracted, 2.03s
+2025-06-10 20:33:17,858 - absa_pipeline.storage.absa - INFO - Stored 2 deep ABSA results
+2025-06-10 20:33:17,858 - absa_pipeline.batch.processor - INFO - Stored 2 ABSA results in database
+2025-06-10 20:33:17,866 - absa_pipeline.batch.processor - INFO - Marked 2 reviews as processed
+2025-06-10 20:33:17,870 - absa_pipeline.batch.processor - INFO - Processing SERVQUAL analysis for com.amazon.mShop.android.shopping
+2025-06-10 20:33:17,876 - absa_pipeline.batch.processor - INFO - Using target date: 2025-06-09
+2025-06-10 20:33:17,883 - absa_pipeline.servqual.mapper - ERROR - Error aggregating dimension sentiment for tangibles: unsupported operand type(s) for +=: 'float' and 'decimal.Decimal'
+2025-06-10 20:33:17,883 - absa_pipeline.servqual.mapper - ERROR - Error aggregating dimension sentiment for assurance: unsupported operand type(s) for +=: 'float' and 'decimal.Decimal'
+2025-06-10 20:33:17,884 - absa_pipeline.servqual.mapper - ERROR - Error aggregating dimension sentiment for responsiveness: unsupported operand type(s) for +=: 'float' and 'decimal.Decimal'
+2025-06-10 20:33:17,884 - absa_pipeline.servqual.mapper - INFO - Mapped 4 aspects to 0 SERVQUAL dimensions
+2025-06-10 20:33:17,884 - absa_pipeline.servqual.mapper - INFO - Processed SERVQUAL for com.amazon.mShop.android.shopping on 2025-06-09: 0 dimensions
+2025-06-10 20:33:17,885 - absa_pipeline.batch.processor - INFO - No SERVQUAL data generated for com.amazon.mShop.android.shopping on 2025-06-09
+2025-06-10 20:33:17,897 - absa_pipeline.batch.tracker - INFO - Job 473d8562-ce9c-4a07-b053-8b4c3047ef30 completed with status: completed
+2025-06-10 20:33:17,897 - absa_pipeline.batch.processor - INFO - Daily processing completed successfully: 2 reviews, 2 aspects, 0 SERVQUAL dimensions
+2025-06-10 20:33:17,897 - absa_pipeline.main - INFO - [OK] ABSA processing completed successfully
+2025-06-10 20:33:17,898 - absa_pipeline.main - INFO -    - Reviews processed: 2
+2025-06-10 20:33:17,898 - absa_pipeline.main - INFO -    - Aspects extracted: 2
+2025-06-10 20:33:17,898 - absa_pipeline.main - INFO -    - SERVQUAL dimensions updated: 0
+2025-06-10 20:33:17,898 - absa_pipeline.main - INFO -    - Processing time: 2.1s
+2025-06-10 20:37:47,202 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:37:47,527 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 20:37:48,493 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:37:48,495 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.amazon.mShop.android.shopping
+2025-06-10 20:37:48,496 - absa_pipeline.scraper - INFO - Scraping app info for: com.amazon.mShop.android.shopping
+2025-06-10 20:37:49,177 - absa_pipeline.scraper - INFO - Successfully scraped app info: Amazon Shopping
+2025-06-10 20:37:49,251 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:37:49,262 - absa_pipeline.storage.apps - INFO - Stored app: com.amazon.mShop.android.shopping
+2025-06-10 20:37:49,262 - absa_pipeline.scraper - INFO - Stored app info for Amazon Shopping
+2025-06-10 20:37:49,262 - absa_pipeline.scraper - INFO - Starting review scraping for com.amazon.mShop.android.shopping, target: 1000 reviews
+2025-06-10 20:37:49,270 - absa_pipeline.scraper.deduplicator - INFO - Loaded 199 existing review IDs for com.amazon.mShop.android.shopping
+2025-06-10 20:37:49,270 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 20:37:49,646 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 20:37:49,647 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 20:37:49,661 - absa_pipeline.scraper - INFO - Batch processing complete: 191 valid out of 200 raw reviews
+2025-06-10 20:37:49,662 - absa_pipeline.scraper - INFO - Batch 1: 191 valid reviews added. Total valid: 191
+2025-06-10 20:37:49,662 - absa_pipeline.scraper - INFO - Breaking early - found 191 valid reviews
+2025-06-10 20:37:49,663 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 191
+2025-06-10 20:37:50,016 - absa_pipeline.storage.reviews - INFO - Stored 0 reviews, 191 errors
+2025-06-10 20:37:50,017 - absa_pipeline.scraper - INFO - Scraping completed for com.amazon.mShop.android.shopping: {'app_id': 'com.amazon.mShop.android.shopping', 'execution_time': 1.52, 'statistics': {'scraped': 200, 'valid': 191, 'invalid': 9, 'duplicates': 0, 'stored': 0, 'errors': 191}, 'success': True}
+2025-06-10 20:37:54,731 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:37:55,116 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 20:37:56,155 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:37:56,157 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.amazon.mShop.android.shopping
+2025-06-10 20:37:56,157 - absa_pipeline.scraper - INFO - Scraping app info for: com.amazon.mShop.android.shopping
+2025-06-10 20:37:56,841 - absa_pipeline.scraper - INFO - Successfully scraped app info: Amazon Shopping
+2025-06-10 20:37:56,914 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:37:56,922 - absa_pipeline.storage.apps - INFO - Stored app: com.amazon.mShop.android.shopping
+2025-06-10 20:37:56,922 - absa_pipeline.scraper - INFO - Stored app info for Amazon Shopping
+2025-06-10 20:37:56,922 - absa_pipeline.scraper - INFO - Starting review scraping for com.amazon.mShop.android.shopping, target: 1000 reviews
+2025-06-10 20:37:56,931 - absa_pipeline.scraper.deduplicator - INFO - Loaded 199 existing review IDs for com.amazon.mShop.android.shopping
+2025-06-10 20:37:56,931 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 20:37:57,287 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 20:37:57,288 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 20:37:57,308 - absa_pipeline.scraper - INFO - Batch processing complete: 191 valid out of 200 raw reviews
+2025-06-10 20:37:57,308 - absa_pipeline.scraper - INFO - Batch 1: 191 valid reviews added. Total valid: 191
+2025-06-10 20:37:57,309 - absa_pipeline.scraper - INFO - Breaking early - found 191 valid reviews
+2025-06-10 20:37:57,309 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 191
+2025-06-10 20:37:57,690 - absa_pipeline.storage.reviews - INFO - Stored 0 reviews, 191 errors
+2025-06-10 20:37:57,690 - absa_pipeline.scraper - INFO - Scraping completed for com.amazon.mShop.android.shopping: {'app_id': 'com.amazon.mShop.android.shopping', 'execution_time': 1.53, 'statistics': {'scraped': 200, 'valid': 191, 'invalid': 9, 'duplicates': 0, 'stored': 0, 'errors': 191}, 'success': True}
+2025-06-10 20:39:03,599 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:39:53,239 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:39:53,240 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:39:53,307 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:39:53,320 - absa_pipeline.storage.redis - INFO - Redis connection initialized successfully
+2025-06-10 20:40:20,915 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:40:20,916 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:40:20,984 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:40:59,373 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:40:59,374 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:40:59,450 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:41:25,966 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:41:25,967 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:41:26,049 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:41:43,438 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:41:43,753 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 20:41:44,721 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:41:44,722 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.amazon.mShop.android.shopping
+2025-06-10 20:41:44,723 - absa_pipeline.scraper - INFO - Scraping app info for: com.amazon.mShop.android.shopping
+2025-06-10 20:41:45,413 - absa_pipeline.scraper - INFO - Successfully scraped app info: Amazon Shopping
+2025-06-10 20:41:45,487 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:41:45,494 - absa_pipeline.storage.apps - INFO - Stored app: com.amazon.mShop.android.shopping
+2025-06-10 20:41:45,494 - absa_pipeline.scraper - INFO - Stored app info for Amazon Shopping
+2025-06-10 20:41:45,494 - absa_pipeline.scraper - INFO - Starting review scraping for com.amazon.mShop.android.shopping, target: 1000 reviews
+2025-06-10 20:41:45,503 - absa_pipeline.scraper.deduplicator - INFO - Loaded 200 existing review IDs for com.amazon.mShop.android.shopping
+2025-06-10 20:41:45,504 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 20:41:46,064 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 20:41:46,065 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 20:41:46,081 - absa_pipeline.scraper - INFO - Batch processing complete: 191 valid out of 200 raw reviews
+2025-06-10 20:41:46,081 - absa_pipeline.scraper - INFO - Batch 1: 191 valid reviews added. Total valid: 191
+2025-06-10 20:41:46,082 - absa_pipeline.scraper - INFO - Breaking early - found 191 valid reviews
+2025-06-10 20:41:46,082 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 191
+2025-06-10 20:41:46,537 - absa_pipeline.storage.reviews - INFO - Stored 0 reviews, 191 errors
+2025-06-10 20:41:46,538 - absa_pipeline.scraper - INFO - Scraping completed for com.amazon.mShop.android.shopping: {'app_id': 'com.amazon.mShop.android.shopping', 'execution_time': 1.82, 'statistics': {'scraped': 200, 'valid': 191, 'invalid': 9, 'duplicates': 0, 'stored': 0, 'errors': 191}, 'success': True}
+2025-06-10 20:43:06,330 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:43:06,331 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:43:06,435 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:43:06,453 - absa_pipeline.storage.reviews - INFO - Stored 2 reviews, 0 errors
+2025-06-10 20:46:42,924 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:46:43,249 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 20:46:44,185 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:46:44,186 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.amazon.mShop.android.shopping
+2025-06-10 20:46:44,187 - absa_pipeline.scraper - INFO - Scraping app info for: com.amazon.mShop.android.shopping
+2025-06-10 20:46:44,912 - absa_pipeline.scraper - INFO - Successfully scraped app info: Amazon Shopping
+2025-06-10 20:46:44,985 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:46:44,992 - absa_pipeline.storage.apps - INFO - Stored app: com.amazon.mShop.android.shopping
+2025-06-10 20:46:44,992 - absa_pipeline.scraper - INFO - Stored app info for Amazon Shopping
+2025-06-10 20:46:44,993 - absa_pipeline.scraper - INFO - Starting review scraping for com.amazon.mShop.android.shopping, target: 1000 reviews
+2025-06-10 20:46:45,001 - absa_pipeline.scraper.deduplicator - INFO - Loaded 202 existing review IDs for com.amazon.mShop.android.shopping
+2025-06-10 20:46:45,002 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 20:46:45,283 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 20:46:45,284 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 20:46:45,296 - absa_pipeline.scraper - INFO - Batch processing complete: 191 valid out of 200 raw reviews
+2025-06-10 20:46:45,297 - absa_pipeline.scraper - INFO - Batch 1: 191 valid reviews added. Total valid: 191
+2025-06-10 20:46:45,297 - absa_pipeline.scraper - INFO - Breaking early - found 191 valid reviews
+2025-06-10 20:46:45,298 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 191
+2025-06-10 20:46:45,670 - absa_pipeline.storage.reviews - INFO - Stored 0 reviews, 191 errors
+2025-06-10 20:46:45,671 - absa_pipeline.scraper - INFO - Scraping completed for com.amazon.mShop.android.shopping: {'app_id': 'com.amazon.mShop.android.shopping', 'execution_time': 1.49, 'statistics': {'scraped': 200, 'valid': 191, 'invalid': 9, 'duplicates': 0, 'stored': 0, 'errors': 191}, 'success': True}
+2025-06-10 20:59:40,570 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 20:59:40,904 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 20:59:41,919 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 20:59:41,922 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.amazon.mShop.android.shopping
+2025-06-10 20:59:41,922 - absa_pipeline.scraper - INFO - Scraping app info for: com.amazon.mShop.android.shopping
+2025-06-10 20:59:47,917 - absa_pipeline.scraper - INFO - Successfully scraped app info: Amazon Shopping
+2025-06-10 20:59:47,997 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 20:59:48,005 - absa_pipeline.storage.apps - INFO - Stored app: com.amazon.mShop.android.shopping
+2025-06-10 20:59:48,005 - absa_pipeline.scraper - INFO - Stored app info for Amazon Shopping
+2025-06-10 20:59:48,006 - absa_pipeline.scraper - INFO - Starting review scraping for com.amazon.mShop.android.shopping, target: 1000 reviews
+2025-06-10 20:59:48,026 - absa_pipeline.scraper.deduplicator - INFO - Loaded 202 existing review IDs for com.amazon.mShop.android.shopping
+2025-06-10 20:59:48,027 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 20:59:49,300 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 20:59:49,301 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 20:59:49,315 - absa_pipeline.scraper - INFO - Batch processing complete: 3 valid out of 200 raw reviews
+2025-06-10 20:59:49,315 - absa_pipeline.scraper - INFO - Batch 1: 3 valid reviews added. Total valid: 3
+2025-06-10 20:59:49,316 - absa_pipeline.scraper - INFO - Breaking early - found 3 valid reviews
+2025-06-10 20:59:49,316 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 3
+2025-06-10 20:59:49,339 - absa_pipeline.storage.reviews - INFO - Stored 3 reviews, 0 errors
+2025-06-10 20:59:49,340 - absa_pipeline.scraper - INFO - Scraping completed for com.amazon.mShop.android.shopping: {'app_id': 'com.amazon.mShop.android.shopping', 'execution_time': 7.42, 'statistics': {'scraped': 200, 'valid': 3, 'invalid': 9, 'duplicates': 188, 'stored': 3, 'errors': 0}, 'success': True}
+2025-06-10 21:00:44,123 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 21:00:44,124 - absa_pipeline.main - INFO - [ABSA] Starting ABSA batch processing...
+2025-06-10 21:00:44,465 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 21:00:45,025 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 21:01:00,015 - absa_pipeline.models.manager - INFO - ModelManager initialized
+2025-06-10 21:01:00,245 - absa_pipeline.preprocessing.aspects - WARNING - Using basic English model - aspect extraction will be limited
+2025-06-10 21:01:00,315 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 21:01:00,321 - absa_pipeline.preprocessing.aspects - INFO - Loaded 15 aspect keyword sets
+2025-06-10 21:01:00,322 - absa_pipeline.preprocessing - INFO - ABSA Preprocessor initialized
+2025-06-10 21:01:00,323 - absa_pipeline.deep_engine - INFO - Deep ABSA Engine initialized
+2025-06-10 21:01:00,323 - absa_pipeline.engine - INFO - Deep ABSA engine initialized
+2025-06-10 21:01:00,323 - absa_pipeline.engine - INFO - Unified ABSA Engine initialized with mode: deep
+2025-06-10 21:01:00,354 - absa_pipeline.servqual.mapper - INFO - Loaded 15 aspect-to-SERVQUAL mappings
+2025-06-10 21:01:00,355 - absa_pipeline.batch.processor - INFO - Batch processor initialized with batch size: 32
+2025-06-10 21:01:00,356 - absa_pipeline.main - INFO - [ABSA] Processing reviews for all apps
+2025-06-10 21:01:00,362 - absa_pipeline.batch.tracker - INFO - Created processing job: 42812e64-e7ba-473e-a425-2dccd057279d
+2025-06-10 21:01:00,363 - absa_pipeline.batch.processor - INFO - Starting daily processing job 42812e64-e7ba-473e-a425-2dccd057279d for all apps
+2025-06-10 21:01:00,371 - absa_pipeline.batch.processor - INFO - Found 6 unprocessed reviews
+2025-06-10 21:01:00,372 - absa_pipeline.batch.processor - INFO - Processing batch 1/1 (6 reviews)
+2025-06-10 21:01:00,372 - absa_pipeline.batch.processor - INFO - Processing batch of 6 reviews for job 42812e64-e7ba-473e-a425-2dccd057279d
+2025-06-10 21:01:00,373 - absa_pipeline.engine - INFO - Starting batch analysis of 6 reviews in deep mode
+2025-06-10 21:01:00,373 - absa_pipeline.deep_engine - INFO - Starting batch analysis of 6 reviews
+2025-06-10 21:01:00,374 - absa_pipeline.deep_engine - INFO - Loading deep ABSA models
+2025-06-10 21:01:00,374 - absa_pipeline.models.manager - INFO - Loading deep ABSA models
+2025-06-10 21:01:00,375 - absa_pipeline.models.loader - INFO - Loading sentiment model: cardiffnlp/twitter-roberta-base-sentiment
+2025-06-10 21:01:02,573 - absa_pipeline.models.loader - INFO - Successfully loaded sentiment model: cardiffnlp/twitter-roberta-base-sentiment
+2025-06-10 21:01:02,573 - absa_pipeline.models.cache - INFO - Added sentiment:cardiffnlp/twitter-roberta-base-sentiment to cache
+2025-06-10 21:01:02,574 - absa_pipeline.models.loader - INFO - Loading spaCy model: en_core_web_sm
+2025-06-10 21:01:02,575 - absa_pipeline.models.loader - ERROR - Error loading spaCy model: [E050] Can't find model 'en_core_web_sm'. It doesn't seem to be a Python package or a valid path to a data directory.
+2025-06-10 21:01:02,575 - absa_pipeline.models.loader - WARNING - Creating basic English model without pre-trained vectors
+2025-06-10 21:01:02,689 - absa_pipeline.models.cache - INFO - Added spacy:en_core_web_sm to cache
+2025-06-10 21:01:02,696 - absa_pipeline.deep_engine.aspects - INFO - Loaded 15 aspect definitions
+2025-06-10 21:01:02,699 - absa_pipeline.deep_engine - INFO - Deep ABSA models loaded successfully
+2025-06-10 21:01:03,224 - absa_pipeline.deep_engine - INFO - Batch analysis complete: 6 processed, 0 errors, 2.85s total
+2025-06-10 21:01:03,225 - absa_pipeline.engine - INFO - Batch analysis complete: 2/6 successful, 7 aspects extracted, 2.85s
+2025-06-10 21:01:03,254 - absa_pipeline.storage.absa - INFO - Stored 7 deep ABSA results
+2025-06-10 21:01:03,255 - absa_pipeline.batch.processor - INFO - Stored 7 ABSA results in database
+2025-06-10 21:01:03,262 - absa_pipeline.batch.processor - INFO - Marked 6 reviews as processed
+2025-06-10 21:01:03,266 - absa_pipeline.batch.processor - INFO - Processing SERVQUAL analysis for com.amazon.mShop.android.shopping
+2025-06-10 21:01:03,271 - absa_pipeline.batch.processor - INFO - Using target date: 2025-06-09
+2025-06-10 21:01:03,278 - absa_pipeline.servqual.mapper - INFO - Mapped 9 aspects to 5 SERVQUAL dimensions
+2025-06-10 21:01:03,278 - absa_pipeline.servqual.mapper - INFO - Processed SERVQUAL for com.amazon.mShop.android.shopping on 2025-06-09: 5 dimensions
+2025-06-10 21:01:03,296 - absa_pipeline.servqual.storage - INFO - Stored SERVQUAL scores: 5 inserted, 0 errors
+2025-06-10 21:01:03,296 - absa_pipeline.batch.processor - INFO - Stored 5 SERVQUAL scores for com.amazon.mShop.android.shopping
+2025-06-10 21:01:03,307 - absa_pipeline.batch.tracker - INFO - Job 42812e64-e7ba-473e-a425-2dccd057279d completed with status: completed
+2025-06-10 21:01:03,308 - absa_pipeline.batch.processor - INFO - Daily processing completed successfully: 6 reviews, 7 aspects, 5 SERVQUAL dimensions
+2025-06-10 21:01:03,308 - absa_pipeline.main - INFO - [OK] ABSA processing completed successfully
+2025-06-10 21:01:03,308 - absa_pipeline.main - INFO -    - Reviews processed: 6
+2025-06-10 21:01:03,309 - absa_pipeline.main - INFO -    - Aspects extracted: 7
+2025-06-10 21:01:03,309 - absa_pipeline.main - INFO -    - SERVQUAL dimensions updated: 5
+2025-06-10 21:01:03,309 - absa_pipeline.main - INFO -    - Processing time: 2.9s
+2025-06-10 21:04:58,469 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 21:04:58,471 - absa_pipeline.main - INFO - [SERVQUAL] Processing SERVQUAL scores...
+2025-06-10 21:04:58,831 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-06-10 21:04:59,440 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 21:04:59,514 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 21:04:59,535 - absa_pipeline.servqual.mapper - INFO - Loaded 15 aspect-to-SERVQUAL mappings
+2025-06-10 21:04:59,541 - absa_pipeline.servqual.mapper - INFO - No aspect data found for com.amazon.mShop.android.shopping on 2025-06-10
+2025-06-10 21:04:59,545 - absa_pipeline.servqual.mapper - INFO - Loaded 15 aspect-to-SERVQUAL mappings
+2025-06-10 21:04:59,549 - absa_pipeline.servqual.mapper - INFO - No aspect data found for com.etsy.android on 2025-06-10
+2025-06-10 21:04:59,553 - absa_pipeline.servqual.mapper - INFO - Loaded 15 aspect-to-SERVQUAL mappings
+2025-06-10 21:04:59,557 - absa_pipeline.servqual.mapper - INFO - No aspect data found for com.zzkko on 2025-06-10
+2025-06-10 21:04:59,561 - absa_pipeline.servqual.mapper - INFO - Loaded 15 aspect-to-SERVQUAL mappings
+2025-06-10 21:04:59,565 - absa_pipeline.servqual.mapper - INFO - No aspect data found for com.einnovation.temu on 2025-06-10
+2025-06-10 21:04:59,569 - absa_pipeline.servqual.mapper - INFO - Loaded 15 aspect-to-SERVQUAL mappings
+2025-06-10 21:04:59,573 - absa_pipeline.servqual.mapper - INFO - No aspect data found for com.ebay.mobile on 2025-06-10
+2025-06-10 21:04:59,573 - absa_pipeline.main - INFO - [OK] SERVQUAL processing completed: 0 total scores stored
+2025-06-10 21:05:27,747 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 21:05:27,749 - absa_pipeline.main - INFO - [DASH] Launching dashboard...
+2025-06-10 21:05:27,750 - absa_pipeline.main - INFO - [START] Starting dashboard on http://0.0.0.0:8502
+2025-06-10 21:05:30,756 - absa_pipeline.main - INFO - [OK] Dashboard launched successfully
+2025-06-10 21:05:30,756 - absa_pipeline.main - INFO - [URL] Access dashboard at: http://localhost:8502
+2025-06-10 21:05:34,738 - absa_pipeline - INFO - Logging initialized. Level: INFO
+2025-06-10 21:05:34,739 - absa_pipeline.storage - INFO - Storage layer initialized (connections will be made on first use)
+2025-06-10 21:05:35,766 - absa_pipeline.storage.db - INFO - Database connection initialized successfully
+2025-06-10 21:05:35,815 - absa_pipeline.storage.redis - INFO - Redis connection initialized successfully
+2025-06-10 21:06:19,838 - absa_pipeline.scraper - INFO - Starting batch scraping for 5 apps
+2025-06-10 21:06:19,839 - absa_pipeline.scraper - INFO - Processing app 1/5: com.amazon.mShop.android.shopping
+2025-06-10 21:06:19,840 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.amazon.mShop.android.shopping
+2025-06-10 21:06:19,841 - absa_pipeline.scraper - INFO - Scraping app info for: com.amazon.mShop.android.shopping
+2025-06-10 21:06:20,502 - absa_pipeline.scraper - INFO - Successfully scraped app info: Amazon Shopping
+2025-06-10 21:06:20,510 - absa_pipeline.storage.apps - INFO - Stored app: com.amazon.mShop.android.shopping
+2025-06-10 21:06:20,511 - absa_pipeline.scraper - INFO - Stored app info for Amazon Shopping
+2025-06-10 21:06:20,511 - absa_pipeline.scraper - INFO - Starting review scraping for com.amazon.mShop.android.shopping, target: 1000 reviews
+2025-06-10 21:06:20,527 - absa_pipeline.scraper.deduplicator - INFO - Loaded 205 existing review IDs for com.amazon.mShop.android.shopping
+2025-06-10 21:06:20,528 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 21:06:21,005 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 21:06:21,005 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 21:06:21,016 - absa_pipeline.scraper - INFO - Batch processing complete: 1 valid out of 200 raw reviews
+2025-06-10 21:06:21,017 - absa_pipeline.scraper - INFO - Batch 1: 1 valid reviews added. Total valid: 1
+2025-06-10 21:06:21,018 - absa_pipeline.scraper - INFO - Breaking early - found 1 valid reviews
+2025-06-10 21:06:21,018 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 1
+2025-06-10 21:06:21,031 - absa_pipeline.storage.reviews - INFO - Stored 1 reviews, 0 errors
+2025-06-10 21:06:21,032 - absa_pipeline.scraper - INFO - Scraping completed for com.amazon.mShop.android.shopping: {'app_id': 'com.amazon.mShop.android.shopping', 'execution_time': 1.19, 'statistics': {'scraped': 200, 'valid': 1, 'invalid': 9, 'duplicates': 190, 'stored': 1, 'errors': 0}, 'success': True}
+2025-06-10 21:06:23,033 - absa_pipeline.scraper - INFO - Processing app 2/5: com.einnovation.temu
+2025-06-10 21:06:23,034 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.einnovation.temu
+2025-06-10 21:06:23,034 - absa_pipeline.scraper - INFO - Scraping app info for: com.einnovation.temu
+2025-06-10 21:06:23,684 - absa_pipeline.scraper - INFO - Successfully scraped app info: Temu: Shop Like a Billionaire
+2025-06-10 21:06:23,693 - absa_pipeline.storage.apps - INFO - Stored app: com.einnovation.temu
+2025-06-10 21:06:23,694 - absa_pipeline.scraper - INFO - Stored app info for Temu: Shop Like a Billionaire
+2025-06-10 21:06:23,695 - absa_pipeline.scraper - INFO - Starting review scraping for com.einnovation.temu, target: 1000 reviews
+2025-06-10 21:06:23,703 - absa_pipeline.scraper.deduplicator - ERROR - Error loading existing review IDs: cannot access local variable 'existing_ids' where it is not associated with a value
+2025-06-10 21:06:23,704 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 21:06:24,184 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 21:06:24,184 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 21:06:24,194 - absa_pipeline.scraper - INFO - Batch processing complete: 183 valid out of 200 raw reviews
+2025-06-10 21:06:24,194 - absa_pipeline.scraper - INFO - Batch 1: 183 valid reviews added. Total valid: 183
+2025-06-10 21:06:24,195 - absa_pipeline.scraper - INFO - Breaking early - found 183 valid reviews
+2025-06-10 21:06:24,196 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 183
+2025-06-10 21:06:24,819 - absa_pipeline.storage.reviews - INFO - Stored 183 reviews, 0 errors
+2025-06-10 21:06:24,819 - absa_pipeline.scraper - INFO - Scraping completed for com.einnovation.temu: {'app_id': 'com.einnovation.temu', 'execution_time': 1.79, 'statistics': {'scraped': 200, 'valid': 183, 'invalid': 17, 'duplicates': 0, 'stored': 183, 'errors': 0}, 'success': True}
+2025-06-10 21:06:26,820 - absa_pipeline.scraper - INFO - Processing app 3/5: com.zzkko
+2025-06-10 21:06:26,820 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.zzkko
+2025-06-10 21:06:26,821 - absa_pipeline.scraper - INFO - Scraping app info for: com.zzkko
+2025-06-10 21:06:27,451 - absa_pipeline.scraper - INFO - Successfully scraped app info: SHEIN-Shopping Online
+2025-06-10 21:06:27,458 - absa_pipeline.storage.apps - INFO - Stored app: com.zzkko
+2025-06-10 21:06:27,459 - absa_pipeline.scraper - INFO - Stored app info for SHEIN-Shopping Online
+2025-06-10 21:06:27,460 - absa_pipeline.scraper - INFO - Starting review scraping for com.zzkko, target: 1000 reviews
+2025-06-10 21:06:27,465 - absa_pipeline.scraper.deduplicator - ERROR - Error loading existing review IDs: cannot access local variable 'existing_ids' where it is not associated with a value
+2025-06-10 21:06:27,465 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 21:06:27,889 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 21:06:27,890 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 21:06:27,913 - absa_pipeline.scraper - INFO - Batch processing complete: 180 valid out of 200 raw reviews
+2025-06-10 21:06:27,914 - absa_pipeline.scraper - INFO - Batch 1: 180 valid reviews added. Total valid: 180
+2025-06-10 21:06:27,915 - absa_pipeline.scraper - INFO - Breaking early - found 180 valid reviews
+2025-06-10 21:06:27,916 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 180
+2025-06-10 21:06:28,527 - absa_pipeline.storage.reviews - INFO - Stored 180 reviews, 0 errors
+2025-06-10 21:06:28,528 - absa_pipeline.scraper - INFO - Scraping completed for com.zzkko: {'app_id': 'com.zzkko', 'execution_time': 1.71, 'statistics': {'scraped': 200, 'valid': 180, 'invalid': 20, 'duplicates': 0, 'stored': 180, 'errors': 0}, 'success': True}
+2025-06-10 21:06:30,528 - absa_pipeline.scraper - INFO - Processing app 4/5: com.ebay.mobile
+2025-06-10 21:06:30,528 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.ebay.mobile
+2025-06-10 21:06:30,528 - absa_pipeline.scraper - INFO - Scraping app info for: com.ebay.mobile
+2025-06-10 21:06:31,201 - absa_pipeline.scraper - INFO - Successfully scraped app info: eBay online shopping & selling
+2025-06-10 21:06:31,236 - absa_pipeline.storage.apps - INFO - Stored app: com.ebay.mobile
+2025-06-10 21:06:31,270 - absa_pipeline.scraper - INFO - Stored app info for eBay online shopping & selling
+2025-06-10 21:06:31,342 - absa_pipeline.scraper - INFO - Starting review scraping for com.ebay.mobile, target: 1000 reviews
+2025-06-10 21:06:31,377 - absa_pipeline.scraper.deduplicator - ERROR - Error loading existing review IDs: cannot access local variable 'existing_ids' where it is not associated with a value
+2025-06-10 21:06:31,377 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 21:06:31,774 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 21:06:31,775 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 21:06:31,814 - absa_pipeline.scraper - INFO - Batch processing complete: 189 valid out of 200 raw reviews
+2025-06-10 21:06:31,837 - absa_pipeline.scraper - INFO - Batch 1: 189 valid reviews added. Total valid: 189
+2025-06-10 21:06:31,877 - absa_pipeline.scraper - INFO - Breaking early - found 189 valid reviews
+2025-06-10 21:06:31,894 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 189
+2025-06-10 21:06:33,328 - absa_pipeline.storage.reviews - INFO - Stored 189 reviews, 0 errors
+2025-06-10 21:06:33,328 - absa_pipeline.scraper - INFO - Scraping completed for com.ebay.mobile: {'app_id': 'com.ebay.mobile', 'execution_time': 2.8, 'statistics': {'scraped': 200, 'valid': 189, 'invalid': 11, 'duplicates': 0, 'stored': 189, 'errors': 0}, 'success': True}
+2025-06-10 21:06:35,330 - absa_pipeline.scraper - INFO - Processing app 5/5: com.etsy.android
+2025-06-10 21:06:35,330 - absa_pipeline.scraper - INFO - Starting complete scraping workflow for com.etsy.android
+2025-06-10 21:06:35,331 - absa_pipeline.scraper - INFO - Scraping app info for: com.etsy.android
+2025-06-10 21:06:35,957 - absa_pipeline.scraper - INFO - Successfully scraped app info: Etsy: A Special Marketplace
+2025-06-10 21:06:35,963 - absa_pipeline.storage.apps - INFO - Stored app: com.etsy.android
+2025-06-10 21:06:35,964 - absa_pipeline.scraper - INFO - Stored app info for Etsy: A Special Marketplace
+2025-06-10 21:06:35,964 - absa_pipeline.scraper - INFO - Starting review scraping for com.etsy.android, target: 1000 reviews
+2025-06-10 21:06:35,969 - absa_pipeline.scraper.deduplicator - ERROR - Error loading existing review IDs: cannot access local variable 'existing_ids' where it is not associated with a value
+2025-06-10 21:06:35,970 - absa_pipeline.scraper - INFO - Scraping batch 1 of 200 reviews...
+2025-06-10 21:06:36,370 - absa_pipeline.scraper - INFO - API returned 200 raw reviews
+2025-06-10 21:06:36,371 - absa_pipeline.scraper - INFO - Processing batch of 200 raw reviews
+2025-06-10 21:06:36,382 - absa_pipeline.scraper - INFO - Batch processing complete: 197 valid out of 200 raw reviews
+2025-06-10 21:06:36,382 - absa_pipeline.scraper - INFO - Batch 1: 197 valid reviews added. Total valid: 197
+2025-06-10 21:06:36,383 - absa_pipeline.scraper - INFO - Breaking early - found 197 valid reviews
+2025-06-10 21:06:36,383 - absa_pipeline.scraper - INFO - Scraping completed. Valid reviews: 197
+2025-06-10 21:06:37,002 - absa_pipeline.storage.reviews - INFO - Stored 197 reviews, 0 errors
+2025-06-10 21:06:37,003 - absa_pipeline.scraper - INFO - Scraping completed for com.etsy.android: {'app_id': 'com.etsy.android', 'execution_time': 1.67, 'statistics': {'scraped': 200, 'valid': 197, 'invalid': 3, 'duplicates': 0, 'stored': 197, 'errors': 0}, 'success': True}
+2025-06-10 21:06:37,003 - absa_pipeline.scraper - INFO - Batch scraping completed: 5/5 apps successful, 750 total reviews stored

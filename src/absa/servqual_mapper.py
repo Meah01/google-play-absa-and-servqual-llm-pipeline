@@ -3,6 +3,7 @@ SERVQUAL Mapper for ABSA Pipeline.
 Maps aspect-level sentiment analysis to SERVQUAL service quality dimensions.
 Converts sentiment scores to business-actionable quality ratings (1-5 scale).
 """
+from __future__ import annotations
 
 import logging
 from typing import Dict, List, Optional, Tuple, Any
@@ -160,9 +161,9 @@ class ServqualMapper:
 
             for aspect in aspects:
                 aspect_name = aspect.get('aspect', '')
-                sentiment_score = aspect.get('sentiment_score', 0.0)
-                weight = self.aspect_weights.get(aspect_name, 1.0)
-                count = aspect.get('review_count', 1)
+                sentiment_score = float(aspect.get('sentiment_score', 0.0))  # Convert to float
+                weight = float(self.aspect_weights.get(aspect_name, 1.0))  # Convert to float
+                count = int(aspect.get('review_count', 1))  # Convert to int
 
                 total_weighted_sentiment += sentiment_score * weight * count
                 total_weight += weight * count

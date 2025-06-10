@@ -118,12 +118,12 @@ class KafkaConfig:
 @dataclass
 class ABSAConfig:
     """ABSA processing configuration."""
-    deep_model_name: str = os.getenv("ABSA_DEEP_MODEL", "cardiffnlp/twitter-roberta-base-sentiment")
+    deep_model_name: str = os.getenv("ABSA_DEEP_MODEL", "cardiffnlp/twitter-roberta-base-sentiment-latest")
     quick_model_name: str = os.getenv("ABSA_QUICK_MODEL", "distilbert-base-uncased-finetuned-sst-2-english")
     aspect_extraction_model: str = os.getenv("ASPECT_MODEL", "en_core_web_sm")
     max_text_length: int = int(os.getenv("MAX_TEXT_LENGTH", "512"))
     confidence_threshold: float = float(os.getenv("CONFIDENCE_THRESHOLD", "0.7"))
-    batch_size: int = int(os.getenv("ABSA_BATCH_SIZE", "32"))
+    batch_size: int = int(os.getenv("ABSA_BATCH_SIZE", "50"))  # Change 32 → 50
     cache_results: bool = os.getenv("CACHE_RESULTS", "true").lower() == "true"
 
     # Aspect definitions file

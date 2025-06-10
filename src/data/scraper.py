@@ -31,9 +31,9 @@ class ReviewData:
     rating: int
     thumbs_up_count: int
     review_created_version: Optional[str]
-    review_date: str
+    review_date: Any  # Changed from str to Any to handle date objects
     reply_content: Optional[str]
-    reply_date: Optional[str]
+    reply_date: Optional[Any]  # Changed from Optional[str] to Optional[Any]
     language: str = 'en'
     is_spam: bool = False
     content_length: Optional[int] = None
@@ -142,6 +142,31 @@ class ReviewValidator:
     def normalize_review_data(self, raw_review: Dict[str, Any], app_id: str) -> Optional[ReviewData]:
         """Convert raw scraped data to normalized ReviewData object."""
         try:
+            # Handle review date conversion
+            review_date = raw_review.get('at')
+            if review_date:
+                if isinstance(review_date, datetime):
+                    review_date = review_date.date()
+                elif isinstance(review_date, str):
+                    from datetime import datetime as dt
+                    review_date = dt.strptime(review_date, '%Y-%m-%d').date()
+            else:
+                review_date = datetime.now().date()
+
+            # Handle reply date conversion
+            reply_date = raw_review.get('repliedAt')
+            if reply_date:
+                if isinstance(reply_date, datetime):
+                    reply_date = reply_date.date()
+                elif isinstance(reply_date, str):
+                    from datetime import datetime as dt
+                    try:
+                        reply_date = dt.strptime(reply_date, '%Y-%m-%d').date()
+                    except:
+                        reply_date = None
+            else:
+                reply_date = None
+
             # Map Google Play Scraper fields to our schema
             review_data = ReviewData(
                 review_id="",  # Will be generated in __post_init__
@@ -151,9 +176,9 @@ class ReviewValidator:
                 rating=raw_review.get('score', 0),
                 thumbs_up_count=raw_review.get('thumbsUpCount', 0),
                 review_created_version=raw_review.get('reviewCreatedVersion'),
-                review_date=raw_review.get('at', datetime.now()).strftime('%Y-%m-%d') if raw_review.get('at') else datetime.now().strftime('%Y-%m-%d'),
+                review_date=review_date,  # Now using date object
                 reply_content=raw_review.get('replyContent'),
-                reply_date=raw_review.get('repliedAt', '').strftime('%Y-%m-%d') if raw_review.get('repliedAt') else None,
+                reply_date=reply_date,  # Now using date object or None
                 language='en',
                 is_spam=False
             )
@@ -200,19 +225,29 @@ class ReviewDeduplicator:
         return False
 
     def load_existing_review_ids(self, app_id: str, days_back: int = 30):
-        """Load existing review IDs from database to prevent re-scraping."""
+        """Load existing review IDs and content hashes from database."""
         try:
-            # Get recent reviews for this app
+            # Get recent reviews with content for hash-based deduplication
             query = """
-            SELECT review_id FROM reviews 
+            SELECT review_id, user_name, content, rating FROM reviews 
             WHERE app_id = :app_id 
             AND scraped_at >= CURRENT_DATE - INTERVAL '%s days'
             """ % days_back
 
             result = storage.db.execute_query(query, {"app_id": app_id})
-            existing_ids = set(result['review_id'].tolist()) if not result.empty else set()
 
-            self.seen_review_ids.update(existing_ids)
+            if not result.empty:
+                # Add review IDs
+                existing_ids = set(result['review_id'].tolist())
+                self.seen_review_ids.update(existing_ids)
+
+                # Add content hashes
+                for _, row in result.iterrows():
+                    content_hash = self.generate_content_hash(
+                        row['content'], row['user_name'], row['rating']
+                    )
+                    self.seen_hashes.add(content_hash)
+
             self.logger.info(f"Loaded {len(existing_ids)} existing review IDs for {app_id}")
 
         except Exception as e:

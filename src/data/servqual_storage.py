@@ -3,6 +3,7 @@ SERVQUAL Storage Operations for ABSA Pipeline.
 Handles database operations specific to SERVQUAL service quality scores.
 Provides data access for SERVQUAL dashboard and analytics.
 """
+from __future__ import annotations
 
 import logging
 from typing import Dict, List, Optional, Any, Tuple

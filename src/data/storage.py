@@ -337,7 +337,7 @@ class ReviewStorage:
         placeholders = ','.join([f"'{rid}'" for rid in review_ids])
         query = f"""
         UPDATE reviews 
-        SET processed = TRUE, updated_at = CURRENT_TIMESTAMP
+        SET processed = TRUE
         WHERE review_id IN ({placeholders})
         """
 
