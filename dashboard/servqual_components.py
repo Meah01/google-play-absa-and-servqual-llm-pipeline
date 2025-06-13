@@ -32,11 +32,11 @@ class ServqualDashboard:
 
     def render_servqual_section(self):
         """Main SERVQUAL section with tabs for different analyses."""
-        st.markdown("## 🎯 SERVQUAL Service Quality Analysis")
+        st.markdown("## SERVQUAL Service Quality Analysis")
         st.markdown("**Strategic business insights using validated service quality framework**")
 
         # Create tabs
-        tab1, tab2 = st.tabs(["🏆 Amazon Focus", "📈 App Comparisons"])
+        tab1, tab2 = st.tabs(["Amazon Focus", "App Comparisons"])
 
         with tab1:
             self.render_amazon_focus()
@@ -46,7 +46,7 @@ class ServqualDashboard:
 
     def render_amazon_focus(self):
         """Amazon-focused SERVQUAL analysis."""
-        st.markdown("### 🏆 Amazon SERVQUAL Analysis")
+        st.markdown("### Amazon SERVQUAL Analysis")
 
         # Time period selection
         col1, col2, col3 = st.columns([2, 1, 1])
@@ -89,7 +89,7 @@ class ServqualDashboard:
 
     def render_amazon_radar_chart(self, profile_data: dict):
         """Render Amazon SERVQUAL radar chart."""
-        st.markdown("#### 📊 Current SERVQUAL Profile")
+        st.markdown("#### Current SERVQUAL Profile")
 
         try:
             dimensions = profile_data.get('dimensions', {})
@@ -225,7 +225,7 @@ class ServqualDashboard:
 
     def render_amazon_ranking(self, ranking_data: dict):
         """Render Amazon competitive ranking."""
-        st.markdown("#### 🏅 Competitive Ranking")
+        st.markdown("#### Competitive Ranking")
 
         try:
             if not ranking_data:
@@ -235,7 +235,7 @@ class ServqualDashboard:
             col1, col2 = st.columns([1, 1])
 
             with col1:
-                st.markdown("**📊 Amazon vs Competitors**")
+                st.markdown("**Amazon vs Competitors**")
 
                 for dimension, rank_info in ranking_data.items():
                     rank = rank_info['rank']
@@ -288,7 +288,7 @@ class ServqualDashboard:
 
     def render_app_comparisons(self):
         """Multi-app SERVQUAL comparisons."""
-        st.markdown("### 📈 App Comparisons")
+        st.markdown("### App Comparisons")
 
         # Controls
         col1, col2, col3 = st.columns([2, 1, 1])
@@ -381,13 +381,21 @@ class ServqualDashboard:
                     'quality_score': 'Quality Score (1-5)',
                     'date': 'Date',
                     'app_name': 'App'
-                }
+                },
+                markers = True
+            )
+
+            fig.update_traces(
+                mode='lines+markers',
+                marker=dict(size=8),
+                line=dict(width=3)
             )
 
             fig.update_layout(
                 yaxis=dict(range=[1, 5]),
                 hovermode='x unified',
-                height=500
+                height=500,
+                showlegend=True
             )
 
             st.plotly_chart(fig, use_container_width=True)
@@ -408,9 +416,30 @@ class ServqualDashboard:
         except Exception as e:
             st.error(f"Error rendering time series: {e}")
 
+        #Debug section
+        """
+        st.write(f"Debug: Retrieved {len(trends_df)} records")
+        if not trends_df.empty:
+            st.write(f"Debug: Apps in data: {trends_df['app_id'].unique().tolist()}")
+
+            # Add detailed debug info
+            st.write("Debug: Data points per app:")
+            app_counts = trends_df.groupby('app_id').size()
+            for app_id, count in app_counts.items():
+                app_name = app_names.get(app_id, app_id)
+                st.write(f"  - {app_name}: {count} data points")
+
+            st.write("Debug: Date range:")
+            st.write(f"  - Min date: {trends_df['date'].min()}")
+            st.write(f"  - Max date: {trends_df['date'].max()}")
+
+            # Show actual data
+            st.write("Debug: Raw data sample:")
+            st.dataframe(trends_df[['app_id', 'date', 'quality_score']].head(10))
+        """
     def render_servqual_heatmap(self, days: int):
         """Render SERVQUAL heatmap across apps and dimensions."""
-        st.markdown("#### 🌡️ SERVQUAL Performance Heatmap")
+        st.markdown("#### SERVQUAL Performance Heatmap")
 
         try:
             # Get data for all dimensions and apps
@@ -456,7 +485,7 @@ class ServqualDashboard:
             st.plotly_chart(fig, use_container_width=True)
 
             # Performance insights
-            st.markdown("**🎯 Key Insights**")
+            st.markdown("**Key Insights**")
 
             # Best performing app overall
             overall_scores = heatmap_data.mean(axis=1).sort_values(ascending=False)

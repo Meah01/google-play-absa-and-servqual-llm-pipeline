@@ -10,6 +10,7 @@ from typing import Dict, List, Optional, Any, Tuple
 from datetime import datetime, date, timedelta
 import pandas as pd
 import uuid
+from typing import Dict, List, Optional, Any, Tuple
 
 from src.data.storage import storage
 from src.absa.servqual_mapper import ServqualResult
@@ -145,7 +146,7 @@ class ServqualStorage:
             self.logger.error(f"Error getting SERVQUAL profile for {app_id}: {e}")
             return {}
 
-    def get_dimension_trends(self, app_id: str, dimension: str = None,
+    def get_dimension_trends(self, app_id: Optional[str] = None, dimension: str = None,
                              days: int = 30) -> pd.DataFrame:
         """
         Get SERVQUAL dimension trends over time.

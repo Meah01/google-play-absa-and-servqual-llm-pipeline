@@ -1,13 +1,14 @@
 """
 Google Play Store review scraper with validation and deduplication.
 Handles both batch and real-time scraping with rate limiting and error handling.
+Enhanced with historical date range scraping functionality.
 """
 
 import time
 import logging
 import hashlib
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from typing import Dict, List, Optional, Set, Tuple, Any
 from dataclasses import dataclass, asdict
 import pandas as pd
@@ -555,6 +556,265 @@ class PlayStoreScraper:
 
         return results
 
+    def scrape_historical_app(self, app_id: str, start_date: date, end_date: date,
+                            max_reviews: int = 500) -> Dict[str, Any]:
+        """
+        Scrape historical reviews for a specific app within date range.
+
+        Args:
+            app_id: Application identifier
+            start_date: Start date (inclusive)
+            end_date: End date (inclusive)
+            max_reviews: Maximum reviews to attempt
+
+        Returns:
+            Dictionary with scraping results and statistics
+        """
+        start_time = time.time()
+
+        self.logger.info(f"Historical scraping {app_id}: {start_date} to {end_date}")
+
+        # Reset stats
+        self.stats = {k: 0 for k in self.stats}
+        historical_stats = {
+            'target_reviews': max_reviews,
+            'date_filtered': 0,
+            'historical_stored': 0,
+            'outside_range': 0
+        }
+
+        try:
+            # Load existing reviews to avoid duplicates
+            self.deduplicator.load_existing_review_ids(app_id, days_back=365)
+
+            historical_reviews = []
+            continuation_token = None
+            total_attempts = 0
+            max_attempts = 50  # Higher limit for historical scraping
+            reviews_outside_range_count = 0
+            consecutive_old_reviews = 0
+
+            while (len(historical_reviews) < max_reviews and
+                   total_attempts < max_attempts and
+                   consecutive_old_reviews < 10):  # Stop if 10 consecutive reviews are too old
+
+                total_attempts += 1
+                batch_size = min(200, max_reviews - len(historical_reviews))
+
+                self.logger.info(f"Historical batch {total_attempts}: requesting {batch_size} reviews")
+
+                # Scrape batch
+                result, continuation_token = reviews(
+                    app_id,
+                    lang='en',
+                    country='us',
+                    sort=Sort.NEWEST,  # Start with newest
+                    count=batch_size,
+                    continuation_token=continuation_token
+                )
+
+                if not result:
+                    self.logger.info("No more reviews available")
+                    break
+
+                self.stats['scraped'] += len(result)
+
+                # Process and filter batch by date
+                batch_historical = self._process_historical_batch(
+                    result, app_id, start_date, end_date, historical_stats
+                )
+
+                # Check if we're getting reviews outside our date range
+                batch_dates = []
+                for raw_review in result:
+                    review_date = self._extract_review_date(raw_review)
+                    if review_date:
+                        batch_dates.append(review_date)
+
+                # Count consecutive old reviews
+                if batch_dates and max(batch_dates) < start_date:
+                    consecutive_old_reviews += 1
+                    self.logger.info(f"Batch {total_attempts}: All reviews before {start_date}, "
+                                   f"consecutive old batches: {consecutive_old_reviews}")
+                else:
+                    consecutive_old_reviews = 0
+
+                historical_reviews.extend(batch_historical)
+
+                self.logger.info(f"Historical batch {total_attempts}: {len(batch_historical)} valid historical reviews. "
+                                f"Total: {len(historical_reviews)}")
+
+                # Rate limiting
+                time.sleep(self.delay)
+
+                if not continuation_token:
+                    self.logger.info("Reached end of available reviews")
+                    break
+
+            # Store historical reviews
+            if historical_reviews:
+                review_dicts = [asdict(review) for review in historical_reviews]
+                stored_count, error_count = storage.reviews.store_reviews(review_dicts)
+                historical_stats['historical_stored'] = stored_count
+                self.stats['stored'] = stored_count
+                self.stats['errors'] += error_count
+
+            execution_time = time.time() - start_time
+
+            # Prepare summary
+            summary = {
+                'app_id': app_id,
+                'start_date': str(start_date),
+                'end_date': str(end_date),
+                'execution_time': round(execution_time, 2),
+                'statistics': self.stats.copy(),
+                'historical_statistics': historical_stats,
+                'success': True
+            }
+
+            self.logger.info(f"Historical scraping completed for {app_id}: {summary}")
+            return summary
+
+        except Exception as e:
+            execution_time = time.time() - start_time
+            error_summary = {
+                'app_id': app_id,
+                'start_date': str(start_date),
+                'end_date': str(end_date),
+                'execution_time': round(execution_time, 2),
+                'error': str(e),
+                'statistics': self.stats.copy(),
+                'historical_statistics': historical_stats,
+                'success': False
+            }
+
+            self.logger.error(f"Historical scraping failed for {app_id}: {error_summary}")
+            return error_summary
+
+    def _extract_review_date(self, raw_review: Dict[str, Any]) -> Optional[date]:
+        """Extract review date from raw review data with debugging."""
+        try:
+            review_date = raw_review.get('at')
+
+            # Debug: Print raw date information
+            self.logger.info(f"Debug: Raw review date field 'at': {review_date} (type: {type(review_date)})")
+
+            if review_date:
+                if isinstance(review_date, datetime):
+                    extracted_date = review_date.date()
+                    self.logger.info(f"Debug: Extracted date from datetime: {extracted_date}")
+                    return extracted_date
+                elif isinstance(review_date, str):
+                    try:
+                        extracted_date = datetime.strptime(review_date, '%Y-%m-%d').date()
+                        self.logger.info(f"Debug: Extracted date from string: {extracted_date}")
+                        return extracted_date
+                    except ValueError:
+                        # Try alternative date format
+                        try:
+                            extracted_date = datetime.strptime(review_date, '%Y-%m-%d %H:%M:%S').date()
+                            self.logger.info(f"Debug: Extracted date from datetime string: {extracted_date}")
+                            return extracted_date
+                        except ValueError:
+                            self.logger.warning(f"Debug: Could not parse date string: {review_date}")
+                            return None
+                else:
+                    self.logger.warning(f"Debug: Unexpected date type: {type(review_date)}")
+                    return None
+            else:
+                self.logger.warning("Debug: No 'at' field found in review")
+                # Check for alternative date fields
+                for field_name in ['date', 'reviewDate', 'created', 'timestamp']:
+                    if field_name in raw_review:
+                        self.logger.info(
+                            f"Debug: Found alternative date field '{field_name}': {raw_review[field_name]}")
+                return None
+
+        except Exception as e:
+            self.logger.error(f"Debug: Error extracting review date: {e}")
+            return None
+
+    def _process_historical_batch(self, raw_reviews: List[Dict], app_id: str,
+                                  start_date: date, end_date: date,
+                                  historical_stats: Dict) -> List[ReviewData]:
+        """Process batch with historical date filtering and enhanced debugging."""
+        historical_reviews = []
+
+        self.logger.info(f"Debug: Processing {len(raw_reviews)} raw reviews for date range {start_date} to {end_date}")
+
+        # Debug: Show structure of first review
+        if raw_reviews:
+            first_review = raw_reviews[0]
+            self.logger.info(f"Debug: First review keys: {list(first_review.keys())}")
+            self.logger.info(f"Debug: First review sample: {dict(list(first_review.items())[:5])}")
+
+        dates_found = []
+        dates_in_range = []
+
+        for i, raw_review in enumerate(raw_reviews):
+            try:
+                # Extract review date first for filtering
+                review_date = self._extract_review_date(raw_review)
+
+                if review_date:
+                    dates_found.append(review_date)
+                    self.logger.info(f"Debug: Review {i + 1} date: {review_date}")
+                else:
+                    self.logger.warning(f"Debug: Review {i + 1} - no date extracted")
+                    continue
+
+                # Date range filtering
+                if review_date < start_date or review_date > end_date:
+                    historical_stats['outside_range'] += 1
+                    self.logger.info(f"Debug: Review {i + 1} date {review_date} outside range {start_date}-{end_date}")
+                    continue
+
+                dates_in_range.append(review_date)
+                historical_stats['date_filtered'] += 1
+                self.logger.info(f"Debug: Review {i + 1} date {review_date} WITHIN range - processing")
+
+                # Standard validation and processing
+                is_valid, reason = self.validator.is_valid_review(raw_review)
+                if not is_valid:
+                    self.logger.info(f"Debug: Review {i + 1} invalid: {reason}")
+                    self.stats['invalid'] += 1
+                    continue
+
+                review_data = self.validator.normalize_review_data(raw_review, app_id)
+                if not review_data:
+                    self.logger.info(f"Debug: Review {i + 1} failed normalization")
+                    self.stats['invalid'] += 1
+                    continue
+
+                if self.deduplicator.is_duplicate(review_data):
+                    self.logger.info(f"Debug: Review {i + 1} is duplicate")
+                    self.stats['duplicates'] += 1
+                    continue
+
+                if self.validator.is_spam(review_data.content):
+                    review_data.is_spam = True
+                    self.logger.info(f"Debug: Review {i + 1} marked as spam")
+
+                historical_reviews.append(review_data)
+                self.stats['valid'] += 1
+                self.logger.info(f"Debug: Review {i + 1} ACCEPTED - Content: {review_data.content[:50]}...")
+
+            except Exception as e:
+                self.logger.error(f"Debug: Error processing historical review {i + 1}: {e}")
+                self.stats['errors'] += 1
+
+        # Summary debug info
+        self.logger.info(f"Debug: Batch summary:")
+        self.logger.info(f"  - Total reviews processed: {len(raw_reviews)}")
+        self.logger.info(f"  - Dates found: {len(dates_found)}")
+        self.logger.info(f"  - Dates in range: {len(dates_in_range)}")
+        self.logger.info(f"  - Valid historical reviews: {len(historical_reviews)}")
+
+        if dates_found:
+            self.logger.info(f"  - Date range in batch: {min(dates_found)} to {max(dates_found)}")
+
+        return historical_reviews
+
     def get_scraping_stats(self) -> Dict[str, Any]:
         """Get current scraping statistics."""
         return self.stats.copy()
@@ -580,3 +840,48 @@ def update_app_info(app_id: str) -> bool:
     if app_info:
         return storage.apps.store_app(app_info)
     return False
+
+
+def scrape_historical_range(app_ids: List[str], start_date: date, end_date: date,
+                          max_reviews_per_app: int = 500) -> List[Dict[str, Any]]:
+    """
+    Scrape historical reviews within specific date range for multiple apps.
+
+    Args:
+        app_ids: List of app IDs to scrape
+        start_date: Start date for historical scraping (inclusive)
+        end_date: End date for historical scraping (inclusive)
+        max_reviews_per_app: Maximum reviews to attempt per app
+
+    Returns:
+        List of results for each app
+    """
+    scraper = PlayStoreScraper()
+    results = []
+
+    scraper.logger.info(f"Starting historical scraping: {start_date} to {end_date}")
+    scraper.logger.info(f"Apps: {len(app_ids)}, Max reviews per app: {max_reviews_per_app}")
+
+    for i, app_id in enumerate(app_ids, 1):
+        scraper.logger.info(f"Historical scraping app {i}/{len(app_ids)}: {app_id}")
+
+        result = scraper.scrape_historical_app(
+            app_id=app_id,
+            start_date=start_date,
+            end_date=end_date,
+            max_reviews=max_reviews_per_app
+        )
+        results.append(result)
+
+        # Delay between apps
+        if i < len(app_ids):
+            time.sleep(scraper.delay * 2)
+
+    # Summary
+    total_historical = sum(r.get('historical_stored', 0) for r in results)
+    successful_apps = sum(1 for r in results if r.get('success', False))
+
+    scraper.logger.info(f"Historical scraping completed: {successful_apps}/{len(app_ids)} apps, "
+                       f"{total_historical} historical reviews stored")
+
+    return results

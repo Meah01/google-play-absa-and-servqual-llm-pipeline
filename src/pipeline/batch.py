@@ -348,7 +348,7 @@ class BatchProcessor:
             self.logger.error(f"Error processing SERVQUAL for {app_id}: {e}")
             return 0
 
-    def run_daily_processing(self, app_id: Optional[str] = None) -> BatchJobResult:
+    def run_daily_processing(self, app_id: Optional[str] = None, progress_callback=None) -> BatchJobResult:
         """Run the complete daily processing workflow."""
         start_time = datetime.now()
         job_id = self.job_tracker.create_job(
@@ -394,6 +394,11 @@ class BatchProcessor:
                 start_idx = batch_num * self.config.batch_size
                 end_idx = min(start_idx + self.config.batch_size, len(reviews))
                 batch_reviews = reviews[start_idx:end_idx]
+
+                # Progress callback
+                if progress_callback:
+                    progress = ((batch_num + 1) / total_batches) * 100
+                    progress_callback(progress, f"Processing batch {batch_num + 1}/{total_batches}")
 
                 self.logger.info(f"Processing batch {batch_num + 1}/{total_batches} "
                                f"({len(batch_reviews)} reviews)")
