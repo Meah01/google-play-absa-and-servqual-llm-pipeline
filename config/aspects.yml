@@ -1,0 +1,306 @@
+# ABSA Aspect Configuration
+# Defines aspects for e-commerce review analysis with SERVQUAL dimension mapping
+
+aspects:
+  # RELIABILITY - Platform consistency, order processing accuracy
+  product_quality:
+    category: "product"
+    servqual_dimension: "reliability"
+    weight: 1.3
+    keywords:
+      - "quality"
+      - "cheap"
+      - "flimsy"
+      - "durable"
+      - "material"
+      - "defective"
+      - "broken"
+      - "fake"
+      - "authentic"
+      - "counterfeit"
+      - "well made"
+      - "poor quality"
+    description: "Product quality, materials, and authenticity"
+
+  product_description:
+    category: "product"
+    servqual_dimension: "reliability"
+    weight: 1.2
+    keywords:
+      - "description"
+      - "accurate"
+      - "misleading"
+      - "photos"
+      - "images"
+      - "size"
+      - "color"
+      - "different"
+      - "expected"
+      - "as described"
+      - "not as shown"
+    description: "Accuracy of product descriptions and images"
+
+  app_performance:
+    category: "technical"
+    servqual_dimension: "reliability"
+    weight: 1.1
+    keywords:
+      - "slow"
+      - "fast"
+      - "lag"
+      - "crash"
+      - "freeze"
+      - "loading"
+      - "responsive"
+      - "performance"
+      - "smooth"
+      - "glitchy"
+    description: "App speed and technical performance"
+
+  # ASSURANCE - Security, trust, professional competence
+  customer_service:
+    category: "service"
+    servqual_dimension: "assurance"
+    weight: 1.2
+    keywords:
+      - "customer service"
+      - "support"
+      - "help"
+      - "response"
+      - "staff"
+      - "representative"
+      - "chat"
+      - "email"
+      - "helpful"
+      - "rude"
+    description: "Customer service quality and responsiveness"
+
+  payment_security:
+    category: "security"
+    servqual_dimension: "assurance"
+    weight: 1.2
+    keywords:
+      - "payment"
+      - "secure"
+      - "safe"
+      - "fraud"
+      - "scam"
+      - "credit card"
+      - "paypal"
+      - "security"
+      - "secure payment"
+    description: "Payment security and fraud protection"
+
+  account_privacy:
+    category: "security"
+    servqual_dimension: "assurance"
+    weight: 1.1
+    keywords:
+      - "privacy"
+      - "personal info"
+      - "data"
+      - "account"
+      - "login"
+      - "password"
+      - "secure"
+      - "privacy policy"
+    description: "Account security and privacy protection"
+
+  pricing_value:
+    category: "financial"
+    servqual_dimension: "assurance"
+    weight: 1.2
+    keywords:
+      - "price"
+      - "expensive"
+      - "cheap"
+      - "affordable"
+      - "value"
+      - "money"
+      - "cost"
+      - "worth"
+      - "overpriced"
+      - "good deal"
+      - "value for money"
+    description: "Product pricing and value for money"
+
+  # TANGIBLES - Physical facilities, equipment, appearance
+  user_interface:
+    category: "design"
+    servqual_dimension: "tangibles"
+    weight: 1.2
+    keywords:
+      - "interface"
+      - "design"
+      - "layout"
+      - "navigation"
+      - "menu"
+      - "buttons"
+      - "easy to use"
+      - "confusing"
+      - "intuitive"
+      - "complicated"
+    description: "User interface design and usability"
+
+  app_design:
+    category: "design"
+    servqual_dimension: "tangibles"
+    weight: 1.1
+    keywords:
+      - "design"
+      - "look"
+      - "appearance"
+      - "beautiful"
+      - "ugly"
+      - "modern"
+      - "outdated"
+      - "colors"
+      - "fonts"
+      - "style"
+    description: "Visual design and aesthetic appeal"
+
+  search_functionality:
+    category: "feature"
+    servqual_dimension: "tangibles"
+    weight: 1.2
+    keywords:
+      - "search"
+      - "find"
+      - "filter"
+      - "sort"
+      - "categories"
+      - "browse"
+      - "discovery"
+      - "recommendations"
+    description: "Search and product discovery features"
+
+  checkout_process:
+    category: "experience"
+    servqual_dimension: "tangibles"
+    weight: 1.2
+    keywords:
+      - "checkout"
+      - "payment"
+      - "cart"
+      - "order"
+      - "purchase"
+      - "buy"
+      - "easy"
+      - "difficult"
+      - "smooth"
+      - "complicated"
+      - "simple checkout"
+    description: "Checkout and payment process"
+
+  # EMPATHY - Caring, individualized attention
+  personalization:
+    category: "experience"
+    servqual_dimension: "empathy"
+    weight: 1.1
+    keywords:
+      - "personalized"
+      - "recommendations"
+      - "preferences"
+      - "customized"
+      - "tailored"
+      - "for me"
+      - "personal"
+    description: "Personalized shopping experience"
+
+  communication:
+    category: "service"
+    servqual_dimension: "empathy"
+    weight: 1.2
+    keywords:
+      - "communication"
+      - "understanding"
+      - "listen"
+      - "care"
+      - "attention"
+      - "personal"
+      - "individual"
+      - "considerate"
+    description: "Quality of communication and personal attention"
+
+  # RESPONSIVENESS - Willingness to help, prompt service
+  delivery_speed:
+    category: "logistics"
+    servqual_dimension: "responsiveness"
+    weight: 1.3
+    keywords:
+      - "delivery"
+      - "shipping"
+      - "fast"
+      - "slow"
+      - "quick"
+      - "on time"
+      - "late"
+      - "delayed"
+      - "express"
+      - "overnight"
+    description: "Delivery speed and shipping performance"
+
+  order_tracking:
+    category: "logistics"
+    servqual_dimension: "responsiveness"
+    weight: 1.2
+    keywords:
+      - "tracking"
+      - "status"
+      - "updates"
+      - "notifications"
+      - "where is my order"
+      - "track package"
+      - "delivery status"
+    description: "Order tracking and status updates"
+
+  issue_resolution:
+    category: "service"
+    servqual_dimension: "responsiveness"
+    weight: 1.2
+    keywords:
+      - "problem"
+      - "issue"
+      - "complaint"
+      - "resolution"
+      - "solve"
+      - "fix"
+      - "help"
+      - "support"
+      - "refund"
+      - "return"
+    description: "Problem resolution and support responsiveness"
+
+# Processing configuration
+processing:
+  confidence_threshold: 0.7
+  min_opinion_length: 10
+  max_aspects_per_review: 8
+  sentiment_threshold:
+    positive: 0.1
+    negative: -0.1
+
+# SERVQUAL dimension weights (for overall scoring)
+servqual_weights:
+  reliability: 0.25
+  assurance: 0.20
+  tangibles: 0.20
+  empathy: 0.15
+  responsiveness: 0.20
+
+# Business rules
+business_rules:
+  # Minimum reviews required for reliable SERVQUAL scoring
+  min_reviews_for_scoring: 10
+
+  # Aspect extraction rules
+  extract_implicit_aspects: true
+  merge_similar_aspects: true
+
+  # Quality filters
+  filter_spam_reviews: true
+  min_review_length: 20
+
+  # Trend analysis
+  trend_analysis_days: 30
+  trend_significance_threshold: 0.15

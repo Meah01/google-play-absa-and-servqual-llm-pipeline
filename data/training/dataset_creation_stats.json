@@ -1,0 +1,86 @@
+{
+  "creation_date": "2025-06-18T15:11:38.365902",
+  "total_reviews": 800,
+  "quality_criteria": {
+    "min_length": 50,
+    "max_length": 500,
+    "exclude_ratings": [],
+    "min_date": "2024-01-01",
+    "target_per_app": 160
+  },
+  "app_statistics": {
+    "eBay online shopping & selling": {
+      "total_available": 320,
+      "after_quality_filter": 319,
+      "selected": 160,
+      "avg_length": 244.38125,
+      "rating_distribution": {
+        "2": 73,
+        "4": 46,
+        "3": 41
+      }
+    },
+    "Amazon Shopping": {
+      "total_available": 320,
+      "after_quality_filter": 320,
+      "selected": 160,
+      "avg_length": 285.025,
+      "rating_distribution": {
+        "2": 84,
+        "3": 53,
+        "4": 23
+      }
+    },
+    "Etsy: A Special Marketplace": {
+      "total_available": 320,
+      "after_quality_filter": 320,
+      "selected": 160,
+      "avg_length": 242.0875,
+      "rating_distribution": {
+        "4": 43,
+        "1": 42,
+        "3": 36,
+        "2": 21,
+        "5": 18
+      }
+    },
+    "SHEIN-Shopping Online": {
+      "total_available": 320,
+      "after_quality_filter": 320,
+      "selected": 160,
+      "avg_length": 217.20625,
+      "rating_distribution": {
+        "2": 74,
+        "3": 45,
+        "4": 39,
+        "1": 2
+      }
+    },
+    "Temu: Shop Like a Billionaire": {
+      "total_available": 320,
+      "after_quality_filter": 320,
+      "selected": 160,
+      "avg_length": 243.64375,
+      "rating_distribution": {
+        "4": 54,
+        "3": 32,
+        "1": 26,
+        "2": 24,
+        "5": 24
+      }
+    }
+  },
+  "rating_distribution": {
+    "1": 70,
+    "2": 276,
+    "3": 207,
+    "4": 205,
+    "5": 42
+  },
+  "content_length_stats": {
+    "min": 50,
+    "max": 500,
+    "mean": 246.46875,
+    "median": 220.0
+  }
+}

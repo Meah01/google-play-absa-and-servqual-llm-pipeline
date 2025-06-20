@@ -14,6 +14,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 
+
+from src.absa.servqual_llm_model import servqual_llm, ServqualResult
 from src.utils.config import config
 from src.absa.deep_engine import (
     DeepABSAEngine,
@@ -24,10 +26,10 @@ from src.absa.deep_engine import (
 
 
 class AnalysisMode(Enum):
-    """ABSA analysis mode selection."""
-    DEEP = "deep"        # High accuracy, slower processing for business intelligence
-    QUICK = "quick"      # Fast processing, real-time analysis (Phase 3)
-    AUTO = "auto"        # Automatically select based on context
+    DEEP = "deep"                    # Existing RoBERTa + spaCy
+    QUICK = "quick"                  # Existing DistilBERT
+    SERVQUAL_LLM = "servqual_llm"    # Direct LLM SERVQUAL classification
+    AUTO = "auto"                    # Automatic mode selection
 
 
 @dataclass
@@ -40,6 +42,9 @@ class EngineStatus:
     total_reviews_processed: int
     last_batch_processing_time_ms: int
     engine_version: str
+    servqual_llm_available: bool
+    servqual_llm_model: str
+    servqual_llm_performance: Dict[str, Any]
 
 
 @dataclass
@@ -132,6 +137,13 @@ class ABSAEngine:
                     self.deep_engine = DeepABSAEngine()
                 return self.deep_engine.analyze_single_review(review_id, app_id, review_text)
 
+            elif analysis_mode == AnalysisMode.SERVQUAL_LLM:
+                # Use direct LLM SERVQUAL analysis
+                self.logger.info(f"Processing review {review_id} with LLM SERVQUAL mode")
+                # For single review analysis, we still need to return ReviewAnalysisResult format
+                # This is handled separately in analyze_review_servqual_llm method
+                raise NotImplementedError("Use analyze_review_servqual_llm method for LLM SERVQUAL analysis")
+
             elif analysis_mode == AnalysisMode.AUTO:
                 # Auto mode: Use deep analysis for batch processing, quick for real-time
                 # For now, default to deep analysis
@@ -167,6 +179,8 @@ class ABSAEngine:
                 results = self._analyze_batch_deep(reviews)
             elif analysis_mode == AnalysisMode.QUICK:
                 results = self._analyze_batch_quick(reviews)
+            elif analysis_mode == AnalysisMode.SERVQUAL_LLM:
+                results = self._analyze_batch_servqual_llm(reviews)
             elif analysis_mode == AnalysisMode.AUTO:
                 # Auto mode: prefer deep for batch processing
                 results = self._analyze_batch_deep(reviews)
@@ -225,6 +239,160 @@ class ABSAEngine:
         """Analyze batch using quick ABSA engine (Phase 3)."""
         self.logger.warning("Quick batch analysis not implemented - using deep analysis")
         return self._analyze_batch_deep(reviews)
+
+    def _analyze_batch_servqual_llm(self, reviews: List[Dict[str, str]]) -> List[ReviewAnalysisResult]:
+        """Analyze batch using SERVQUAL LLM engine."""
+        self.logger.info(f"Processing {len(reviews)} reviews with LLM SERVQUAL mode")
+
+        results = []
+
+        # Process each review through LLM SERVQUAL
+        for review in reviews:
+            try:
+                llm_result = self.analyze_review_servqual_llm(
+                    review_id=review['review_id'],
+                    app_id=review['app_id'],
+                    review_text=review['content'],
+                    rating=review.get('rating', 3)
+                )
+
+                # Convert LLM result to ReviewAnalysisResult format for consistency
+                if llm_result['success']:
+                    # Create aspects from SERVQUAL dimensions
+                    aspects = []
+                    for dimension, score in llm_result['servqual_dimensions'].items():
+                        aspect_result = AspectResult(
+                            aspect=dimension,
+                            sentiment_score=score,
+                            confidence_score=0.9,  # LLM confidence assumed high
+                            opinion_text=review['content'][:100] + "...",
+                            opinion_start_pos=0,
+                            opinion_end_pos=min(100, len(review['content']))
+                        )
+                        aspects.append(aspect_result)
+
+                    analysis_result = ReviewAnalysisResult(
+                        review_id=review['review_id'],
+                        app_id=review['app_id'],
+                        aspects=aspects,
+                        overall_sentiment_score=sum(llm_result['servqual_dimensions'].values()) / len(llm_result['servqual_dimensions']),
+                        processing_time_ms=llm_result['processing_time_ms'],
+                        processing_model=llm_result['model_version'],
+                        processing_version="servqual_llm",
+                        analysis_metadata={'platform_context': llm_result.get('platform_context', {})}
+                    )
+                else:
+                    # Create empty result for failed analysis
+                    analysis_result = ReviewAnalysisResult(
+                        review_id=review['review_id'],
+                        app_id=review['app_id'],
+                        aspects=[],
+                        overall_sentiment_score=0.0,
+                        processing_time_ms=0,
+                        processing_model="servqual_llm",
+                        processing_version="servqual_llm",
+                        analysis_metadata={'error': llm_result.get('error_message', 'Unknown error')}
+                    )
+
+                results.append(analysis_result)
+
+            except Exception as e:
+                self.logger.error(f"LLM SERVQUAL analysis failed for review {review['review_id']}: {e}")
+                # Create empty result for exception
+                empty_result = ReviewAnalysisResult(
+                    review_id=review['review_id'],
+                    app_id=review['app_id'],
+                    aspects=[],
+                    overall_sentiment_score=0.0,
+                    processing_time_ms=0,
+                    processing_model="servqual_llm",
+                    processing_version="servqual_llm",
+                    analysis_metadata={'error': str(e)}
+                )
+                results.append(empty_result)
+
+        return results
+
+    def process_reviews(self, reviews: List[Dict], mode: AnalysisMode = AnalysisMode.DEEP) -> List[Dict]:
+        """Process reviews with specified analysis mode."""
+
+        if mode == AnalysisMode.DEEP:
+            batch_result = self.analyze_batch(reviews, mode)
+            return batch_result.database_records
+
+        elif mode == AnalysisMode.QUICK:
+            batch_result = self.analyze_batch(reviews, mode)
+            return batch_result.database_records
+
+        elif mode == AnalysisMode.SERVQUAL_LLM:
+            results = []
+            for review in reviews:
+                result = self.analyze_review_servqual_llm(
+                    review_id=review['review_id'],
+                    app_id=review['app_id'],
+                    review_text=review['content'],
+                    rating=review.get('rating', 3)
+                )
+                results.append(result)
+            return results
+
+        else:
+            raise ValueError(f"Unknown analysis mode: {mode}")
+
+    def process_reviews_servqual_llm_batch(self, reviews: List[Dict]) -> List[Dict]:
+        """
+        Batch process reviews for SERVQUAL LLM analysis with optimized performance.
+
+        Args:
+            reviews: List of review dictionaries
+
+        Returns:
+            List of SERVQUAL analysis results
+        """
+        self.logger.info(f"Starting LLM SERVQUAL batch processing for {len(reviews)} reviews")
+
+        try:
+            # Use the LLM model's batch processing capability
+            llm_results = servqual_llm.batch_analyze_reviews(reviews)
+
+            # Convert results to pipeline format
+            processed_results = []
+            for llm_result in llm_results:
+                result = {
+                    'review_id': llm_result.review_id,
+                    'app_id': llm_result.app_id,
+                    'servqual_dimensions': llm_result.servqual_dimensions,
+                    'platform_context': llm_result.platform_context,
+                    'processing_time_ms': llm_result.processing_time_ms,
+                    'model_version': llm_result.model_version,
+                    'success': llm_result.success,
+                    'error_message': llm_result.error_message,
+                    'analysis_mode': AnalysisMode.SERVQUAL_LLM.value
+                }
+                processed_results.append(result)
+
+            successful = sum(1 for r in processed_results if r['success'])
+            avg_time = sum(r['processing_time_ms'] for r in processed_results) / len(processed_results) if processed_results else 0
+
+            self.logger.info(f"LLM SERVQUAL batch complete: {successful}/{len(reviews)} successful, avg time: {avg_time:.0f}ms")
+
+            return processed_results
+
+        except Exception as e:
+            self.logger.error(f"LLM SERVQUAL batch processing failed: {e}")
+            return []
+
+    def get_servqual_llm_status(self) -> Dict[str, Any]:
+        """Get SERVQUAL LLM model status and performance information."""
+        try:
+            return servqual_llm.get_model_info()
+        except Exception as e:
+            return {
+                'error': str(e),
+                'model_available': False,
+                'model_name': 'unknown',
+                'validated_performance': {}
+            }
 
     def _convert_to_database_format(self, results: List[ReviewAnalysisResult],
                                   mode: AnalysisMode) -> List[Dict[str, Any]]:
@@ -293,6 +461,9 @@ class ABSAEngine:
             self.logger.warning(f"Could not get memory status: {e}")
             memory_usage = 0
 
+        # Get LLM status
+        llm_status = self.get_servqual_llm_status()
+
         return EngineStatus(
             deep_engine_loaded=self.deep_engine is not None,
             quick_engine_loaded=self.quick_engine is not None,
@@ -300,10 +471,13 @@ class ABSAEngine:
             models_memory_usage_mb=memory_usage,
             total_reviews_processed=self.total_reviews_processed,
             last_batch_processing_time_ms=self.last_batch_time,
-            engine_version=self.engine_version
+            engine_version=self.engine_version,
+            servqual_llm_available=llm_status.get('model_available', False),
+            servqual_llm_model=llm_status.get('model_name', 'unknown'),
+            servqual_llm_performance=llm_status.get('validated_performance', {})
         )
 
-    def process_reviews_for_servqual(self, reviews: List[Dict[str, str]]) -> List[Dict[str, Any]]:
+    def process_reviews_for_servqual(self, reviews: List[Dict], mode: AnalysisMode = AnalysisMode.DEEP) -> List[Dict]:
         """
         Process reviews specifically for SERVQUAL integration.
         Optimized workflow for business intelligence pipeline.
@@ -401,6 +575,52 @@ class ABSAEngine:
         except Exception as e:
             self.logger.error(f"Error clearing models: {e}")
 
+    def analyze_review_servqual_llm(self, review_id: str, app_id: str,
+                                    review_text: str, rating: int) -> Dict[str, Any]:
+        """
+        Analyze review using LLM for direct SERVQUAL dimension classification.
+
+        Args:
+            review_id: Review identifier
+            app_id: Application identifier
+            review_text: Review content
+            rating: Star rating (1-5)
+
+        Returns:
+            Dictionary with LLM SERVQUAL analysis results
+        """
+        try:
+            # Use LLM for SERVQUAL analysis
+            result = servqual_llm.analyze_review_servqual(
+                review_text=review_text,
+                app_id=app_id,
+                rating=rating,
+                review_id=review_id
+            )
+
+            # Convert to format compatible with existing pipeline
+            return {
+                'review_id': review_id,
+                'app_id': app_id,
+                'servqual_dimensions': result.servqual_dimensions,
+                'platform_context': result.platform_context,
+                'processing_time_ms': result.processing_time_ms,
+                'model_version': result.model_version,
+                'success': result.success,
+                'error_message': result.error_message,
+                'analysis_mode': AnalysisMode.SERVQUAL_LLM.value
+            }
+
+        except Exception as e:
+            self.logger.error(f"LLM SERVQUAL analysis failed for review {review_id}: {e}")
+            return {
+                'review_id': review_id,
+                'app_id': app_id,
+                'success': False,
+                'error_message': str(e),
+                'analysis_mode': AnalysisMode.SERVQUAL_LLM.value
+            }
+
 
 # Global engine instance for convenience
 absa_engine = ABSAEngine(default_mode=AnalysisMode.DEEP)
@@ -418,8 +638,24 @@ def process_batch_for_servqual(reviews: List[Dict[str, str]]) -> List[Dict[str, 
 
 
 def get_absa_engine_status() -> EngineStatus:
-    """Convenience function to get engine status."""
-    return absa_engine.get_engine_status()
+    """Convenience function to get engine status with LLM information."""
+    status = absa_engine.get_engine_status()
+
+    # Additional LLM status for compatibility
+    llm_status = absa_engine.get_servqual_llm_status()
+
+    return EngineStatus(
+        deep_engine_loaded=status.deep_engine_loaded,
+        quick_engine_loaded=status.quick_engine_loaded,
+        current_mode=status.current_mode,
+        models_memory_usage_mb=status.models_memory_usage_mb,
+        total_reviews_processed=status.total_reviews_processed,
+        last_batch_processing_time_ms=status.last_batch_processing_time_ms,
+        engine_version=status.engine_version,
+        servqual_llm_available=llm_status.get('model_available', False),
+        servqual_llm_model=llm_status.get('model_name', 'unknown'),
+        servqual_llm_performance=llm_status.get('validated_performance', {})
+    )
 
 
 def validate_and_process_reviews(reviews: List[Dict[str, str]]) -> BatchProcessingResult:

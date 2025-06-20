@@ -14,6 +14,8 @@ from pathlib import Path
 from typing import Optional, List
 import asyncio
 from datetime import datetime
+from src.pipeline.sequential_processor import sequential_processor, SequentialProcessingResult
+from typing import Optional, List, Dict, Any
 
 # Add project root to path
 project_root = Path(__file__).parent
@@ -140,6 +142,197 @@ class ABSAPipelineOrchestrator:
         except Exception as e:
             self.logger.error(f"[ERROR] ABSA processing error: {e}")
             return False
+
+    def process_reviews_sequential(self, app_id: Optional[str] = None,
+                                   resume_job_id: Optional[str] = None,
+                                   skip_absa: bool = False,
+                                   limit: Optional[int] = None) -> bool:
+        """
+        Process reviews using sequential ABSA → SERVQUAL workflow with checkpoints.
+
+        Args:
+            app_id: Process specific app or None for all apps
+            resume_job_id: Resume existing job or None for new job
+
+        Returns:
+            True if processing successful, False otherwise
+        """
+        self.logger.info("[SEQUENTIAL] Starting sequential ABSA -> SERVQUAL processing...")
+
+        try:
+            from src.pipeline.sequential_processor import sequential_processor
+
+            # Start sequential processing
+            if resume_job_id:
+                self.logger.info(f"[SEQUENTIAL] Resuming job: {resume_job_id}")
+                result = sequential_processor.start_sequential_processing(
+                    app_id,
+                    resume_job_id,
+                    skip_absa=skip_absa,
+                    limit=limit
+                )
+            else:
+                if app_id:
+                    self.logger.info(f"[SEQUENTIAL] Processing reviews for app: {app_id}")
+                else:
+                    self.logger.info("[SEQUENTIAL] Processing reviews for all apps")
+                result = sequential_processor.start_sequential_processing(
+                    app_id,
+                    resume_job_id,
+                    skip_absa=skip_absa,
+                    limit=limit
+                )
+
+            if result.success:
+                self.logger.info(f"[OK] Sequential processing completed successfully")
+                self.logger.info(f"   - Job ID: {result.job_id}")
+                self.logger.info(f"   - Total reviews processed: {result.total_reviews_processed}")
+                self.logger.info(f"   - ABSA phase: {result.absa_phase.reviews_processed} reviews")
+                self.logger.info(f"   - SERVQUAL phase: {result.servqual_phase.reviews_processed} reviews")
+                self.logger.info(f"   - Aspects extracted: {result.total_aspects_extracted}")
+                self.logger.info(f"   - SERVQUAL dimensions updated: {result.total_servqual_dimensions_updated}")
+                self.logger.info(f"   - Processing time: {result.processing_time_seconds:.1f}s")
+                self.logger.info(f"   - Checkpoints created: {result.checkpoints_created}")
+                if result.failed_reviews > 0:
+                    self.logger.warning(f"   - Failed reviews: {result.failed_reviews}")
+                return True
+            else:
+                self.logger.error(f"[ERROR] Sequential processing failed: {result.error_message}")
+                self.logger.error(f"   - ABSA phase success: {result.absa_phase.success}")
+                self.logger.error(f"   - SERVQUAL phase success: {result.servqual_phase.success}")
+                return False
+
+        except Exception as e:
+            self.logger.error(f"[ERROR] Sequential processing error: {e}")
+            return False
+
+    def get_processing_status(self) -> Dict[str, Any]:
+        """
+        Get current processing status for dashboard monitoring.
+
+        Returns:
+            Dictionary with processing status information
+        """
+        try:
+            from dashboard.data_loader import dashboard_data_loader
+            return dashboard_data_loader.load_processing_status()
+        except Exception as e:
+            self.logger.error(f"Error getting processing status: {e}")
+            return {'active_jobs': [], 'unprocessed_counts': [], 'notifications': []}
+
+    def pause_processing_job(self, job_id: str) -> bool:
+        """
+        Pause an active processing job.
+
+        Args:
+            job_id: UUID of job to pause
+
+        Returns:
+            True if successfully paused, False otherwise
+        """
+        try:
+            # Validate UUID format
+            import uuid
+            uuid.UUID(job_id)
+
+            query = """
+            UPDATE processing_jobs 
+            SET status = 'paused'
+            WHERE job_id = :job_id AND status = 'running'
+            """
+
+            from src.data.storage import storage
+            rows_affected = storage.db.execute_non_query(query, {'job_id': job_id})
+
+            if rows_affected > 0:
+                self.logger.info(f"[PAUSE] Processing job paused: {job_id}")
+                return True
+            else:
+                self.logger.error(f"[PAUSE] Job not found or not running: {job_id}")
+                return False
+
+        except ValueError:
+            self.logger.error(f"Error pausing job - invalid UUID format: {job_id}")
+            return False
+        except Exception as e:
+            self.logger.error(f"Error pausing job {job_id}: {e}")
+            return False
+
+    def resume_processing_job(self, job_id: str) -> bool:
+        """
+        Resume a paused processing job.
+
+        Args:
+            job_id: UUID of job to resume
+
+        Returns:
+            True if successfully resumed, False otherwise
+        """
+        try:
+            # Validate UUID format
+            import uuid
+            uuid.UUID(job_id)
+
+            # Check if job can be resumed
+            query = """
+            SELECT status, app_id FROM processing_jobs 
+            WHERE job_id = :job_id
+            """
+
+            from src.data.storage import storage
+            df = storage.db.execute_query(query, {'job_id': job_id})
+
+            if df.empty:
+                self.logger.error(f"[RESUME] Job not found: {job_id}")
+                return False
+
+            row = df.iloc[0]
+            status = row['status']
+            app_id = row['app_id']
+
+            if status != 'paused':
+                self.logger.error(f"[RESUME] Job cannot be resumed - status: {status}")
+                return False
+
+            # Resume processing
+            return self.process_reviews_sequential(app_id, job_id)
+
+        except ValueError:
+            self.logger.error(f"Error resuming job - invalid UUID format: {job_id}")
+            return False
+        except Exception as e:
+            self.logger.error(f"Error resuming job {job_id}: {e}")
+            return False
+
+    def show_processing_status(self):
+        """Show detailed processing status information."""
+        try:
+            status = self.get_processing_status()
+
+            print("\n=== PROCESSING STATUS ===")
+            print(f"Active jobs: {len(status['active_jobs'])}")
+            print(f"Unread notifications: {len(status['notifications'])}")
+
+            if status['active_jobs']:
+                print("\nActive Jobs:")
+                for job in status['active_jobs']:
+                    print(f"  • {job['job_id']}: {job['status']} ({job.get('current_phase', 'unknown')})")
+
+            if status['unprocessed_counts']:
+                print("\nUnprocessed Reviews by App:")
+                for app in status['unprocessed_counts']:
+                    print(f"  • {app['app_id']}: ABSA={app['absa_pending']}, SERVQUAL={app['servqual_pending']}")
+
+            if status['notifications']:
+                print("\nRecent Notifications:")
+                for notif in status['notifications'][:5]:  # Show first 5
+                    print(f"  • {notif['message']}")
+
+            print(f"\nLast updated: {status.get('last_updated', 'Unknown')}")
+
+        except Exception as e:
+            self.logger.error(f"Error showing processing status: {e}")
+            print("Error retrieving processing status")
 
     def process_servqual_scores(self, app_id: Optional[str] = None) -> bool:
         """Process SERVQUAL scores for business intelligence."""
@@ -443,17 +636,22 @@ class ABSAPipelineOrchestrator:
             print("[DASH] Dashboard: Not running")
 
         print("\n[INFO] Use 'python main.py run' to start the complete pipeline")
+        print("[INFO] Use 'python main.py sequential' to run sequential ABSA → SERVQUAL processing")
         print("[INFO] Use 'python main.py absa' to run ABSA processing only")
         print("[INFO] Use 'python main.py process --app-id <app>' for complete app processing")
         print("[INFO] Use 'python main.py stop' to stop infrastructure")
 
 
 def main():
-    """Main entry point with command line interface."""
+    """Main entry point with argparse command handling."""
     parser = argparse.ArgumentParser(description="ABSA Sentiment Pipeline Orchestrator")
     parser.add_argument(
         "command",
-        choices=["run", "start", "stop", "status", "scrape", "dashboard", "absa", "servqual", "process"],
+        choices=[
+            "run", "start", "stop", "status", "scrape", "dashboard",
+            "absa", "servqual", "process",
+            "sequential", "pause", "resume", "process-status"
+        ],
         help="Command to execute"
     )
     parser.add_argument(
@@ -470,6 +668,22 @@ def main():
         "--app-id",
         type=str,
         help="Specific app ID to scrape or process"
+    )
+    parser.add_argument(
+        "--job-id",
+        type=str,
+        help="Job ID (UUID) for pause/resume operations"
+    )
+    parser.add_argument(
+        "--resume-job-id",
+        type=str,
+        help="Job ID (UUID) to resume for sequential processing"
+    )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Limit number of reviews to process (for testing)"
     )
 
     args = parser.parse_args()
@@ -526,6 +740,59 @@ def main():
             success = orchestrator.process_servqual_scores(args.app_id)
             sys.exit(0 if success else 1)
 
+
+        elif args.command == "sequential":
+            # Run sequential ABSA → SERVQUAL processing
+            if args.resume_job_id:
+                print(f"Resuming sequential processing job: {args.resume_job_id}")
+                success = orchestrator.process_reviews_sequential(
+                    args.app_id,
+                    args.resume_job_id,
+                    skip_absa=args.skip_absa,
+                    limit=args.limit
+                )
+            else:
+                if args.app_id:
+                    print(f"Starting sequential processing for app: {args.app_id}")
+                else:
+                    print("Starting sequential processing for all apps")
+
+                success = orchestrator.process_reviews_sequential(
+                    args.app_id,
+                    skip_absa=args.skip_absa,
+                    limit=args.limit
+                )
+
+        elif args.command == "pause":
+            # Pause active processing job
+            if not args.job_id:
+                print("Please specify --job-id for pausing")
+                sys.exit(1)
+
+            success = orchestrator.pause_processing_job(args.job_id)
+            if success:
+                print(f"Job {args.job_id} paused successfully")
+            else:
+                print(f"Failed to pause job {args.job_id}")
+                sys.exit(1)
+
+        elif args.command == "resume":
+            # Resume paused processing job
+            if not args.job_id:
+                print("Please specify --job-id for resuming")
+                sys.exit(1)
+
+            success = orchestrator.resume_processing_job(args.job_id)
+            if success:
+                print(f"Job {args.job_id} resumed successfully")
+            else:
+                print(f"Failed to resume job {args.job_id}")
+                sys.exit(1)
+
+        elif args.command == "process-status":
+            # Show detailed processing status
+            orchestrator.show_processing_status()
+
         elif args.command == "process":
             # Run complete processing (scrape + ABSA + SERVQUAL) for specific app
             if args.app_id:
@@ -565,3 +832,31 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+
+"""
+        print("ABSA Pipeline - Available commands:")
+        print("  python main.py                                      - Run default pipeline")
+        print("  python main.py sequential [app_id] [resume_job_id]  - Run sequential ABSA → SERVQUAL processing")
+        print("  python main.py pause <job_id>                       - Pause active processing job")
+        print("  python main.py resume <job_id>                      - Resume paused processing job")
+        print("  python main.py status                               - Show processing status")
+        print("  python main.py absa [app_id]                        - Run ABSA processing only")
+        print("  python main.py servqual [app_id]                    - Run SERVQUAL processing only")
+        print("  python main.py help                                 - Show this help message")
+        print("  http://localhost:8080      - Database")
+        print("  docker-compose up -d                                - Docker start-up")
+        print("  docker-compose ps                                   - Check if services are running")
+
+        print()
+        print("Examples:")
+        print("  python main.py sequential                           - Process all apps sequentially")
+        print("  python main.py sequential com.amazon.mshop.android.shopping  - Process specific app")
+        print("  python main.py pause 123e4567-e89b-12d3-a456-426614174000    - Pause specific job")
+        print("  python main.py resume 123e4567-e89b-12d3-a456-426614174000   - Resume specific job")
+        """

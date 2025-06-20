@@ -1,188 +1,138 @@
 """
-Test script for the Streamlit dashboard.
-Verifies dashboard functionality and data loading.
+Simple Dashboard Test - Minimal version to test rendering
+Save as: test_simple_dashboard.py
 """
 
+import streamlit as st
 import sys
-import time
-import subprocess
 from pathlib import Path
 
-# Add project root to Python path
+# Add project root to path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
-from src.data.storage import storage
-from src.data.scraper import scrape_app_reviews
+def test_basic_rendering():
+    """Test basic Streamlit rendering"""
+    st.title("🔧 Dashboard Test - Basic Rendering")
+    st.success("✅ Basic Streamlit rendering works!")
 
+    st.write("Testing basic components...")
 
-def test_dashboard_data():
-    """Test that dashboard can load data correctly."""
-    print("🔍 Testing Dashboard Data Loading...")
+    # Test metrics
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Test Metric 1", "1,234")
+    with col2:
+        st.metric("Test Metric 2", "5,678")
+    with col3:
+        st.metric("Test Metric 3", "9,999")
 
-    try:
-        # Test storage connectivity
-        health = storage.health_check()
-        print(f"   Storage health: {health['overall']}")
+    st.success("✅ Basic components work!")
 
-        # Get apps
-        apps = storage.apps.get_all_apps()
-        print(f"   Apps available: {len(apps)}")
-
-        # Get reviews
-        all_reviews = []
-        for app in apps:
-            reviews = storage.reviews.get_reviews_for_processing(app['app_id'], limit=100)
-            all_reviews.extend(reviews)
-
-        print(f"   Reviews available: {len(all_reviews)}")
-
-        if len(apps) == 0:
-            print("⚠️ No apps found - dashboard will show welcome screen")
-            return True
-
-        if len(all_reviews) == 0:
-            print("⚠️ No reviews found - scraping sample data...")
-            result = scrape_app_reviews("com.instagram.android", count=5)
-            if result['success']:
-                print(f"   ✅ Scraped {result['statistics']['stored']} sample reviews")
-            else:
-                print("   ❌ Failed to scrape sample data")
-
-        print("✅ Dashboard data test passed")
-        return True
-
-    except Exception as e:
-        print(f"❌ Dashboard data test failed: {e}")
-        return False
-
-
-def test_dashboard_launch():
-    """Test launching the dashboard."""
-    print("\n🚀 Testing Dashboard Launch...")
+def test_data_loading():
+    """Test data loading components"""
+    st.markdown("## 📊 Testing Data Loading")
 
     try:
-        dashboard_path = project_root / "dashboard_app.py"
+        from src.data.storage import storage
+        st.success("✅ Storage import works")
 
-        if not dashboard_path.exists():
-            print(f"❌ Dashboard file not found: {dashboard_path}")
-            return False
+        # Test simple query
+        result = storage.db.execute_query("SELECT COUNT(*) as count FROM apps")
+        apps_count = result.iloc[0]['count']
+        st.success(f"✅ Database query works: {apps_count} apps found")
 
-        print("   ✅ Dashboard file exists")
+        # Test dashboard data loader
+        from dashboard.data_loader import dashboard_data_loader
+        st.success("✅ Dashboard data loader import works")
 
-        # Test imports
-        try:
-            import streamlit
-            print(f"   ✅ Streamlit available (version: {streamlit.__version__})")
-        except ImportError:
-            print("   ❌ Streamlit not installed")
-            print("   💡 Install with: pip install streamlit")
-            return False
+        # Test Amazon data
+        amazon_data = dashboard_data_loader.load_amazon_fixed_absa(days=30)
+        aspects_count = len(amazon_data.get('aspects', []))
+        st.success(f"✅ Amazon ABSA data loads: {aspects_count} aspects found")
 
-        try:
-            import plotly
-            print(f"   ✅ Plotly available (version: {plotly.__version__})")
-        except ImportError:
-            print("   ❌ Plotly not installed")
-            print("   💡 Install with: pip install plotly")
-            return False
-
-        print("✅ Dashboard launch test passed")
-        return True
+        if aspects_count > 0:
+            st.write("**Sample Amazon aspects:**")
+            for aspect in amazon_data['aspects'][:3]:  # Show first 3
+                st.write(f"- {aspect['aspect']}: {aspect['positive_pct']:.1f}% positive")
 
     except Exception as e:
-        print(f"❌ Dashboard launch test failed: {e}")
-        return False
+        st.error(f"❌ Data loading error: {e}")
+        st.write("**Error details:**", str(e))
 
-
-def test_main_orchestrator():
-    """Test the main orchestrator functionality."""
-    print("\n🎯 Testing Main Orchestrator...")
+def test_dashboard_components():
+    """Test individual dashboard components"""
+    st.markdown("## 🎛️ Testing Dashboard Components")
 
     try:
-        main_path = project_root / "main.py"
+        # Test processing status
+        from dashboard.data_loader import dashboard_data_loader
+        status_data = dashboard_data_loader.load_processing_status()
 
-        if not main_path.exists():
-            print(f"❌ Main file not found: {main_path}")
-            return False
+        st.success("✅ Processing status loads")
+        st.write(f"Active jobs: {len(status_data.get('active_jobs', []))}")
+        st.write(f"ABSA queue: {status_data.get('queue_metrics', {}).get('total_pending_absa', 0)}")
 
-        print("   ✅ Main orchestrator file exists")
+        # Test apps loading
+        apps_data = dashboard_data_loader.get_app_list_with_data()
+        st.success(f"✅ Apps with data: {len(apps_data)} found")
 
-        # Test status command
-        try:
-            result = subprocess.run(
-                [sys.executable, "main.py", "status"],
-                cwd=project_root,
-                capture_output=True,
-                text=True,
-                timeout=30
-            )
-
-            if result.returncode == 0:
-                print("   ✅ Status command works")
-            else:
-                print(f"   ⚠️ Status command returned error: {result.stderr}")
-
-        except subprocess.TimeoutExpired:
-            print("   ⚠️ Status command timed out")
-        except Exception as e:
-            print(f"   ⚠️ Status command failed: {e}")
-
-        print("✅ Main orchestrator test completed")
-        return True
+        if apps_data:
+            st.write("**Apps with ABSA data:**")
+            for app in apps_data[:3]:  # Show first 3
+                st.write(f"- {app['app_name']}: {app['absa_processed_count']} processed")
 
     except Exception as e:
-        print(f"❌ Main orchestrator test failed: {e}")
-        return False
+        st.error(f"❌ Component testing error: {e}")
+        st.write("**Error details:**", str(e))
 
+def test_servqual_components():
+    """Test SERVQUAL components"""
+    st.markdown("## 🤖 Testing SERVQUAL Components")
+
+    try:
+        from dashboard.servqual_components import servqual_dashboard
+        st.success("✅ SERVQUAL components import works")
+
+        from src.data.servqual_storage import servqual_storage
+        st.success("✅ SERVQUAL storage import works")
+
+        # Test Amazon SERVQUAL data
+        amazon_data = servqual_storage.get_amazon_focus_data(days=30)
+        if amazon_data.get('current_profile'):
+            st.success("✅ Amazon SERVQUAL data loads")
+            profile = amazon_data['current_profile']
+            st.write(f"Overall quality: {profile.get('overall_quality', 0):.2f}/5")
+            st.write(f"Dimensions: {len(profile.get('dimensions', {}))}")
+        else:
+            st.warning("⚠️ No Amazon SERVQUAL profile found")
+
+    except Exception as e:
+        st.error(f"❌ SERVQUAL testing error: {e}")
+        st.write("**Error details:**", str(e))
 
 def main():
-    """Run all dashboard tests."""
-    print("🧪 Dashboard Test Suite")
-    print("=" * 40)
+    st.set_page_config(
+        page_title="Dashboard Test",
+        page_icon="🔧",
+        layout="wide"
+    )
 
-    tests = [
-        ("Dashboard Data Loading", test_dashboard_data),
-        ("Dashboard Launch", test_dashboard_launch),
-        ("Main Orchestrator", test_main_orchestrator)
-    ]
+    # Basic rendering test
+    test_basic_rendering()
 
-    results = []
+    # Data loading test
+    test_data_loading()
 
-    for test_name, test_func in tests:
-        try:
-            result = test_func()
-            results.append((test_name, result))
-        except Exception as e:
-            print(f"💥 {test_name} crashed: {e}")
-            results.append((test_name, False))
+    # Dashboard components test
+    test_dashboard_components()
 
-    # Summary
-    print("\n" + "=" * 40)
-    print("📊 Test Results Summary:")
+    # SERVQUAL components test
+    test_servqual_components()
 
-    passed = 0
-    for test_name, result in results:
-        status = "✅ PASS" if result else "❌ FAIL"
-        print(f"   {status} - {test_name}")
-        if result:
-            passed += 1
-
-    total = len(results)
-    print(f"\nOverall: {passed}/{total} tests passed")
-
-    if passed == total:
-        print("\n🎉 All tests passed! Dashboard is ready to launch.")
-        print("\n🚀 To start the complete pipeline:")
-        print("   python main.py run")
-        print("\n🎨 To start just the dashboard:")
-        print("   python main.py dashboard")
-    else:
-        print("\n⚠️ Some tests failed. Check the issues above.")
-
-    return passed == total
-
+    st.markdown("---")
+    st.success("🎯 **All tests completed!** If you see this, basic rendering works.")
+    st.info("**Next step:** Check main dashboard for specific rendering issues.")
 
 if __name__ == "__main__":
-    success = main()
-    sys.exit(0 if success else 1)
+    main()

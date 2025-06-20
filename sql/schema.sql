@@ -327,3 +327,241 @@ SELECT
 FROM servqual_scores
 GROUP BY app_id, date
 ORDER BY app_id, date DESC;
+
+-- Add processing flags to reviews table for tracking completion status
+ALTER TABLE reviews ADD COLUMN IF NOT EXISTS absa_processed BOOLEAN DEFAULT FALSE;
+ALTER TABLE reviews ADD COLUMN IF NOT EXISTS servqual_processed BOOLEAN DEFAULT FALSE;
+ALTER TABLE reviews ADD COLUMN IF NOT EXISTS absa_processed_at TIMESTAMP WITH TIME ZONE;
+ALTER TABLE reviews ADD COLUMN IF NOT EXISTS servqual_processed_at TIMESTAMP WITH TIME ZONE;
+
+-- Processing checkpoints table for resume functionality
+CREATE TABLE IF NOT EXISTS processing_checkpoints (
+    checkpoint_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    job_type VARCHAR(50) NOT NULL, -- 'absa', 'servqual', 'sequential'
+    job_id UUID NOT NULL,
+    reviews_processed INTEGER DEFAULT 0,
+    total_reviews INTEGER DEFAULT 0,
+    last_review_id UUID,
+    current_app_id VARCHAR(255),
+    checkpoint_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'active', -- 'active', 'completed', 'paused', 'failed'
+    batch_config JSONB, -- Store batch processing configuration
+    progress_metadata JSONB, -- Additional progress tracking data
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Processing statistics table for detailed tracking
+CREATE TABLE IF NOT EXISTS processing_statistics (
+    stat_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    job_id UUID NOT NULL,
+    job_type VARCHAR(50) NOT NULL,
+    app_id VARCHAR(255),
+    start_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    end_time TIMESTAMP WITH TIME ZONE,
+    reviews_processed INTEGER DEFAULT 0,
+    aspects_extracted INTEGER DEFAULT 0,
+    servqual_dimensions_updated INTEGER DEFAULT 0,
+    failed_reviews INTEGER DEFAULT 0,
+    processing_time_seconds DECIMAL(10,3),
+    success_rate DECIMAL(5,2),
+    error_details JSONB,
+    performance_metrics JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Progress notifications table for dashboard updates
+CREATE TABLE IF NOT EXISTS progress_notifications (
+    notification_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    job_id UUID NOT NULL,
+    notification_type VARCHAR(50) NOT NULL, -- 'progress', 'complete', 'error', 'milestone'
+    progress_percentage INTEGER,
+    message TEXT NOT NULL,
+    metadata JSONB,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Update the existing processing_jobs table with additional columns for sequential processing
+DO $$
+BEGIN
+    -- Add columns if they don't exist
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'processing_jobs' AND column_name = 'sequential_mode') THEN
+        ALTER TABLE processing_jobs ADD COLUMN sequential_mode BOOLEAN DEFAULT FALSE;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'processing_jobs' AND column_name = 'checkpoint_frequency') THEN
+        ALTER TABLE processing_jobs ADD COLUMN checkpoint_frequency INTEGER DEFAULT 50;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'processing_jobs' AND column_name = 'current_phase') THEN
+        ALTER TABLE processing_jobs ADD COLUMN current_phase VARCHAR(20) DEFAULT 'pending'; -- 'pending', 'absa', 'servqual', 'completed'
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'processing_jobs' AND column_name = 'phase_progress') THEN
+        ALTER TABLE processing_jobs ADD COLUMN phase_progress JSONB;
+    END IF;
+END
+$$;
+
+-- Performance indexes for processing tables
+CREATE INDEX IF NOT EXISTS idx_reviews_absa_processed ON reviews(absa_processed);
+CREATE INDEX IF NOT EXISTS idx_reviews_servqual_processed ON reviews(servqual_processed);
+CREATE INDEX IF NOT EXISTS idx_reviews_processing_status ON reviews(absa_processed, servqual_processed);
+CREATE INDEX IF NOT EXISTS idx_reviews_app_processing ON reviews(app_id, absa_processed, servqual_processed);
+
+CREATE INDEX IF NOT EXISTS idx_checkpoints_job_id ON processing_checkpoints(job_id);
+CREATE INDEX IF NOT EXISTS idx_checkpoints_status ON processing_checkpoints(status);
+CREATE INDEX IF NOT EXISTS idx_checkpoints_type_status ON processing_checkpoints(job_type, status);
+
+CREATE INDEX IF NOT EXISTS idx_processing_stats_job_id ON processing_statistics(job_id);
+CREATE INDEX IF NOT EXISTS idx_processing_stats_app_type ON processing_statistics(app_id, job_type);
+CREATE INDEX IF NOT EXISTS idx_processing_stats_time ON processing_statistics(start_time);
+
+CREATE INDEX IF NOT EXISTS idx_notifications_job_id ON progress_notifications(job_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_unread ON progress_notifications(is_read) WHERE is_read = FALSE;
+
+-- Views for processing monitoring
+CREATE OR REPLACE VIEW processing_status_summary AS
+SELECT
+    pj.job_id,
+    pj.job_type,
+    pj.app_id,
+    pj.status,
+    pj.current_phase,
+    pj.start_time,
+    pj.end_time,
+    pc.reviews_processed,
+    pc.total_reviews,
+    CASE
+        WHEN pc.total_reviews > 0 THEN ROUND((pc.reviews_processed::DECIMAL / pc.total_reviews) * 100, 1)
+        ELSE 0
+    END as progress_percentage,
+    ps.processing_time_seconds,
+    ps.success_rate,
+    pj.created_at
+FROM processing_jobs pj
+LEFT JOIN processing_checkpoints pc ON pj.job_id = pc.job_id AND pc.status = 'active'
+LEFT JOIN processing_statistics ps ON pj.job_id = ps.job_id
+ORDER BY pj.created_at DESC;
+
+-- View for unprocessed reviews count by app
+CREATE OR REPLACE VIEW unprocessed_reviews_summary AS
+SELECT
+    r.app_id,
+    a.app_name,
+    COUNT(*) FILTER (WHERE NOT r.absa_processed) as absa_pending,
+    COUNT(*) FILTER (WHERE NOT r.servqual_processed) as servqual_pending,
+    COUNT(*) FILTER (WHERE r.absa_processed AND NOT r.servqual_processed) as ready_for_servqual,
+    COUNT(*) FILTER (WHERE r.absa_processed AND r.servqual_processed) as fully_processed,
+    COUNT(*) as total_reviews,
+    MIN(r.review_date) as oldest_unprocessed_date,
+    MAX(r.review_date) as newest_unprocessed_date
+FROM reviews r
+INNER JOIN apps a ON r.app_id = a.app_id
+WHERE NOT r.is_spam
+GROUP BY r.app_id, a.app_name
+ORDER BY absa_pending DESC, servqual_pending DESC;
+
+-- Function to create processing checkpoint
+CREATE OR REPLACE FUNCTION create_processing_checkpoint(
+    p_job_id UUID,
+    p_job_type VARCHAR(50),
+    p_reviews_processed INTEGER,
+    p_total_reviews INTEGER,
+    p_last_review_id UUID DEFAULT NULL,
+    p_current_app_id VARCHAR(255) DEFAULT NULL,
+    p_metadata JSONB DEFAULT NULL
+)
+RETURNS UUID AS $$
+DECLARE
+    checkpoint_id UUID;
+BEGIN
+    -- Deactivate previous checkpoints for this job
+    UPDATE processing_checkpoints
+    SET status = 'completed'
+    WHERE job_id = p_job_id AND status = 'active';
+
+    -- Create new checkpoint
+    INSERT INTO processing_checkpoints (
+        job_id, job_type, reviews_processed, total_reviews,
+        last_review_id, current_app_id, progress_metadata
+    ) VALUES (
+        p_job_id, p_job_type, p_reviews_processed, p_total_reviews,
+        p_last_review_id, p_current_app_id, p_metadata
+    ) RETURNING checkpoint_id INTO checkpoint_id;
+
+    RETURN checkpoint_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to get resumable processing state
+CREATE OR REPLACE FUNCTION get_resumable_job_state(p_job_id UUID)
+RETURNS TABLE (
+    checkpoint_id UUID,
+    reviews_processed INTEGER,
+    total_reviews INTEGER,
+    last_review_id UUID,
+    current_app_id VARCHAR(255),
+    progress_metadata JSONB,
+    can_resume BOOLEAN
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        pc.checkpoint_id,
+        pc.reviews_processed,
+        pc.total_reviews,
+        pc.last_review_id,
+        pc.current_app_id,
+        pc.progress_metadata,
+        (pc.status = 'active' AND pj.status IN ('running', 'paused')) as can_resume
+    FROM processing_checkpoints pc
+    INNER JOIN processing_jobs pj ON pc.job_id = pj.job_id
+    WHERE pc.job_id = p_job_id
+    AND pc.status = 'active'
+    ORDER BY pc.checkpoint_time DESC
+    LIMIT 1;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to clean up old checkpoints (run periodically)
+CREATE OR REPLACE FUNCTION cleanup_old_checkpoints(days_to_keep INTEGER DEFAULT 7)
+RETURNS INTEGER AS $$
+DECLARE
+    deleted_count INTEGER;
+BEGIN
+    -- Delete old completed checkpoints
+    DELETE FROM processing_checkpoints
+    WHERE status IN ('completed', 'failed')
+    AND checkpoint_time < CURRENT_TIMESTAMP - (days_to_keep || ' days')::interval;
+
+    GET DIAGNOSTICS deleted_count = ROW_COUNT;
+
+    -- Clean up orphaned notifications
+    DELETE FROM progress_notifications
+    WHERE created_at < CURRENT_TIMESTAMP - (days_to_keep || ' days')::interval;
+
+    RETURN deleted_count;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Add trigger to automatically update review processing timestamps
+CREATE OR REPLACE FUNCTION update_processing_timestamps()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.absa_processed = TRUE AND (OLD.absa_processed IS NULL OR OLD.absa_processed = FALSE) THEN
+        NEW.absa_processed_at = CURRENT_TIMESTAMP;
+    END IF;
+
+    IF NEW.servqual_processed = TRUE AND (OLD.servqual_processed IS NULL OR OLD.servqual_processed = FALSE) THEN
+        NEW.servqual_processed_at = CURRENT_TIMESTAMP;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_processing_timestamps
+    BEFORE UPDATE ON reviews
+    FOR EACH ROW
+    EXECUTE FUNCTION update_processing_timestamps();

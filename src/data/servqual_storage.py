@@ -13,7 +13,6 @@ import uuid
 from typing import Dict, List, Optional, Any, Tuple
 
 from src.data.storage import storage
-from src.absa.servqual_mapper import ServqualResult
 
 
 class ServqualStorage:
@@ -23,12 +22,12 @@ class ServqualStorage:
         self.logger = logging.getLogger("absa_pipeline.servqual.storage")
         self.db = storage.db
 
-    def store_servqual_scores(self, servqual_results: List[ServqualResult]) -> Tuple[int, int]:
+    def store_servqual_scores(self, servqual_results: List[Dict[str, Any]]) -> Tuple[int, int]:
         """
         Store SERVQUAL dimension scores in database.
 
         Args:
-            servqual_results: List of SERVQUAL results to store
+            servqual_results: List of SERVQUAL result dictionaries
 
         Returns:
             Tuple of (inserted_count, error_count)
@@ -53,13 +52,14 @@ class ServqualStorage:
 
         for result in servqual_results:
             try:
+                # Handle dictionary format from LLM processing
                 params = {
-                    'app_id': result.app_id,
-                    'dimension': result.dimension,
-                    'sentiment_score': result.sentiment_score,
-                    'quality_score': result.quality_score,
-                    'review_count': result.review_count,
-                    'date': result.date
+                    'app_id': result['app_id'],
+                    'dimension': result['dimension'],
+                    'sentiment_score': result['sentiment_score'],
+                    'quality_score': result['quality_score'],
+                    'review_count': result['review_count'],
+                    'date': result['date']
                 }
 
                 rows_affected = self.db.execute_non_query(insert_query, params)

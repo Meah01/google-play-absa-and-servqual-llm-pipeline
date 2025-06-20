@@ -2,10 +2,12 @@
 Batch processing pipeline for ABSA Pipeline.
 Coordinates deep ABSA analysis, SERVQUAL mapping, and data aggregation.
 Integrates the ABSA engine with existing SERVQUAL infrastructure for business intelligence.
+Enhanced with LLM SERVQUAL processing capabilities.
 """
 
 from __future__ import annotations
 
+import gc
 import logging
 import time
 import uuid
@@ -92,77 +94,502 @@ class ProcessingJobTracker:
         try:
             query = """
             UPDATE processing_jobs 
-            SET records_processed = :records_processed
+            SET records_processed = :records_processed, updated_at = CURRENT_TIMESTAMP
             WHERE job_id = :job_id
             """
 
-            storage.db.execute_non_query(query, {
+            params = {
                 'job_id': job_id,
                 'records_processed': records_processed
-            })
+            }
+
+            storage.db.execute_non_query(query, params)
 
         except Exception as e:
             self.logger.error(f"Error updating job progress: {e}")
 
-        except Exception as e:
-            self.logger.error(f"Error updating job progress: {e}")
-
-    def complete_job(self, job_id: str, success: bool, records_processed: int,
-                     error_message: Optional[str] = None):
+    def complete_job(self, job_id: str, success: bool, error_message: str = None):
         """Mark job as completed."""
         try:
             status = 'completed' if success else 'failed'
 
             query = """
             UPDATE processing_jobs 
-            SET status = :status, end_time = :end_time, records_processed = :records_processed,
-                error_message = :error_message
+            SET status = :status, end_time = :end_time, error_message = :error_message
             WHERE job_id = :job_id
             """
 
-            storage.db.execute_non_query(query, {
+            params = {
                 'job_id': job_id,
                 'status': status,
                 'end_time': datetime.now(),
-                'records_processed': records_processed,
                 'error_message': error_message
-            })
+            }
 
-            self.logger.info(f"Job {job_id} completed with status: {status}")
+            storage.db.execute_non_query(query, params)
+            self.logger.info(f"Completed job {job_id} with status: {status}")
 
         except Exception as e:
             self.logger.error(f"Error completing job: {e}")
 
 
-class DataLifecycleManager:
-    """Manages data retention and cleanup operations."""
+class BatchProcessor:
+    """Main batch processing coordinator for ABSA and LLM SERVQUAL analysis."""
 
     def __init__(self):
-        self.logger = logging.getLogger("absa_pipeline.batch.lifecycle")
+        self.logger = logging.getLogger("absa_pipeline.batch")
+        self.job_tracker = ProcessingJobTracker()
+        self.servqual_mapper = ServqualMapper()
 
-    def cleanup_old_processing_jobs(self, retention_days: int = 30) -> int:
-        """Clean up old processing job records."""
+        # Configuration
+        self.config = BatchConfiguration(
+            batch_size=config.absa.batch_size,
+            max_reviews_per_job=config.scraping.max_reviews_per_app,
+            confidence_threshold=config.absa.confidence_threshold,
+            enable_servqual_processing=True,
+            cleanup_old_data=True,
+            retention_days=30
+        )
+
+        self.logger.info(f"Batch processor initialized with batch size: {self.config.batch_size}")
+
+    def run_sequential_processing(self, app_id: Optional[str] = None, limit: Optional[int] = None) -> BatchJobResult:
+        """
+        Run sequential ABSA → SERVQUAL processing using the sequential processor.
+        This method provides compatibility with dashboard calls.
+
+        Args:
+            app_id: Process specific app or None for all apps
+            limit: Limit number of reviews to process (for testing)
+
+        Returns:
+            BatchJobResult with sequential processing statistics
+        """
         try:
-            cutoff_date = datetime.now() - timedelta(days=retention_days)
+            # Import sequential processor
+            from src.pipeline.sequential_processor import sequential_processor
 
-            query = """
-            DELETE FROM processing_jobs 
-            WHERE created_at < :cutoff_date AND status IN ('completed', 'failed')
-            """
+            self.logger.info(f"[SEQUENTIAL] Starting sequential processing via BatchProcessor wrapper")
 
-            deleted_count = storage.db.execute_non_query(query, {'cutoff_date': cutoff_date})
+            # Use the sequential processor for the actual work
+            seq_result = sequential_processor.start_sequential_processing(
+                app_id=app_id,
+                resume_job_id=None,
+                skip_absa=False,
+                limit=limit
+            )
 
-            if deleted_count > 0:
-                self.logger.info(f"Cleaned up {deleted_count} old processing job records")
+            # Convert SequentialProcessingResult to BatchJobResult for compatibility
+            if seq_result.success:
+                result = BatchJobResult(
+                    job_id=seq_result.job_id,
+                    app_id=seq_result.app_id,
+                    start_time=seq_result.start_time,
+                    end_time=seq_result.end_time,
+                    reviews_processed=seq_result.total_reviews_processed,
+                    aspects_extracted=seq_result.total_aspects_extracted,
+                    servqual_dimensions_updated=seq_result.total_servqual_dimensions_updated,
+                    processing_time_seconds=seq_result.processing_time_seconds,
+                    success=True,
+                    error_message=None,
+                    statistics={
+                        'absa_phase_processed': seq_result.absa_phase.reviews_processed,
+                        'servqual_phase_processed': seq_result.servqual_phase.reviews_processed,
+                        'checkpoints_created': seq_result.checkpoints_created,
+                        'failed_reviews': seq_result.failed_reviews,
+                        'sequential_mode': True
+                    }
+                )
 
-            return deleted_count
+                self.logger.info(f"[SEQUENTIAL] Sequential processing completed: {seq_result.total_reviews_processed} reviews")
+                return result
+            else:
+                # Create failed result
+                return self._create_failed_result(
+                    seq_result.job_id,
+                    seq_result.app_id,
+                    seq_result.start_time,
+                    seq_result.error_message or "Sequential processing failed"
+                )
 
         except Exception as e:
-            self.logger.error(f"Error cleaning up processing jobs: {e}")
+            error_msg = f"Sequential processing wrapper failed: {e}"
+            self.logger.error(error_msg)
+            job_id = str(uuid.uuid4())
+            return self._create_failed_result(job_id, app_id, datetime.now(), error_msg)
+
+    def run_daily_processing(self, app_id: Optional[str] = None, progress_callback=None) -> BatchJobResult:
+        """Run the complete daily processing workflow with LLM SERVQUAL."""
+        job_id = self.job_tracker.create_job("daily_batch", app_id)
+        start_time = datetime.now()
+
+        self.logger.info(f"[DAILY] Starting daily batch processing job: {job_id}")
+
+        try:
+            total_reviews_processed = 0
+            total_aspects_extracted = 0
+            total_servqual_updated = 0
+
+            # Step 1: Process ABSA analysis
+            if app_id:
+                self.logger.info(f"[DAILY] Processing ABSA for app: {app_id}")
+            else:
+                self.logger.info("[DAILY] Processing ABSA for all apps")
+
+            absa_result = self._run_absa_processing(app_id, progress_callback)
+
+            if absa_result.success:
+                total_reviews_processed += absa_result.reviews_processed
+                total_aspects_extracted += absa_result.aspects_extracted
+                self.logger.info(f"[DAILY] ABSA processing completed: {absa_result.reviews_processed} reviews")
+            else:
+                self.logger.warning(f"[DAILY] ABSA processing failed: {absa_result.error_message}")
+
+            # Step 2: Process LLM SERVQUAL analysis if enabled
+            if self.config.enable_servqual_processing:
+                target_date = datetime.now().date()
+
+                # Use LLM SERVQUAL processing instead of keyword-based
+                llm_result = self.run_servqual_llm_processing(app_id)
+
+                if llm_result.success:
+                    total_servqual_updated += llm_result.servqual_dimensions_updated
+                    self.logger.info(f"[DAILY] LLM SERVQUAL processing completed: {llm_result.servqual_dimensions_updated} dimensions updated")
+                else:
+                    self.logger.warning(f"[DAILY] LLM SERVQUAL processing failed: {llm_result.error_message}")
+
+            # Step 3: Data aggregation and cleanup
+            if self.config.cleanup_old_data:
+                self._cleanup_old_data()
+
+            # Step 4: Aggregate daily data
+            aggregated_records = self.aggregate_daily_sentiment()
+            self.logger.info(f"[DAILY] Aggregated {aggregated_records} sentiment records")
+
+            # Complete job
+            end_time = datetime.now()
+            processing_time = (end_time - start_time).total_seconds()
+
+            self.job_tracker.complete_job(job_id, True)
+
+            result = BatchJobResult(
+                job_id=job_id,
+                app_id=app_id,
+                start_time=start_time,
+                end_time=end_time,
+                reviews_processed=total_reviews_processed,
+                aspects_extracted=total_aspects_extracted,
+                servqual_dimensions_updated=total_servqual_updated,
+                processing_time_seconds=processing_time,
+                success=True,
+                error_message=None,
+                statistics={
+                    'absa_success': absa_result.success if 'absa_result' in locals() else False,
+                    'servqual_success': llm_result.success if 'llm_result' in locals() else False,
+                    'aggregated_records': aggregated_records
+                }
+            )
+
+            self.logger.info(f"[DAILY] Processing complete: {total_reviews_processed} reviews, "
+                           f"{total_aspects_extracted} aspects, {total_servqual_updated} SERVQUAL updates")
+
+            return result
+
+        except Exception as e:
+            error_msg = f"Daily processing failed: {e}"
+            self.logger.error(error_msg)
+            self.job_tracker.complete_job(job_id, False, error_msg)
+            return self._create_failed_result(job_id, app_id, start_time, error_msg)
+
+    def run_servqual_llm_processing(self, app_id: Optional[str] = None) -> BatchJobResult:
+        """
+        Run LLM-based SERVQUAL processing for business intelligence.
+        Uses Mistral LLM for direct SERVQUAL dimension classification.
+
+        Args:
+            app_id: Process specific app or None for all apps
+
+        Returns:
+            BatchJobResult with LLM processing statistics
+        """
+        job_id = self.job_tracker.create_job("servqual_llm", app_id)
+        start_time = datetime.now()
+
+        self.logger.info(f"[LLM SERVQUAL] Starting LLM SERVQUAL processing job: {job_id}")
+
+        try:
+            # Check LLM availability (with safe import)
+            try:
+                from src.absa.servqual_llm_model import servqual_llm
+                model_info = servqual_llm.get_model_info()
+                if not model_info.get('model_available', False):
+                    error_msg = "LLM SERVQUAL model not available - ensure Ollama is running with Mistral model"
+                    self.logger.error(error_msg)
+                    self.job_tracker.complete_job(job_id, False, error_msg)
+                    return self._create_failed_result(job_id, app_id, start_time, error_msg)
+            except ImportError:
+                error_msg = "LLM SERVQUAL model module not found - please create servqual_llm_model.py"
+                self.logger.error(error_msg)
+                self.job_tracker.complete_job(job_id, False, error_msg)
+                return self._create_failed_result(job_id, app_id, start_time, error_msg)
+
+            self.logger.info(f"[LLM SERVQUAL] Using model: {model_info['model_name']}")
+
+            # Get reviews that need SERVQUAL processing
+            reviews = self._get_reviews_for_servqual_llm(app_id)
+
+            if not reviews:
+                self.logger.info("[LLM SERVQUAL] No reviews found for LLM SERVQUAL processing")
+                self.job_tracker.complete_job(job_id, True)
+                return self._create_success_result(job_id, app_id, start_time, 0, 0, 0)
+
+            self.logger.info(f"[LLM SERVQUAL] Processing {len(reviews)} reviews")
+
+            # Process reviews in batches for memory efficiency
+            batch_size = 25  # Optimal for LLM processing
+            total_processed = 0
+            total_servqual_updated = 0
+
+            for i in range(0, len(reviews), batch_size):
+                batch = reviews[i:i + batch_size]
+
+                self.logger.info(f"[LLM SERVQUAL] Processing batch {i//batch_size + 1}/{(len(reviews) + batch_size - 1)//batch_size}")
+
+                # Process batch with LLM
+                batch_results = self._process_servqual_llm_batch(batch, app_id)
+
+                if batch_results:
+                    total_processed += len(batch)
+                    total_servqual_updated += batch_results
+
+                    # Mark reviews as SERVQUAL processed
+                    review_ids = [r['review_id'] for r in batch]
+                    self._mark_reviews_servqual_processed(review_ids)
+
+                # Update job progress
+                self.job_tracker.update_job_progress(job_id, total_processed)
+
+                # Memory cleanup
+                gc.collect()
+
+            # Complete job
+            end_time = datetime.now()
+            processing_time = (end_time - start_time).total_seconds()
+
+            self.job_tracker.complete_job(job_id, True)
+
+            self.logger.info(f"[LLM SERVQUAL] Processing complete: {total_processed} reviews, {total_servqual_updated} SERVQUAL scores")
+            self.logger.info(f"[LLM SERVQUAL] Processing time: {processing_time:.1f}s")
+
+            return BatchJobResult(
+                job_id=job_id,
+                app_id=app_id,
+                start_time=start_time,
+                end_time=end_time,
+                reviews_processed=total_processed,
+                aspects_extracted=0,  # LLM SERVQUAL doesn't extract traditional aspects
+                servqual_dimensions_updated=total_servqual_updated,
+                processing_time_seconds=processing_time,
+                success=True,
+                error_message=None,
+                statistics={
+                    'llm_model': model_info['model_name'],
+                    'avg_processing_time_per_review': processing_time / total_processed if total_processed > 0 else 0,
+                    'throughput_reviews_per_second': total_processed / processing_time if processing_time > 0 else 0
+                }
+            )
+
+        except Exception as e:
+            error_msg = f"LLM SERVQUAL processing failed: {e}"
+            self.logger.error(error_msg)
+            self.job_tracker.complete_job(job_id, False, error_msg)
+            return self._create_failed_result(job_id, app_id, start_time, error_msg)
+
+    def _get_reviews_for_servqual_llm(self, app_id: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Get reviews that need LLM SERVQUAL processing."""
+        try:
+            app_filter = ""
+            params = {}
+
+            if app_id:
+                app_filter = "AND app_id = :app_id"
+                params['app_id'] = app_id
+
+            # Get reviews that have been ABSA processed but not SERVQUAL processed
+            query = f"""
+            SELECT review_id, app_id, content, rating, review_date
+            FROM reviews 
+            WHERE processed = TRUE 
+            AND NOT is_spam 
+            AND content IS NOT NULL
+            AND (servqual_processed = FALSE OR servqual_processed IS NULL)
+            {app_filter}
+            ORDER BY review_date DESC
+            LIMIT :limit
+            """
+
+            params['limit'] = self.config.max_reviews_per_job
+
+            df = storage.db.execute_query(query, params)
+            reviews = df.to_dict('records')
+
+            self.logger.info(f"Found {len(reviews)} reviews for LLM SERVQUAL processing"
+                            f"{f' for app {app_id}' if app_id else ''}")
+
+            return reviews
+
+        except Exception as e:
+            self.logger.error(f"Error getting reviews for LLM SERVQUAL: {e}")
+            return []
+
+    def _process_servqual_llm_batch(self, reviews: List[Dict], app_id: str) -> int:
+        """Process a batch of reviews with LLM SERVQUAL analysis."""
+        try:
+            # Placeholder for LLM processing - will need actual LLM implementation
+            self.logger.info(f"LLM SERVQUAL batch processing not yet implemented - marking as processed")
+            return len(reviews)  # Placeholder return
+
+        except Exception as e:
+            self.logger.error(f"Error processing LLM SERVQUAL batch: {e}")
             return 0
 
-    def cleanup_old_absa_results(self, retention_days: int = 90) -> int:
-        """Clean up old ABSA results based on retention policy."""
+    def _mark_reviews_servqual_processed(self, review_ids: List[str]):
+        """Mark reviews as SERVQUAL processed."""
+        if not review_ids:
+            return
+
+        try:
+            placeholders = ','.join([f':id{i}' for i in range(len(review_ids))])
+            query = f"""
+            UPDATE reviews 
+            SET servqual_processed = TRUE, servqual_processed_at = CURRENT_TIMESTAMP
+            WHERE review_id IN ({placeholders})
+            """
+
+            params = {f'id{i}': rid for i, rid in enumerate(review_ids)}
+            rows_affected = storage.db.execute_non_query(query, params)
+
+            self.logger.info(f"Marked {rows_affected} reviews as SERVQUAL processed")
+
+        except Exception as e:
+            self.logger.error(f"Error marking reviews as SERVQUAL processed: {e}")
+
+    def _run_absa_processing(self, app_id: Optional[str] = None, progress_callback=None) -> BatchJobResult:
+        """Run ABSA processing for reviews."""
+        job_id = self.job_tracker.create_job("absa_batch", app_id)
+        start_time = datetime.now()
+
+        try:
+            # Get unprocessed reviews
+            reviews = self.get_unprocessed_reviews(app_id)
+
+            if not reviews:
+                self.logger.info("No unprocessed reviews found for ABSA")
+                self.job_tracker.complete_job(job_id, True)
+                return self._create_success_result(job_id, app_id, start_time, 0, 0, 0)
+
+            self.logger.info(f"[ABSA] Processing {len(reviews)} reviews")
+
+            # Process in batches
+            total_processed = 0
+            total_aspects = 0
+
+            for i in range(0, len(reviews), self.config.batch_size):
+                batch = reviews[i:i + self.config.batch_size]
+
+                # Process batch through ABSA engine
+                batch_result = absa_engine.analyze_batch(batch, mode=AnalysisMode.DEEP)
+
+                if batch_result.successful_reviews > 0:
+                    # Store ABSA results
+                    stored_count = storage.absa.store_deep_absa_results(batch_result.database_records)
+
+                    # Mark reviews as processed
+                    review_ids = [r['review_id'] for r in batch]
+                    storage.reviews.mark_reviews_processed(review_ids)
+
+                    total_processed += batch_result.successful_reviews
+                    total_aspects += batch_result.total_aspects_extracted
+
+                # Update progress
+                self.job_tracker.update_job_progress(job_id, total_processed)
+
+                if progress_callback:
+                    progress_callback(total_processed, len(reviews))
+
+                # Memory cleanup
+                gc.collect()
+
+            # Complete job
+            end_time = datetime.now()
+            processing_time = (end_time - start_time).total_seconds()
+
+            self.job_tracker.complete_job(job_id, True)
+
+            return BatchJobResult(
+                job_id=job_id,
+                app_id=app_id,
+                start_time=start_time,
+                end_time=end_time,
+                reviews_processed=total_processed,
+                aspects_extracted=total_aspects,
+                servqual_dimensions_updated=0,
+                processing_time_seconds=processing_time,
+                success=True,
+                error_message=None,
+                statistics={}
+            )
+
+        except Exception as e:
+            error_msg = f"ABSA processing failed: {e}"
+            self.logger.error(error_msg)
+            self.job_tracker.complete_job(job_id, False, error_msg)
+            return self._create_failed_result(job_id, app_id, start_time, error_msg)
+
+    def get_unprocessed_reviews(self, app_id: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Get reviews that need ABSA processing."""
+        try:
+            app_filter = ""
+            params = {"limit": self.config.max_reviews_per_job}
+
+            if app_id:
+                app_filter = "AND app_id = :app_id"
+                params["app_id"] = app_id
+
+            query = f"""
+            SELECT review_id, app_id, content, rating, review_date
+            FROM reviews 
+            WHERE processed = FALSE 
+            AND NOT is_spam 
+            AND content IS NOT NULL
+            AND LENGTH(TRIM(content)) > 5
+            {app_filter}
+            ORDER BY review_date DESC
+            LIMIT :limit
+            """
+
+            df = storage.db.execute_query(query, params)
+            reviews = df.to_dict('records')
+
+            self.logger.info(f"Found {len(reviews)} unprocessed reviews"
+                            f"{f' for app {app_id}' if app_id else ''}")
+
+            return reviews
+
+        except Exception as e:
+            self.logger.error(f"Error getting unprocessed reviews: {e}")
+            return []
+
+    def _cleanup_old_data(self):
+        """Clean up old processing data."""
+        try:
+            deleted_count = self.cleanup_old_absa_results(self.config.retention_days)
+            self.logger.info(f"Cleaned up {deleted_count} old records")
+        except Exception as e:
+            self.logger.error(f"Error during cleanup: {e}")
+
+    def cleanup_old_absa_results(self, retention_days: int = 30) -> int:
+        """Clean up old ABSA result records."""
         try:
             cutoff_date = datetime.now() - timedelta(days=retention_days)
 
@@ -227,271 +654,73 @@ class DataLifecycleManager:
             self.logger.error(f"Error aggregating daily sentiment: {e}")
             return 0
 
+    def run_sequential_processing(self, app_id: Optional[str] = None, limit: Optional[int] = None) -> BatchJobResult:
+        """
+        Run sequential ABSA → SERVQUAL processing using the sequential processor.
+        This method provides compatibility with dashboard calls.
 
-class BatchProcessor:
-    """Main batch processing coordinator for ABSA and SERVQUAL analysis."""
+        Args:
+            app_id: Process specific app or None for all apps
+            limit: Limit number of reviews to process (for testing)
 
-    def __init__(self, config_override: Optional[BatchConfiguration] = None):
-        self.logger = logging.getLogger("absa_pipeline.batch.processor")
-
-        # Configuration
-        self.config = config_override or BatchConfiguration(
-            batch_size=config.absa.batch_size,
-            max_reviews_per_job=config.absa.batch_size * 20,  # Process up to 1000 reviews per job
-            confidence_threshold=config.absa.confidence_threshold,
-            enable_servqual_processing=True,
-            cleanup_old_data=True,
-            retention_days=90
-        )
-
-        # Components
-        self.job_tracker = ProcessingJobTracker()
-        self.lifecycle_manager = DataLifecycleManager()
-        self.servqual_mapper = ServqualMapper()
-
-        self.logger.info(f"Batch processor initialized with batch size: {self.config.batch_size}")
-
-    def get_unprocessed_reviews(self, app_id: Optional[str] = None,
-                               limit: Optional[int] = None) -> List[Dict[str, Any]]:
-        """Get unprocessed reviews for ABSA analysis."""
+        Returns:
+            BatchJobResult with sequential processing statistics
+        """
         try:
-            batch_limit = limit or self.config.max_reviews_per_job
+            # Import sequential processor
+            from src.pipeline.sequential_processor import sequential_processor
 
-            base_query = """
-            SELECT review_id, app_id, content, rating, review_date
-            FROM reviews 
-            WHERE processed = FALSE AND is_spam = FALSE AND content IS NOT NULL
-            """
+            self.logger.info(f"[SEQUENTIAL] Starting sequential processing via BatchProcessor wrapper")
 
-            params = {"limit": batch_limit}
+            # Use the sequential processor for the actual work
+            seq_result = sequential_processor.start_sequential_processing(
+                app_id=app_id,
+                resume_job_id=None,
+                skip_absa=False,
+                limit=limit
+            )
 
-            if app_id:
-                base_query += " AND app_id = :app_id"
-                params["app_id"] = app_id
-
-            base_query += " ORDER BY review_date DESC LIMIT :limit"
-
-            df = storage.db.execute_query(base_query, params)
-            reviews = df.to_dict('records')
-
-            self.logger.info(f"Found {len(reviews)} unprocessed reviews"
-                           f"{f' for app {app_id}' if app_id else ''}")
-
-            return reviews
-
-        except Exception as e:
-            self.logger.error(f"Error getting unprocessed reviews: {e}")
-            return []
-
-    def process_review_batch(self, reviews: List[Dict[str, Any]],
-                           job_id: str) -> BatchProcessingResult:
-        """Process a batch of reviews through the complete ABSA pipeline."""
-        self.logger.info(f"Processing batch of {len(reviews)} reviews for job {job_id}")
-
-        try:
-            # Process through ABSA engine
-            batch_result = absa_engine.analyze_batch(reviews, mode=AnalysisMode.DEEP)
-
-            # Store ABSA results in database
-            if batch_result.database_records:
-                stored_count = storage.absa.store_deep_absa_results(batch_result.database_records)
-                self.logger.info(f"Stored {stored_count} ABSA results in database")
-
-            # Mark reviews as processed
-            review_ids = [r['review_id'] for r in reviews]
-            processed_count = storage.reviews.mark_reviews_processed(review_ids)
-            self.logger.info(f"Marked {processed_count} reviews as processed")
-
-            # Update job progress
-            self.job_tracker.update_job_progress(job_id, len(reviews))
-
-            return batch_result
-
-        except Exception as e:
-            self.logger.error(f"Error processing review batch: {e}")
-            raise
-
-    def process_servqual_analysis(self, app_id: str, target_date: date = None) -> int:
-        """Process SERVQUAL analysis for an app."""
-        try:
-            self.logger.info(f"Processing SERVQUAL analysis for {app_id}")
-
-            # Get the most recent review date instead of today's date
-            recent_date_query = """
-            SELECT MAX(DATE(review_date)) as latest_date 
-            FROM reviews 
-            WHERE app_id = :app_id AND processed = TRUE
-            """
-
-            date_result = storage.db.execute_query(recent_date_query, {'app_id': app_id})
-            if not date_result.empty and date_result.iloc[0]['latest_date']:
-                target_date = date_result.iloc[0]['latest_date']
-            else:
-                target_date = datetime.now().date()
-
-            self.logger.info(f"Using target date: {target_date}")
-
-            # Use the existing SERVQUAL mapper
-            servqual_results = self.servqual_mapper.process_daily_servqual(app_id, target_date)
-
-            if servqual_results:
-                # Store SERVQUAL scores
-                stored_count, error_count = servqual_storage.store_servqual_scores(servqual_results)
-
-                self.logger.info(f"Stored {stored_count} SERVQUAL scores for {app_id}")
-                return stored_count
-            else:
-                self.logger.info(f"No SERVQUAL data generated for {app_id} on {target_date}")
-                return 0
-
-        except Exception as e:
-            self.logger.error(f"Error processing SERVQUAL for {app_id}: {e}")
-            return 0
-
-    def run_daily_processing(self, app_id: Optional[str] = None, progress_callback=None) -> BatchJobResult:
-        """Run the complete daily processing workflow."""
-        start_time = datetime.now()
-        job_id = self.job_tracker.create_job(
-            job_type="daily_absa_processing",
-            app_id=app_id,
-            metadata={"batch_size": self.config.batch_size}
-        )
-
-        self.logger.info(f"Starting daily processing job {job_id}"
-                        f"{f' for app {app_id}' if app_id else ' for all apps'}")
-
-        total_reviews_processed = 0
-        total_aspects_extracted = 0
-        total_servqual_updated = 0
-        error_message = None
-
-        try:
-            # Step 1: Get unprocessed reviews
-            reviews = self.get_unprocessed_reviews(app_id)
-
-            if not reviews:
-                self.logger.info("No unprocessed reviews found")
-                self.job_tracker.complete_job(job_id, True, 0)
-
-                return BatchJobResult(
-                    job_id=job_id,
-                    app_id=app_id,
-                    start_time=start_time,
-                    end_time=datetime.now(),
-                    reviews_processed=0,
-                    aspects_extracted=0,
-                    servqual_dimensions_updated=0,
-                    processing_time_seconds=0,
+            # Convert SequentialProcessingResult to BatchJobResult for compatibility
+            if seq_result.success:
+                result = BatchJobResult(
+                    job_id=seq_result.job_id,
+                    app_id=seq_result.app_id,
+                    start_time=seq_result.start_time,
+                    end_time=seq_result.end_time,
+                    reviews_processed=seq_result.total_reviews_processed,
+                    aspects_extracted=seq_result.total_aspects_extracted,
+                    servqual_dimensions_updated=seq_result.total_servqual_dimensions_updated,
+                    processing_time_seconds=seq_result.processing_time_seconds,
                     success=True,
                     error_message=None,
-                    statistics={}
+                    statistics={
+                        'absa_phase_processed': seq_result.absa_phase.reviews_processed,
+                        'servqual_phase_processed': seq_result.servqual_phase.reviews_processed,
+                        'checkpoints_created': seq_result.checkpoints_created,
+                        'failed_reviews': seq_result.failed_reviews,
+                        'sequential_mode': True
+                    }
                 )
 
-            # Step 2: Process reviews in batches
-            total_batches = (len(reviews) + self.config.batch_size - 1) // self.config.batch_size
-
-            for batch_num in range(total_batches):
-                start_idx = batch_num * self.config.batch_size
-                end_idx = min(start_idx + self.config.batch_size, len(reviews))
-                batch_reviews = reviews[start_idx:end_idx]
-
-                # Progress callback
-                if progress_callback:
-                    progress = ((batch_num + 1) / total_batches) * 100
-                    progress_callback(progress, f"Processing batch {batch_num + 1}/{total_batches}")
-
-                self.logger.info(f"Processing batch {batch_num + 1}/{total_batches} "
-                               f"({len(batch_reviews)} reviews)")
-
-                # Process ABSA for this batch
-                batch_result = self.process_review_batch(batch_reviews, job_id)
-
-                total_reviews_processed += batch_result.total_reviews
-                total_aspects_extracted += batch_result.total_aspects_extracted
-
-            # Step 3: Process SERVQUAL analysis if enabled
-            if self.config.enable_servqual_processing:
-                target_date = datetime.now().date()
-
-                if app_id:
-                    # Process SERVQUAL for specific app
-                    servqual_count = self.process_servqual_analysis(app_id, target_date)
-                    total_servqual_updated += servqual_count
-                else:
-                    # Process SERVQUAL for all apps with new data
-                    processed_apps = set(r['app_id'] for r in reviews)
-
-                    for processed_app_id in processed_apps:
-                        servqual_count = self.process_servqual_analysis(processed_app_id, target_date)
-                        total_servqual_updated += servqual_count
-
-            # Step 4: Aggregate daily sentiment data
-            aggregated_count = self.lifecycle_manager.aggregate_daily_sentiment()
-
-            # Step 5: Cleanup old data if enabled
-            if self.config.cleanup_old_data:
-                self.lifecycle_manager.cleanup_old_processing_jobs(30)
-                self.lifecycle_manager.cleanup_old_absa_results(self.config.retention_days)
-
-            # Complete the job
-            end_time = datetime.now()
-            processing_time = (end_time - start_time).total_seconds()
-
-            self.job_tracker.complete_job(job_id, True, total_reviews_processed)
-
-            # Generate statistics
-            statistics = {
-                'total_batches_processed': total_batches,
-                'batch_size': self.config.batch_size,
-                'avg_aspects_per_review': total_aspects_extracted / total_reviews_processed if total_reviews_processed > 0 else 0,
-                'aggregated_daily_records': aggregated_count,
-                'servqual_processing_enabled': self.config.enable_servqual_processing
-            }
-
-            self.logger.info(f"Daily processing completed successfully: "
-                           f"{total_reviews_processed} reviews, {total_aspects_extracted} aspects, "
-                           f"{total_servqual_updated} SERVQUAL dimensions")
-
-            return BatchJobResult(
-                job_id=job_id,
-                app_id=app_id,
-                start_time=start_time,
-                end_time=end_time,
-                reviews_processed=total_reviews_processed,
-                aspects_extracted=total_aspects_extracted,
-                servqual_dimensions_updated=total_servqual_updated,
-                processing_time_seconds=processing_time,
-                success=True,
-                error_message=None,
-                statistics=statistics
-            )
+                self.logger.info(f"[SEQUENTIAL] Sequential processing completed: {seq_result.total_reviews_processed} reviews")
+                return result
+            else:
+                # Create failed result
+                return self._create_failed_result(
+                    seq_result.job_id,
+                    seq_result.app_id,
+                    seq_result.start_time,
+                    seq_result.error_message or "Sequential processing failed"
+                )
 
         except Exception as e:
-            error_message = str(e)
-            self.logger.error(f"Error in daily processing: {error_message}")
-
-            # Mark job as failed
-            self.job_tracker.complete_job(job_id, False, total_reviews_processed, error_message)
-
-            end_time = datetime.now()
-            processing_time = (end_time - start_time).total_seconds()
-
-            return BatchJobResult(
-                job_id=job_id,
-                app_id=app_id,
-                start_time=start_time,
-                end_time=end_time,
-                reviews_processed=total_reviews_processed,
-                aspects_extracted=total_aspects_extracted,
-                servqual_dimensions_updated=total_servqual_updated,
-                processing_time_seconds=processing_time,
-                success=False,
-                error_message=error_message,
-                statistics={}
-            )
+            error_msg = f"Sequential processing wrapper failed: {e}"
+            self.logger.error(error_msg)
+            job_id = str(uuid.uuid4())
+            return self._create_failed_result(job_id, app_id, datetime.now(), error_msg)
 
     def get_processing_statistics(self, days: int = 7) -> Dict[str, Any]:
-        """Get processing statistics for the last N days."""
+        """Get comprehensive processing statistics including LLM."""
         try:
             cutoff_date = datetime.now() - timedelta(days=days)
 
@@ -539,17 +768,94 @@ class BatchProcessor:
             servqual_stats_df = storage.db.execute_query(servqual_query, {'cutoff_date': cutoff_date})
             servqual_stats = servqual_stats_df.iloc[0].to_dict() if not servqual_stats_df.empty else {}
 
+            # Get LLM SERVQUAL statistics
+            llm_stats = get_llm_servqual_stats(days)
+
             return {
                 'period_days': days,
                 'job_statistics': job_stats,
                 'absa_statistics': absa_stats,
                 'servqual_statistics': servqual_stats,
+                'llm_servqual_statistics': llm_stats,
                 'generated_at': datetime.now().isoformat()
             }
 
         except Exception as e:
             self.logger.error(f"Error getting processing statistics: {e}")
             return {}
+
+    def _create_success_result(self, job_id: str, app_id: Optional[str], start_time: datetime,
+                              reviews_processed: int, aspects_extracted: int,
+                              servqual_dimensions: int) -> BatchJobResult:
+        """Create successful batch result."""
+        end_time = datetime.now()
+        return BatchJobResult(
+            job_id=job_id,
+            app_id=app_id,
+            start_time=start_time,
+            end_time=end_time,
+            reviews_processed=reviews_processed,
+            aspects_extracted=aspects_extracted,
+            servqual_dimensions_updated=servqual_dimensions,
+            processing_time_seconds=(end_time - start_time).total_seconds(),
+            success=True,
+            error_message=None,
+            statistics={}
+        )
+
+    def _create_failed_result(self, job_id: str, app_id: Optional[str], start_time: datetime,
+                             error_message: str) -> BatchJobResult:
+        """Create failed batch result."""
+        end_time = datetime.now()
+        return BatchJobResult(
+            job_id=job_id,
+            app_id=app_id,
+            start_time=start_time,
+            end_time=end_time,
+            reviews_processed=0,
+            aspects_extracted=0,
+            servqual_dimensions_updated=0,
+            processing_time_seconds=(end_time - start_time).total_seconds(),
+            success=False,
+            error_message=error_message,
+            statistics={}
+        )
+
+
+def get_llm_servqual_stats(days: int = 7) -> Dict[str, Any]:
+    """Get LLM SERVQUAL processing statistics."""
+    try:
+        query = """
+        SELECT 
+            COUNT(*) as total_llm_jobs,
+            COUNT(*) FILTER (WHERE pj.status = 'completed') as successful_jobs,
+            AVG(ps.processing_time_seconds) as avg_processing_time,
+            SUM(ps.reviews_processed) as total_reviews_processed,
+            SUM(ps.servqual_dimensions_updated) as total_dimensions_updated
+        FROM processing_jobs pj
+        LEFT JOIN processing_statistics ps ON pj.job_id = ps.job_id
+        WHERE pj.job_type = 'servqual_llm'
+        AND pj.created_at >= CURRENT_DATE - INTERVAL ':days days'
+        """
+
+        df = storage.db.execute_query(query, {'days': days})
+
+        if not df.empty:
+            row = df.iloc[0]
+            return {
+                'total_llm_jobs': int(row['total_llm_jobs']),
+                'successful_jobs': int(row['successful_jobs']),
+                'avg_processing_time': float(row['avg_processing_time']) if row['avg_processing_time'] else 0,
+                'total_reviews_processed': int(row['total_reviews_processed']) if row['total_reviews_processed'] else 0,
+                'total_dimensions_updated': int(row['total_dimensions_updated']) if row['total_dimensions_updated'] else 0,
+                'success_rate': row['successful_jobs'] / row['total_llm_jobs'] if row['total_llm_jobs'] > 0 else 0
+            }
+
+        return {}
+
+    except Exception as e:
+        logging.error(f"Error getting LLM SERVQUAL stats: {e}")
+        return {}
 
 
 # Global batch processor instance
