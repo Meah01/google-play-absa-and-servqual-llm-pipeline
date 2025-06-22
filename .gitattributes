@@ -1,2 +1,18 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Language detection overrides
+*.py linguist-language=Python
+*.sql linguist-language=SQL
+*.yml linguist-language=YAML
+*.yaml linguist-language=YAML
+*.json linguist-language=JSON
+*.md linguist-language=Markdown
+*.txt linguist-language=Text
+
+# Exclude files from language statistics
+logs/ linguist-vendored
+data/exports/ linguist-vendored
+__pycache__/ linguist-vendored
+*.log linguist-vendored
+tests&debugs/ linguist-documentation
