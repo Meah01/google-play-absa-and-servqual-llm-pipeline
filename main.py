@@ -852,6 +852,7 @@ if __name__ == "__main__":
         print("  http://localhost:8080      - Database")
         print("  docker-compose up -d                                - Docker start-up")
         print("  docker-compose ps                                   - Check if services are running")
+        print("  streamlit run dashboard_app.py                      - dashboard")
 
         print()
         print("Examples:")

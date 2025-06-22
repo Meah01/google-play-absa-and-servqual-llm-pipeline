@@ -149,7 +149,7 @@ class ServqualStorage:
     def get_dimension_trends(self, app_id: Optional[str] = None, dimension: str = None,
                              days: int = 30) -> pd.DataFrame:
         """
-        Get SERVQUAL dimension trends over time.
+        Get SERVQUAL dimension trends over time using review publication dates.
 
         Args:
             app_id: Application identifier (None for all apps)
@@ -165,30 +165,31 @@ class ServqualStorage:
             params = {'days': days}
 
             if app_id:
-                conditions.append("app_id = :app_id")
+                conditions.append("ss.app_id = :app_id")
                 params['app_id'] = app_id
 
             if dimension:
-                conditions.append("dimension = :dimension")
+                conditions.append("ss.dimension = :dimension")
                 params['dimension'] = dimension
 
             where_clause = ""
             if conditions:
-                where_clause = "WHERE " + " AND ".join(conditions) + " AND "
-            else:
-                where_clause = "WHERE "
+                where_clause = "AND " + " AND ".join(conditions)
 
             query = f"""
             SELECT 
-                app_id,
-                dimension,
-                date,
-                sentiment_score,
-                quality_score,
-                review_count
-            FROM servqual_scores
-            {where_clause} date >= CURRENT_DATE - INTERVAL '{days} days'
-            ORDER BY app_id, dimension, date
+                ss.app_id,
+                ss.dimension,
+                r.review_date as date,
+                ss.sentiment_score,
+                ss.quality_score,
+                ss.review_count
+            FROM servqual_scores ss
+            INNER JOIN reviews r ON ss.app_id = r.app_id 
+                AND r.review_date = ss.date
+            WHERE r.review_date >= CURRENT_DATE - INTERVAL '{days} days'
+            {where_clause}
+            ORDER BY ss.app_id, ss.dimension, r.review_date
             """
 
             df = self.db.execute_query(query, params)
@@ -200,7 +201,7 @@ class ServqualStorage:
 
     def get_comparative_analysis(self, dimension: str, days: int = 30) -> pd.DataFrame:
         """
-        Get comparative analysis across apps for a specific dimension.
+        Get comparative analysis across apps for a specific dimension using review publication dates.
 
         Args:
             dimension: SERVQUAL dimension to analyze
@@ -212,18 +213,20 @@ class ServqualStorage:
         try:
             query = """
             SELECT 
-                s.app_id,
+                ss.app_id,
                 a.app_name,
-                s.dimension,
-                AVG(s.sentiment_score) as avg_sentiment,
-                AVG(s.quality_score) as avg_quality,
-                SUM(s.review_count) as total_reviews,
+                ss.dimension,
+                AVG(ss.sentiment_score) as avg_sentiment,
+                AVG(ss.quality_score) as avg_quality,
+                SUM(ss.review_count) as total_reviews,
                 COUNT(*) as data_points
-            FROM servqual_scores s
-            INNER JOIN apps a ON s.app_id = a.app_id
-            WHERE s.dimension = :dimension
-            AND s.date >= CURRENT_DATE - INTERVAL '%s days'
-            GROUP BY s.app_id, a.app_name, s.dimension
+            FROM servqual_scores ss
+            INNER JOIN apps a ON ss.app_id = a.app_id
+            INNER JOIN reviews r ON ss.app_id = r.app_id 
+                AND r.review_date = ss.date
+            WHERE ss.dimension = :dimension
+            AND r.review_date >= CURRENT_DATE - INTERVAL '%s days'
+            GROUP BY ss.app_id, a.app_name, ss.dimension
             ORDER BY avg_quality DESC, total_reviews DESC
             """ % days
 
@@ -237,7 +240,7 @@ class ServqualStorage:
 
     def get_dimension_summary(self, app_id: str = None, days: int = 7) -> Dict[str, Any]:
         """
-        Get summary statistics for SERVQUAL dimensions.
+        Get summary statistics for SERVQUAL dimensions using review publication dates.
 
         Args:
             app_id: Application identifier (None for all apps)
@@ -251,23 +254,25 @@ class ServqualStorage:
             params = {'days': days}
 
             if app_id:
-                app_filter = "AND app_id = :app_id"
+                app_filter = "AND ss.app_id = :app_id"
                 params['app_id'] = app_id
 
             query = f"""
             SELECT 
-                dimension,
-                AVG(sentiment_score) as avg_sentiment,
-                AVG(quality_score) as avg_quality,
-                MIN(quality_score) as min_quality,
-                MAX(quality_score) as max_quality,
-                SUM(review_count) as total_reviews,
-                COUNT(DISTINCT app_id) as app_count,
-                COUNT(DISTINCT date) as day_count
-            FROM servqual_scores
-            WHERE date >= CURRENT_DATE - INTERVAL '{days} days'
+                ss.dimension,
+                AVG(ss.sentiment_score) as avg_sentiment,
+                AVG(ss.quality_score) as avg_quality,
+                MIN(ss.quality_score) as min_quality,
+                MAX(ss.quality_score) as max_quality,
+                SUM(ss.review_count) as total_reviews,
+                COUNT(DISTINCT ss.app_id) as app_count,
+                COUNT(DISTINCT r.review_date) as day_count
+            FROM servqual_scores ss
+            INNER JOIN reviews r ON ss.app_id = r.app_id 
+                AND r.review_date = ss.date
+            WHERE r.review_date >= CURRENT_DATE - INTERVAL '{days} days'
             {app_filter}
-            GROUP BY dimension
+            GROUP BY ss.dimension
             ORDER BY avg_quality DESC
             """
 

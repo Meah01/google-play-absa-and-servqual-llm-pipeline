@@ -52,7 +52,7 @@ class ServqualLLM:
         # Performance configuration (validated targets)
         self.timeout = 20  # 20 second timeout (6s target + buffer)
         self.temperature = 0.1  # Low for consistency
-        self.max_tokens = 120  # Minimal for JSON output
+        self.max_tokens = 500  # Minimal for JSON output
 
         # Platform detection patterns
         self.platform_patterns = {
@@ -151,51 +151,71 @@ class ServqualLLM:
             )
 
     def _create_servqual_prompt(self, review_text: str, platform: str, rating: int) -> str:
-        """Create platform-aware SERVQUAL analysis prompt with stricter JSON formatting."""
+        """Create platform-aware SERVQUAL analysis prompt with better dimension detection."""
 
-        # Platform-specific context
+        # More specific dimension definitions
+        dimension_definitions = {
+            'reliability': 'Product/service quality, functionality, accuracy, performance issues',
+            'assurance': 'Customer service, support, security, trust, professional help',
+            'tangibles': 'App interface, design, user experience, navigation, features',
+            'empathy': 'Personal care, return policies, understanding, accommodation',
+            'responsiveness': 'Delivery speed, response times, customer service communication, problem resolution'
+        }
+
+        # Platform-specific context with better targeting
         platform_context = {
-            'amazon': "an e-commerce marketplace focusing on product quality and delivery",
-            'ebay': "an auction and marketplace platform emphasizing seller reliability",
-            'etsy': "a handmade and vintage marketplace valuing artisan quality",
-            'temu': "a value-focused marketplace emphasizing competitive pricing",
-            'shein': "a fast fashion platform focusing on trendy affordable items"
-        }.get(platform, "an e-commerce platform")
+            'amazon': "This is an Amazon review focusing on product quality and delivery",
+            'ebay': "This is an eBay review focusing on seller reliability and marketplace experience",
+            'etsy': "This is an Etsy review focusing on handmade quality and seller interaction",
+            'temu': "This is a Temu review focusing on value and delivery experience",
+            'shein': "This is a Shein review focusing on fashion quality and ordering experience"
+        }.get(platform, "This is an e-commerce review")
 
-        # Rating context for enhanced accuracy
-        rating_context = ""
+        # Rating context for better sentiment calibration
         if rating <= 2:
-            rating_context = "This is a low-rated review likely containing complaints."
+            rating_context = "This is a negative review (1-2 stars) - look for problems and complaints."
+            expected_sentiment = "negative (-0.3 to -0.8)"
         elif rating >= 4:
-            rating_context = "This is a high-rated review likely containing praise."
+            rating_context = "This is a positive review (4-5 stars) - look for praise and satisfaction."
+            expected_sentiment = "positive (0.3 to 0.8)"
         else:
-            rating_context = "This is a neutral review with mixed feedback."
+            rating_context = "This is a neutral review (3 stars) - look for mixed feedback."
+            expected_sentiment = "neutral (-0.2 to 0.2)"
 
-        prompt = f"""Analyze this customer review from {platform_context}. {rating_context}
+        prompt = f"""You are analyzing a customer review for SERVQUAL service quality dimensions.
 
-Review: "{review_text}"
+    {platform_context}
+    {rating_context}
+    Expected sentiment range: {expected_sentiment}
 
-Classify into SERVQUAL dimensions. Return ONLY valid JSON, no explanations:
+    Review Text: "{review_text}"
 
-{{
-  "reliability": {{"relevant": true, "sentiment": -0.5, "confidence": 0.9}},
-  "assurance": {{"relevant": false, "sentiment": 0.0, "confidence": 0.8}},
-  "tangibles": {{"relevant": false, "sentiment": 0.0, "confidence": 0.8}},
-  "empathy": {{"relevant": false, "sentiment": 0.0, "confidence": 0.8}},
-  "responsiveness": {{"relevant": true, "sentiment": 0.3, "confidence": 0.9}}
-}}
+    Analyze this review for these 5 SERVQUAL dimensions:
 
-Rules:
-- relevant: true if dimension mentioned, false otherwise
-- sentiment: -0.8 to +0.8 (negative to positive)
-- confidence: 0.7 to 1.0
+    1. RELIABILITY: {dimension_definitions['reliability']}
+    2. ASSURANCE: {dimension_definitions['assurance']} 
+    3. TANGIBLES: {dimension_definitions['tangibles']}
+    4. EMPATHY: {dimension_definitions['empathy']}
+    5. RESPONSIVENESS: {dimension_definitions['responsiveness']}
 
-JSON only:"""
+    For each dimension:
+    - relevant: true if mentioned/implied in review, false otherwise
+    - sentiment: score from -0.8 (very negative) to +0.8 (very positive)
+    - confidence: your confidence in this analysis (0.7 to 1.0)
+
+    Return ONLY this JSON format:
+    {{
+      "reliability": {{"relevant": true/false, "sentiment": 0.0, "confidence": 0.9}},
+      "assurance": {{"relevant": true/false, "sentiment": 0.0, "confidence": 0.9}},
+      "tangibles": {{"relevant": true/false, "sentiment": 0.0, "confidence": 0.9}},
+      "empathy": {{"relevant": true/false, "sentiment": 0.0, "confidence": 0.9}},
+      "responsiveness": {{"relevant": true/false, "sentiment": 0.0, "confidence": 0.9}}
+    }}"""
 
         return prompt
 
     def _query_ollama(self, prompt: str) -> str:
-        """Query Ollama API with error handling and retries."""
+        """Query Ollama API with improved parameters for complete JSON responses."""
 
         payload = {
             "model": self.model_name,
@@ -204,8 +224,10 @@ JSON only:"""
             "options": {
                 "temperature": self.temperature,
                 "top_p": 0.3,
-                "num_predict": self.max_tokens,
-                "stop": ["\n\n", "Based on", "Explanation"]
+                "num_predict": self.max_tokens,  # Use updated max_tokens
+                "stop": ["}\n\n", "```", "Based on", "Explanation:", "Note:"],  # Better stop sequences
+                "repeat_penalty": 1.1,  # Prevent repetitive responses
+                "seed": -1  # Randomize for variety
             }
         }
 
@@ -220,7 +242,16 @@ JSON only:"""
 
                 if response.status_code == 200:
                     result = response.json()
-                    return result.get('response', '').strip()
+                    raw_response = result.get('response', '').strip()
+
+                    # Log response length for debugging
+                    self.logger.debug(f"LLM response length: {len(raw_response)} characters")
+
+                    # Check if response seems complete (should end with closing brace)
+                    if not raw_response.endswith('}'):
+                        self.logger.warning(f"Potentially truncated response (doesn't end with }})")
+
+                    return raw_response
                 else:
                     self.logger.warning(f"Ollama API error: {response.status_code}")
 
@@ -236,93 +267,221 @@ JSON only:"""
         raise Exception("Failed to get LLM response after retries")
 
     def _parse_servqual_response(self, response: str, review_text: str, rating: int) -> Dict[str, Dict[str, Any]]:
-        """Parse LLM response with enhanced robustness and debugging."""
+        """Parse LLM response with enhanced debugging and more robust parsing."""
 
-        # Debug logging to see what we're getting
-        self.logger.debug(f"Raw LLM response: {response[:200]}...")
+        # Enhanced debug logging to see exactly what we're getting
+        self.logger.info(f"=== LLM RESPONSE DEBUG ===")
+        self.logger.info(f"Raw response length: {len(response)}")
+        self.logger.info(f"Raw response: {repr(response)}")  # Using repr to see special characters
 
-        # Strategy 1: Clean and parse JSON directly
+        # Strategy 1: Direct JSON parsing with better cleaning
         try:
-            # Multiple cleaning steps
+            # More aggressive cleaning
             cleaned = response.strip()
 
-            # Remove common prefixes/suffixes
-            if cleaned.startswith('```json'):
-                cleaned = cleaned[7:]
-            if cleaned.startswith('```'):
-                cleaned = cleaned[3:]
-            if cleaned.endswith('```'):
-                cleaned = cleaned[:-3]
+            # Remove markdown formatting
+            if '```json' in cleaned:
+                cleaned = cleaned.split('```json')[1].split('```')[0]
+            elif '```' in cleaned:
+                # Handle generic code blocks
+                parts = cleaned.split('```')
+                if len(parts) >= 3:
+                    cleaned = parts[1]
 
-            # Remove any text before the first { or after the last }
-            start_brace = cleaned.find('{')
-            end_brace = cleaned.rfind('}')
+            # Remove text before first { and after last }
+            start_idx = cleaned.find('{')
+            end_idx = cleaned.rfind('}')
 
-            if start_brace != -1 and end_brace != -1 and end_brace > start_brace:
-                cleaned = cleaned[start_brace:end_brace + 1]
+            if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+                json_str = cleaned[start_idx:end_idx + 1]
+                self.logger.info(f"Extracted JSON: {json_str}")
 
-                # Try to parse
-                result = json.loads(cleaned)
+                # Parse JSON
+                result = json.loads(json_str)
+                self.logger.info(f"Parsed JSON result: {result}")
 
-                # Validate structure
+                # Validate structure - check if it has the expected dimensions
                 required_dims = ['reliability', 'assurance', 'tangibles', 'empathy', 'responsiveness']
+
                 if all(dim in result for dim in required_dims):
-                    validated = self._validate_servqual_output(result)
-                    self.logger.debug("Successfully parsed LLM JSON response")
-                    return validated
+                    # Check if values are properly structured
+                    valid_structure = True
+                    for dim in required_dims:
+                        if not isinstance(result[dim], dict):
+                            valid_structure = False
+                            break
+                        if 'relevant' not in result[dim]:
+                            valid_structure = False
+                            break
 
-        except (json.JSONDecodeError, ValueError) as e:
-            self.logger.debug(f"JSON parsing attempt 1 failed: {e}")
+                    if valid_structure:
+                        validated = self._validate_servqual_output(result)
+                        self.logger.info(f"Successfully parsed LLM JSON: {validated}")
 
-        # Strategy 2: Regex-based extraction with multiple patterns
-        patterns = [
-            r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}',  # Nested braces
-            r'\{.*?"responsiveness".*?\}',        # Look for last dimension
-            r'\{.*?\}',                          # Simple brace matching
-        ]
+                        # Count relevant dimensions for logging
+                        relevant_count = sum(1 for dim in validated.values() if dim['relevant'])
+                        self.logger.info(f"Found {relevant_count} relevant dimensions")
 
-        for pattern in patterns:
-            matches = re.findall(pattern, response, re.DOTALL)
-            for match in matches:
-                try:
-                    result = json.loads(match)
-                    validated = self._validate_servqual_output(result)
-                    self.logger.debug("Successfully parsed with regex")
-                    return validated
-                except json.JSONDecodeError:
-                    continue
+                        return validated
+                    else:
+                        self.logger.warning("JSON structure invalid - missing required fields")
+                else:
+                    missing = [dim for dim in required_dims if dim not in result]
+                    self.logger.warning(f"JSON missing dimensions: {missing}")
 
-        # Strategy 3: Parse individual dimension lines
-        try:
-            result = {}
-            dimensions = ['reliability', 'assurance', 'tangibles', 'empathy', 'responsiveness']
+        except json.JSONDecodeError as e:
+            self.logger.warning(f"JSON parsing failed: {e}")
+            self.logger.warning(f"Attempted to parse: {json_str if 'json_str' in locals() else 'N/A'}")
+        except Exception as e:
+            self.logger.warning(f"JSON extraction failed: {e}")
 
-            for dim in dimensions:
-                # Look for dimension in response
-                pattern = f'"{dim}"\\s*:\\s*\\{{[^}}]+\\}}'
-                match = re.search(pattern, response)
+        # Strategy 2: Look for individual dimension patterns
+        self.logger.info("Attempting pattern-based parsing...")
+
+        result = {}
+        dimensions = ['reliability', 'assurance', 'tangibles', 'empathy', 'responsiveness']
+
+        for dim in dimensions:
+            # Multiple patterns to find dimension data
+            patterns = [
+                f'"{dim}"\\s*:\\s*{{\\s*"relevant"\\s*:\\s*(true|false)\\s*,\\s*"sentiment"\\s*:\\s*([^,}}]+)\\s*,\\s*"confidence"\\s*:\\s*([^}}]+)\\s*}}',
+                f'"{dim}".*?"relevant"\\s*:\\s*(true|false).*?"sentiment"\\s*:\\s*([^,}}]+).*?"confidence"\\s*:\\s*([^}}]+)',
+                f'{dim}.*?relevant.*?(true|false).*?sentiment.*?([^,}}]+).*?confidence.*?([^}}]+)'
+            ]
+
+            found = False
+            for pattern in patterns:
+                match = re.search(pattern, response, re.IGNORECASE | re.DOTALL)
                 if match:
                     try:
-                        dim_json = '{' + match.group() + '}'
-                        dim_data = json.loads(dim_json)[dim]
-                        result[dim] = dim_data
-                    except:
-                        result[dim] = {'relevant': False, 'sentiment': 0.0, 'confidence': 0.8}
+                        relevant_str = match.group(1).lower()
+                        sentiment_str = match.group(2).strip()
+                        confidence_str = match.group(3).strip()
+
+                        # Clean numeric values
+                        sentiment_str = re.sub(r'[^-0-9.]', '', sentiment_str)
+                        confidence_str = re.sub(r'[^0-9.]', '', confidence_str)
+
+                        relevant = relevant_str == 'true'
+                        sentiment = float(sentiment_str) if sentiment_str else 0.0
+                        confidence = float(confidence_str) if confidence_str else 0.8
+
+                        result[dim] = {
+                            'relevant': relevant,
+                            'sentiment': sentiment,
+                            'confidence': confidence
+                        }
+                        found = True
+                        self.logger.info(f"Pattern matched {dim}: relevant={relevant}, sentiment={sentiment}")
+                        break
+                    except (ValueError, IndexError) as e:
+                        self.logger.warning(f"Error parsing {dim} from pattern: {e}")
+                        continue
+
+            if not found:
+                # Default values
+                result[dim] = {
+                    'relevant': False,
+                    'sentiment': 0.0,
+                    'confidence': 0.7
+                }
+
+        if len(result) == 5:
+            # Validate and return
+            validated = self._validate_servqual_output(result)
+            relevant_count = sum(1 for dim in validated.values() if dim['relevant'])
+            self.logger.info(f"Pattern parsing successful: {relevant_count} relevant dimensions")
+            self.logger.info(f"Pattern result: {validated}")
+            return validated
+
+        # Strategy 3: Enhanced keyword fallback with more liberal detection
+        self.logger.warning("All parsing failed - using enhanced keyword fallback")
+        self.logger.warning(f"Failed response was: {response[:500]}")
+
+        return self._enhanced_keyword_fallback(review_text, rating)
+
+    def _enhanced_keyword_fallback(self, review_text: str, rating: int) -> Dict[str, Dict[str, Any]]:
+        """Enhanced keyword-based fallback with broader detection."""
+
+        review_lower = review_text.lower()
+        result = {}
+
+        # Enhanced keyword sets with more variations
+        enhanced_keywords = {
+            'reliability': [
+                'quality', 'defective', 'broken', 'fake', 'authentic', 'durable', 'poor quality',
+                'accurate', 'description', 'as shown', 'misleading', 'photos', 'not as described',
+                'performance', 'crash', 'freeze', 'slow', 'responsive', 'buggy', 'glitch',
+                'works', 'working', 'doesnt work', "doesn't work", 'malfunction', 'error'
+            ],
+            'assurance': [
+                'customer service', 'support', 'help', 'response', 'secure', 'customer care',
+                'safe', 'fraud', 'scam', 'price', 'expensive', 'value', 'trust', 'reliable',
+                'professional', 'knowledgeable', 'helpful', 'rude', 'unhelpful', 'service'
+            ],
+            'tangibles': [
+                'interface', 'design', 'layout', 'navigation', 'search', 'website', 'app',
+                'filter', 'checkout', 'payment', 'easy', 'difficult', 'user friendly',
+                'confusing', 'intuitive', 'menu', 'page', 'loading', 'ui', 'ux'
+            ],
+            'empathy': [
+                'personalized', 'recommendations', 'understanding', 'care', 'personal',
+                'attention', 'individual', 'considerate', 'flexible', 'accommodating',
+                'policy', 'return', 'refund', 'exchange', 'custom', 'tailored'
+            ],
+            'responsiveness': [
+                'delivery', 'shipping', 'fast', 'slow', 'tracking', 'status', 'quick',
+                'problem', 'issue', 'resolution', 'response time', 'wait', 'delay',
+                'immediate', 'prompt', 'timely', 'speed', 'efficiency', 'contact'
+            ]
+        }
+
+        # Base sentiment from rating
+        base_sentiment = (rating - 3) * 0.25  # Scale to -0.5 to +0.5
+
+        for dimension, keywords in enhanced_keywords.items():
+            # Count keyword matches with partial matching
+            matches = 0
+            matched_keywords = []
+
+            for keyword in keywords:
+                if keyword in review_lower:
+                    matches += 1
+                    matched_keywords.append(keyword)
+
+            # More liberal relevance detection
+            relevant = matches > 0
+
+            if relevant:
+                # Adjust sentiment based on rating and negative keywords
+                negative_indicators = ['not', 'dont', "don't", 'bad', 'poor', 'terrible', 'awful', 'horrible']
+                has_negative = any(neg in review_lower for neg in negative_indicators)
+
+                if has_negative or rating <= 2:
+                    sentiment = min(-0.2, base_sentiment - 0.3)
+                elif rating >= 4:
+                    sentiment = max(0.2, base_sentiment + 0.3)
                 else:
-                    result[dim] = {'relevant': False, 'sentiment': 0.0, 'confidence': 0.8}
+                    sentiment = base_sentiment
 
-            if len(result) == 5:
-                validated = self._validate_servqual_output(result)
-                self.logger.debug("Successfully parsed with line-by-line extraction")
-                return validated
+                confidence = 0.75
+            else:
+                sentiment = 0.0
+                confidence = 0.7
 
-        except Exception as e:
-            self.logger.debug(f"Line-by-line parsing failed: {e}")
+            result[dimension] = {
+                'relevant': relevant,
+                'sentiment': sentiment,
+                'confidence': confidence
+            }
 
-        # Strategy 4: Keyword-based fallback
-        self.logger.info("LLM response parsing failed, using keyword-based fallback")
-        self.logger.debug(f"Failed to parse response: {response}")
-        return self._fallback_analysis(review_text, rating)
+            if relevant:
+                self.logger.info(f"Keyword fallback detected {dimension}: {matched_keywords}")
+
+        relevant_count = sum(1 for dim in result.values() if dim['relevant'])
+        self.logger.info(f"Enhanced keyword fallback found {relevant_count} relevant dimensions")
+
+        return result
 
     def _validate_servqual_output(self, result: Dict) -> Dict[str, Dict[str, Any]]:
         """Validate and normalize SERVQUAL output format."""

@@ -23,6 +23,13 @@ from src.data.scraper import scrape_app_reviews, scrape_multiple_apps
 from dashboard.servqual_components import servqual_dashboard
 from dashboard.data_loader import dashboard_data_loader
 
+# Import heatmap utilities with graceful fallback
+try:
+    from dashboard.heatmap_utils import apply_heatmap_styling
+except ImportError:
+    # Graceful fallback if heatmap utils not available
+    apply_heatmap_styling = None
+
 # Page configuration
 st.set_page_config(
     page_title="ABSA Sentiment Pipeline",
@@ -247,7 +254,7 @@ def render_processing_status():
 
 def render_sidebar():
     """Render enhanced sidebar with processing status."""
-    st.sidebar.title("🎛️ Dashboard Controls")
+    st.sidebar.title("Dashboard Controls")
 
     # Navigation
     st.sidebar.markdown("### Navigation")
@@ -379,7 +386,7 @@ def render_sidebar():
 
 
 def render_absa_percentage_table(data: Dict, title: str, help_text: str = None):
-    """Render ABSA percentage table in the requested format."""
+    """Render ABSA percentage table with improved intuitive heatmap colors."""
     if not data.get('aspects'):
         st.info("No data available for this analysis.")
         return
@@ -401,13 +408,51 @@ def render_absa_percentage_table(data: Dict, title: str, help_text: str = None):
 
     df = pd.DataFrame(table_data)
 
-    # Style the dataframe
-    styled_df = df.style.format({
-        'Positive (%)': '{:.1f}%',
-        'Neutral (%)': '{:.1f}%',
-        'Negative (%)': '{:.1f}%',
-        'Total Mentions': '{:,}'
-    }).background_gradient(subset=['Positive (%)', 'Neutral (%)', 'Negative (%)'], cmap='RdYlGn_r')
+    # Apply improved heatmap styling if available
+    if apply_heatmap_styling is not None:
+        try:
+            # Define sentiment columns for styling
+            sentiment_columns = {
+                'positive': 'Positive (%)',
+                'neutral': 'Neutral (%)',
+                'negative': 'Negative (%)'
+            }
+
+            # Apply improved heatmap styling
+            styled_df = apply_heatmap_styling(df, sentiment_columns)
+
+            # Additional formatting for non-sentiment columns
+            styled_df = styled_df.format({
+                'Positive (%)': '{:.1f}',
+                'Neutral (%)': '{:.1f}',
+                'Negative (%)': '{:.1f}',
+                'Total Mentions': '{:,}'
+            })
+
+            st.markdown("""
+            **Color Logic:** 
+            🟢 **Positive**: Red (0%) → Green (100%) - *More positive = greener*  
+            🟡 **Neutral**: Light → Deep yellow - *Higher % = deeper yellow*  
+            🔴 **Negative**: Green (0%) → Red (100%) - *More negative = redder*
+            """)
+
+        except Exception as e:
+            st.warning(f"Using fallback styling - error with heatmap utilities: {str(e)}")
+            styled_df = df.style.format({
+                'Positive (%)': '{:.1f}%',
+                'Neutral (%)': '{:.1f}%',
+                'Negative (%)': '{:.1f}%',
+                'Total Mentions': '{:,}'
+            }).background_gradient(subset=['Positive (%)', 'Neutral (%)', 'Negative (%)'], cmap='RdYlGn_r')
+    else:
+        # Fallback to basic styling if heatmap utils not available
+        st.warning("Using fallback styling - heatmap utilities not found")
+        styled_df = df.style.format({
+            'Positive (%)': '{:.1f}%',
+            'Neutral (%)': '{:.1f}%',
+            'Negative (%)': '{:.1f}%',
+            'Total Mentions': '{:,}'
+        }).background_gradient(subset=['Positive (%)', 'Neutral (%)', 'Negative (%)'], cmap='RdYlGn_r')
 
     st.dataframe(styled_df, use_container_width=True, hide_index=True)
 
@@ -427,7 +472,7 @@ def render_absa_percentage_table(data: Dict, title: str, help_text: str = None):
 
 def render_absa_analysis():
     """Render enhanced ABSA Analysis section."""
-    st.markdown("## 📊 ABSA Analysis")
+    st.markdown("##ABSA Analysis")
     st.markdown("**Enhanced aspect-based sentiment analysis with business intelligence focus**")
 
     # Time period selector
@@ -683,7 +728,7 @@ def render_overview_metrics(apps_df, reviews_df):
         for i, (check_name, query) in enumerate(status_checks.items()):
             try:
                 result_df = storage.db.execute_query(query)
-                count = int(result_df.iloc[0][0]) if not result_df.empty else 0
+                count = int(result_df.iloc[0]['count']) if not result_df.empty else 0
 
                 # Determine which column to use
                 col = [col1, col2, col3][i % 3]
@@ -999,7 +1044,7 @@ def main():
         render_health_status()
 
         # Additional system info
-        st.markdown("### 📊 System Information")
+        st.markdown("### System Information")
 
         col1, col2 = st.columns(2)
 

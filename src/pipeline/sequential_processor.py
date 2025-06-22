@@ -67,7 +67,7 @@ class SequentialProcessor:
         # Configuration with timeout protection
         self.checkpoint_frequency = 50  # Every 50 reviews
         self.checkpoint_time_interval = 900  # 15 minutes in seconds
-        self.batch_size = 25  # Process reviews in smaller batches
+        self.batch_size = 5  # Process reviews in smaller batches
         self.max_retries = 2
         self.max_processing_time = 3600  # 1 hour timeout
 

@@ -49,7 +49,7 @@ class ServqualDashboard:
 
     def render_executive_summary(self):
         """Render executive summary with strategic insights."""
-        st.markdown("### 📈 Executive Summary")
+        st.markdown("### Executive Summary")
 
         # Controls
         col1, col2, col3 = st.columns([2, 1, 1])
@@ -87,7 +87,7 @@ class ServqualDashboard:
             combined_df = pd.concat(all_apps_data, ignore_index=True)
 
             # Executive KPIs
-            st.markdown("#### 🎯 Key Performance Indicators")
+            st.markdown("#### Key Performance Indicators")
 
             col1, col2, col3, col4 = st.columns(4)
 
@@ -127,7 +127,7 @@ class ServqualDashboard:
                 )
 
             # Market positioning matrix
-            st.markdown("#### 📊 Market Positioning Matrix")
+            st.markdown("#### Market Positioning Matrix")
 
             # Create pivot table for heatmap
             pivot_df = combined_df.pivot(index='app_name', columns='dimension', values='avg_quality')
@@ -149,7 +149,7 @@ class ServqualDashboard:
             st.plotly_chart(fig, use_container_width=True)
 
             # Strategic insights
-            st.markdown("#### 💡 Strategic Insights")
+            st.markdown("#### Strategic Insights")
 
             col1, col2 = st.columns(2)
 
@@ -278,7 +278,7 @@ class ServqualDashboard:
 
     def render_amazon_focus(self):
         """Enhanced Amazon-focused SERVQUAL analysis with LLM insights."""
-        st.markdown("### 🛒 Amazon SERVQUAL Analysis")
+        st.markdown("### Amazon SERVQUAL Analysis")
         st.markdown("**Enhanced with LLM-powered business intelligence**")
 
         # Time period selection
@@ -383,7 +383,7 @@ class ServqualDashboard:
                 self.render_amazon_ranking(amazon_data['competitive_ranking'])
 
             # LLM Performance Insights
-            st.markdown("#### 🤖 LLM Analysis Insights")
+            st.markdown("#### LLM Analysis Insights")
 
             col1, col2 = st.columns(2)
 
@@ -609,7 +609,7 @@ class ServqualDashboard:
 
     def render_app_comparisons(self):
         """Enhanced multi-app SERVQUAL comparisons with LLM insights."""
-        st.markdown("### 🏪 App Comparisons")
+        st.markdown("### App Comparisons")
         st.markdown("**LLM-powered competitive analysis across ecommerce platforms**")
 
         # Enhanced controls
@@ -755,7 +755,7 @@ class ServqualDashboard:
 
     def render_dimension_time_series(self, dimension: str, days: int):
         """Render time series comparison for a dimension across apps."""
-        st.markdown(f"#### 📊 {dimension.title()} Trends Across Apps")
+        st.markdown(f"#### {dimension.title()} Trends Across Apps")
 
         try:
             # Get trends data for all apps
@@ -836,7 +836,7 @@ class ServqualDashboard:
             summary.columns = ['Avg Quality', 'Quality StdDev', 'Avg Sentiment', 'Total Reviews']
             summary = summary.sort_values('Avg Quality', ascending=False)
 
-            st.markdown("**📋 Summary Statistics**")
+            st.markdown("** Summary Statistics**")
             st.dataframe(summary, use_container_width=True)
 
         except Exception as e:
